@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>YELL VOTE デザイン一新プロトタイプ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16161A; --ink-2:#3A3A42; --muted:#6B6B73;
+    --line:#E6E6EA; --surface:#FFFFFF; --surface-2:#F6F6F7;
+    --yell-accent:#FF5A3C;
+    --yell-grad:linear-gradient(135deg,#FF5A3C 0%,#FF8A3C 100%);
+    /* テーマカラー（オーディションごとに注入する想定） */
+    --key:#FF5A3C;
+    --key-weak:color-mix(in srgb, var(--key) 12%, #fff);
+    --key-line:color-mix(in srgb, var(--key) 40%, #fff);
+    --radius:14px;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Noto Sans JP",system-ui,sans-serif;
+    color:var(--ink); background:var(--surface);
+    -webkit-font-smoothing:antialiased; line-height:1.6;
+  }
+  .num{font-family:"Oswald",sans-serif; font-weight:600; letter-spacing:.02em}
+  a{color:inherit; text-decoration:none}
+  img{max-width:100%; display:block}
+
+  /* ====== グローバルヘッダー（YELLの面＝ニュートラル） ====== */
+  header.gnav{
+    position:sticky; top:0; z-index:40;
+    background:rgba(255,255,255,.85); backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .gnav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:14px 20px;
+    display:flex; align-items:center; gap:18px; flex-wrap:nowrap;
+  }
+  .logo{display:flex; align-items:center; flex:0 0 auto; cursor:pointer}
+  .logo img{height:32px; width:auto; display:block}
+  .gnav nav{display:flex; gap:6px; margin-left:8px; flex-wrap:nowrap}
+  .gnav nav button{
+    font:inherit; font-weight:500; color:var(--muted); white-space:nowrap;
+    background:none; border:0; padding:8px 12px; border-radius:9px; cursor:pointer;
+  }
+  .gnav nav button.active{color:var(--ink); background:var(--surface-2)}
+  .gnav .spacer{flex:1}
+  .gnav .ghost{
+    font-weight:700; font-size:13px; padding:9px 14px; border-radius:999px; white-space:nowrap; flex:0 0 auto;
+    border:1px solid var(--line); color:var(--ink-2); cursor:pointer; background:#fff;
+  }
+  .gnav .ghost-key{border-color:var(--key); color:var(--key); background:var(--key-weak)}
+
+  main{max-width:var(--maxw); margin:0 auto; padding:0 20px 80px}
+  section{margin-top:48px}
+  .eyebrow{font-size:12px; font-weight:700; letter-spacing:.18em; color:var(--key); text-transform:uppercase}
+  h2.sec{font-size:clamp(22px,3vw,30px); font-weight:900; margin:6px 0 0; letter-spacing:.01em}
+  .sec-sub{color:var(--muted); margin-top:6px; font-size:14px}
+
+  /* ====== HERO（特集オーディション） ====== */
+  .hero{
+    margin-top:28px; border-radius:24px; overflow:hidden; position:relative;
+    color:#fff; min-height:380px; display:flex; align-items:flex-end;
+    background:
+      linear-gradient(180deg, transparent 30%, rgba(0,0,0,.78) 100%),
+      linear-gradient(120deg, color-mix(in srgb,var(--key) 70%, #000) 0%, var(--key) 100%);
+  }
+  .hero .kv-note{position:absolute; top:18px; right:20px; font-size:11px; opacity:.8}
+  .hero-body{padding:34px; width:100%}
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:12px; font-weight:700; padding:5px 11px; border-radius:999px;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(4px);
+  }
+  .badge.live::before{content:""; width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:pulse 1.6s infinite}
+  .hero h1{font-size:clamp(26px,4.5vw,42px); font-weight:900; margin:14px 0 8px; line-height:1.15}
+  .hero .meta{display:flex; flex-wrap:wrap; gap:18px; font-size:13px; opacity:.92}
+  .hero .meta b{font-weight:700}
+  .hero-cta{margin-top:20px; display:flex; gap:10px; flex-wrap:wrap}
+
+  .btn{
+    font:inherit; font-weight:700; cursor:pointer; border:0;
+    padding:13px 22px; border-radius:999px; font-size:15px;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-key{background:var(--key); color:#fff}
+  .btn-key.on-dark{background:#fff; color:var(--ink)}
+  .btn-ghost{background:transparent; color:#fff; border:1px solid rgba(255,255,255,.5)}
+
+  /* ====== フィルタ ====== */
+  .filters{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:18px}
+  .seg{display:inline-flex; background:var(--surface-2); border-radius:999px; padding:4px}
+  .seg button{font:inherit; font-weight:600; font-size:13px; border:0; background:none; padding:8px 16px; border-radius:999px; cursor:pointer; color:var(--muted)}
+  .seg button.active{background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .search{margin-left:auto; flex:1; min-width:200px; max-width:320px; position:relative}
+  .search input{
+    width:100%; font:inherit; font-size:14px; padding:11px 14px 11px 38px;
+    border:1px solid var(--line); border-radius:999px; background:#fff;
+  }
+  .search input:focus{outline:2px solid var(--key-line); border-color:var(--key)}
+  .search svg{position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted)}
+
+  /* ====== カードグリッド ====== */
+  .grid{display:grid; gap:18px; margin-top:22px;
+    grid-template-columns:repeat(4,1fr)}
+  .card{
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    background:#fff; cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;
+    display:flex; flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,.10)}
+  .card .thumb{position:relative; aspect-ratio:16/9; background:linear-gradient(135deg,var(--c1),var(--c2))}
+  .card .keybar{height:5px; background:var(--ck)}
+  .card .st{position:absolute; top:10px; left:10px; font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px; color:#fff}
+  .st.live{background:#1FAE5A}
+  .st.soon{background:#F0A21B}
+  .st.result{background:#7A5CFF}
+  .st.end{background:#9A9AA2}
+  .card .body{padding:13px 14px 15px}
+  .card .uni{font-size:11px; color:var(--muted); font-weight:600}
+  .card .ttl{font-weight:700; font-size:15px; margin:3px 0 8px; line-height:1.35}
+  .card .row{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted)}
+  .card .period{font-size:12px}
+  .card .ent{font-weight:700; color:var(--ink-2)}
+  .card.is-end .thumb{filter:grayscale(1) opacity(.85)}
+
+  /* ====== Finalist（候補者カード＋投票） ====== */
+  .people{display:grid; gap:16px; grid-template-columns:repeat(4,1fr); margin-top:20px}
+  .person{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:#fff}
+  .person .ph{aspect-ratio:3/4; background:linear-gradient(160deg,var(--c1),var(--c2)); position:relative}
+  .person .eno{position:absolute; top:10px; left:10px; background:rgba(0,0,0,.55); color:#fff; font-size:12px; padding:3px 9px; border-radius:8px}
+  .person .gp{position:absolute; top:10px; right:10px; background:var(--key); color:#fff; font-size:11px; font-weight:700; padding:4px 9px; border-radius:999px}
+  .person .pbody{padding:12px 13px 14px}
+  .person .pname{font-weight:700; font-size:16px}
+  .person .pkana{font-size:11px; color:var(--muted); margin-top:1px}
+  .person .heat{margin:10px 0 12px}
+  .heat-label{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:4px}
+  .heat-bar{height:7px; border-radius:999px; background:var(--surface-2); overflow:hidden}
+  .heat-bar > i{display:block; height:100%; border-radius:999px; background:var(--yell-grad); width:0; transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+  .vote-btn{
+    width:100%; font:inherit; font-weight:700; font-size:14px; cursor:pointer;
+    padding:11px; border-radius:999px; border:0; color:#fff; background:var(--key);
+    display:flex; align-items:center; justify-content:center; gap:7px;
+  }
+  .vote-btn .hb{display:inline-block; animation:beat 1.3s infinite}
+  .vote-btn:disabled{background:var(--surface-2); color:var(--muted); cursor:default}
+  .vote-btn:disabled .hb{animation:none}
+
+  /* ====== 空状態 ====== */
+  .empty{
+    text-align:center; padding:60px 20px; border:1px dashed var(--line);
+    border-radius:var(--radius); background:var(--surface-2); margin-top:22px;
+  }
+  .empty .ico{width:64px;height:64px;margin:0 auto 14px;border-radius:20px;background:var(--yell-grad);display:flex;align-items:center;justify-content:center;font-size:30px}
+  .empty h3{margin:0 0 6px; font-size:18px}
+  .empty p{margin:0 0 16px; color:var(--muted); font-size:14px}
+
+  /* ====== Outline テーブル ====== */
+  .outline{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:20px}
+  .outline dl{margin:0; display:grid; grid-template-columns:160px 1fr}
+  .outline dt{padding:14px 18px; background:var(--surface-2); font-size:13px; font-weight:700; border-bottom:1px solid var(--line)}
+  .outline dd{padding:14px 18px; margin:0; font-size:14px; border-bottom:1px solid var(--line)}
+
+  footer.gfoot{border-top:1px solid var(--line); margin-top:64px; background:var(--surface-2)}
+  .gfoot-inner{max-width:var(--maxw); margin:0 auto; padding:30px 20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px; color:var(--muted); font-size:13px}
+  .gfoot a{margin-right:16px}
+
+  /* ====== テーマ切替フローティング ====== */
+  .switcher{
+    position:fixed; right:18px; bottom:18px; z-index:60;
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.16); padding:14px; width:230px;
+  }
+  .switcher h4{margin:0 0 4px; font-size:13px}
+  .switcher p{margin:0 0 10px; font-size:11px; color:var(--muted)}
+  .swatches{display:flex; gap:8px; flex-wrap:wrap}
+  .swatch{width:34px; height:34px; border-radius:10px; cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--line); position:relative}
+  .swatch.sel{box-shadow:0 0 0 2px var(--ink)}
+  .swatch span{position:absolute; bottom:-17px; left:50%; transform:translateX(-50%); font-size:9px; color:var(--muted); white-space:nowrap}
+  .switcher .note{margin-top:24px; font-size:10px; color:var(--muted); line-height:1.5}
+
+  .gnav nav button[data-stub]{position:relative}
+  .more{font:inherit; font-weight:700; font-size:13px; color:var(--key); background:none; border:0; cursor:pointer}
+  .sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:12px}
+
+  /* 広告ローテーター（最大5社） */
+  .ad-rotator{position:relative; margin:24px 0 0}
+  .ad-track{display:grid; gap:16px; align-items:center; transition:opacity .25s ease}
+  .ad-slide{position:relative; aspect-ratio:300/250; border-radius:14px; overflow:hidden; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; text-align:center; padding:0 18px; color:#fff; font-weight:800; font-size:20px; letter-spacing:.04em; transition:opacity .4s ease, transform .4s ease}
+  .ad-slide.side{opacity:.45; transform:scale(.86)}
+  .ad-slide.side.l{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 88%); mask-image:linear-gradient(90deg,transparent 0,#000 88%)}
+  .ad-slide.side.r{-webkit-mask-image:linear-gradient(270deg,transparent 0,#000 88%); mask-image:linear-gradient(270deg,transparent 0,#000 88%)}
+  .ad-tag{position:absolute; top:8px; left:10px; font-size:10px; font-weight:700; color:#fff; background:rgba(0,0,0,.35); padding:2px 7px; border-radius:6px}
+  .ad-dots{position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:flex; gap:6px}
+  .ad-dots i{width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.5); cursor:pointer}
+  .ad-dots i.on{background:#fff}
+
+  /* AdSense 枠 */
+  .adsense{margin-top:40px; height:250px; border:1px dashed var(--line); border-radius:12px; background:repeating-linear-gradient(45deg,#fafafa,#fafafa 10px,#f2f2f4 10px,#f2f2f4 20px); display:flex; align-items:center; justify-content:center}
+  .adsense span{font-size:12px; color:var(--muted); background:#fff; padding:4px 12px; border-radius:999px; border:1px solid var(--line)}
+
+  /* NEWS */
+  .news{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .news a{display:flex; align-items:center; gap:14px; padding:15px 18px; border-bottom:1px solid var(--line)}
+  .news a:last-child{border-bottom:0}
+  .news a:hover{background:var(--surface-2)}
+  .news .date{font-size:12px; color:var(--muted); min-width:84px}
+  .news .cat{font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--surface-2); color:var(--ink-2)}
+  .news .nt{font-weight:500; font-size:14px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .news .new{font-size:10px; font-weight:800; color:#fff; background:var(--yell-accent); padding:2px 6px; border-radius:5px}
+
+  /* フッター */
+  .foot-brand{display:flex; align-items:center; gap:14px}
+  .foot-logo{height:48px; width:auto; display:block}
+  .foot-brand span{font-size:13px; color:var(--ink-2)}
+  .foot-links{display:flex; flex-wrap:wrap; gap:18px}
+  .foot-links a{font-size:13px; color:var(--ink-2)}
+  .foot-links a:hover{color:var(--key)}
+  .foot-copy{max-width:var(--maxw); margin:0 auto; padding:0 20px 28px; color:var(--muted); font-size:12px}
+
+  /* ガチャ ポップアップ */
+  .gacha-overlay{position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; padding:20px; animation:fadein .2s ease}
+  .gacha-overlay[hidden]{display:none}
+  .gacha-modal{background:#fff; border-radius:22px; padding:30px 26px; max-width:340px; width:100%; text-align:center; position:relative; box-shadow:0 24px 70px rgba(0,0,0,.3)}
+  .gacha-close{position:absolute; top:12px; right:14px; border:0; background:none; font-size:24px; color:var(--muted); cursor:pointer; line-height:1}
+  .gacha-modal h3{margin:6px 0 4px; font-size:21px}
+  .gacha-modal p{margin:0 0 16px; color:var(--muted); font-size:13px}
+  .gacha-capsule{width:120px; height:120px; margin:0 auto 18px; border-radius:50%; background:var(--yell-grad); display:flex; align-items:center; justify-content:center; font-size:54px; box-shadow:0 12px 30px color-mix(in srgb,var(--yell-accent) 35%, transparent)}
+  .gacha-capsule.spin{animation:shake .5s ease infinite}
+  .gacha-result{margin:0 0 16px; font-weight:700; font-size:16px}
+  .gacha-modal .btn-key{width:100%; justify-content:center}
+
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  @keyframes shake{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+  /* テーマカード */
+  .theme-card{margin-top:18px; border:1px solid var(--line); border-left:4px solid var(--key); border-radius:var(--radius); padding:22px 24px; background:var(--key-weak)}
+  .theme-card p{margin:0 0 8px; font-size:19px; font-weight:700}
+  .theme-card span{color:var(--ink-2); font-size:14px}
+
+  /* 結果発表 */
+  .result-hero{
+    margin-top:28px; border-radius:24px; padding:40px 34px; color:#fff; text-align:center;
+    background:linear-gradient(135deg, var(--ink) 0%, color-mix(in srgb,var(--key) 55%, var(--ink)) 100%);
+    position:relative; overflow:hidden;
+  }
+  .result-hero h1{font-size:clamp(30px,5vw,48px); font-weight:900; margin:6px 0 4px}
+  .result-hero p{margin:0; opacity:.85}
+  .personal{margin:20px auto 0; max-width:520px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); border-radius:14px; padding:14px 18px; font-size:14px}
+  .personal .hb{display:inline-block; animation:beat 1.3s infinite}
+  .personal b{font-weight:900}
+
+  .gp-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px}
+  .gp{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:#fff; position:relative}
+  .gp .crown{position:absolute; top:12px; left:12px; background:var(--key); color:#fff; font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px; z-index:2}
+  .gp .ph{aspect-ratio:4/3; background:linear-gradient(160deg,var(--c1),var(--c2))}
+  .gp .gpb{padding:16px 18px}
+  .gp .cat{font-size:12px; color:var(--muted); font-weight:700}
+  .gp .nm{font-size:22px; font-weight:900; margin:2px 0 10px}
+  .gp .score{display:flex; align-items:baseline; gap:6px}
+  .gp .score .n{font-size:34px; color:var(--key)}
+  .gp .score small{color:var(--muted); font-size:12px}
+
+  .rank{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .rank .row{display:flex; align-items:center; gap:14px; padding:14px 18px; border-bottom:1px solid var(--line)}
+  .rank .row:last-child{border-bottom:0}
+  .rank .pos{width:30px; font-size:18px; color:var(--key); text-align:center}
+  .rank .av{width:40px; height:40px; border-radius:10px; background:linear-gradient(160deg,var(--c1),var(--c2))}
+  .rank .rn{font-weight:700}
+  .rank .rc{margin-left:auto; font-size:12px; color:var(--muted)}
+
+  /* About */
+  .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:20px}
+  .feat{border:1px solid var(--line); border-radius:var(--radius); padding:24px 22px; background:#fff}
+  .feat .fic{font-size:34px; margin-bottom:10px}
+  .feat h3{margin:0 0 8px; font-size:18px}
+  .feat p{margin:0; color:var(--ink-2); font-size:14px}
+  .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px}
+  .step{border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px; text-align:center}
+  .step .num{display:inline-flex; width:38px; height:38px; align-items:center; justify-content:center; border-radius:50%; background:var(--key-weak); color:var(--key); font-size:18px; margin-bottom:8px}
+  .step b{display:block; margin-bottom:4px}
+  .step p{margin:0; color:var(--muted); font-size:13px}
+  /* About 追加セクション */
+  .lead{font-size:16px; line-height:1.95; color:var(--ink-2); max-width:780px; margin-top:14px}
+  .rule-list{list-style:none; margin:18px 0 0; padding:0; display:grid; gap:12px}
+  .rule-list li{position:relative; padding:14px 16px 14px 44px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; font-size:14px; line-height:1.7; color:var(--ink-2)}
+  .rule-list li::before{content:"✓"; position:absolute; left:14px; top:13px; width:20px; height:20px; border-radius:50%; background:var(--key-weak); color:var(--key); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+  .sso-list{display:flex; flex-wrap:wrap; gap:10px; margin-top:16px}
+  .sso-list span{border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13px; font-weight:700; background:var(--surface-2)}
+  .payout-list{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; max-width:520px}
+  .pl-row{display:flex; justify-content:space-between; align-items:center; padding:13px 18px; font-size:15px}
+  .pl-row+.pl-row{border-top:1px solid var(--line)}
+  .pl-pt{font-weight:700; font-family:'Oswald',sans-serif; font-size:17px; color:var(--ink)}
+  .pl-rate{color:var(--ink-2); font-variant-numeric:tabular-nums}
+  .pl-head{background:var(--surface-2)}
+  .pl-head .pl-pt,.pl-head .pl-rate{font-family:inherit; font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--muted)}
+  .payout-note{margin-top:12px; font-size:12px; color:var(--muted)}
+
+  /* マイページ */
+  .mp-head{display:flex; justify-content:space-between; align-items:center; gap:18px; margin-top:18px; flex-wrap:wrap; border:1px solid var(--line); border-radius:var(--radius); padding:20px 22px; background:var(--surface-2)}
+  .mp-user{display:flex; align-items:center; gap:14px}
+  .mp-av{width:54px; height:54px; border-radius:50%; background:var(--yell-grad)}
+  .mp-user b{display:block; font-size:17px}
+  .mp-user span{font-size:12px; color:var(--muted)}
+  .mp-points{display:flex; align-items:center; gap:16px}
+  .mp-points b{font-size:30px; color:var(--ink)}
+  .mp-bal{display:flex; align-items:center; gap:18px}
+  .mp-bal-total span{font-size:12px; color:var(--muted)}
+  .mp-bal-split{display:flex; gap:16px; padding-left:18px; border-left:1px solid var(--line)}
+  .mp-bal-split > div{font-size:11px; color:var(--muted)}
+  .mp-bal-split > div span{display:block}
+  .mp-bal-split b{font-size:18px; color:var(--ink-2)}
+  .mp-bal-split small{font-size:11px; color:var(--muted); margin-left:2px}
+  .mp-actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .btn-line{background:#fff; border:1px solid var(--line); color:var(--ink-2); font-size:13px; padding:10px 16px}
+  .btn-line:hover{border-color:var(--key); color:var(--key)}
+  .mp-cols{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:8px}
+  .timeline{margin-top:14px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .timeline .ti{display:flex; gap:12px; padding:13px 16px; border-bottom:1px solid var(--line); font-size:14px}
+  .timeline .ti:last-child{border-bottom:0}
+  .timeline .ti .d{color:var(--muted); font-size:12px; min-width:78px}
+  .timeline .ti-amt{margin-left:auto; font-weight:800; color:var(--key); font-family:'Oswald',sans-serif; white-space:nowrap}
+  .mp-gacha-cta{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-top:16px; padding:18px 22px; border-radius:var(--radius); border:1px solid var(--key); background:var(--key-weak)}
+  .mp-gacha-cta b{display:block; font-size:15px}
+  .mp-gacha-cta span{font-size:13px; color:var(--ink-2)}
+
+  /* ポイント購入 */
+  .buy-note{margin-top:12px; font-size:13px; color:var(--ink-2); background:var(--key-weak); border:1px solid var(--key-line); border-radius:10px; padding:11px 14px}
+  .buy-note b{color:var(--key)}
+  .plan-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:16px}
+  .plan{border:1px solid var(--line); border-radius:var(--radius); padding:22px 18px; text-align:center; background:#fff; position:relative}
+  .plan.best{border-color:var(--key); box-shadow:0 0 0 1px var(--key)}
+  .plan .tag{position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:var(--key); color:#fff; font-size:11px; font-weight:700; padding:3px 12px; border-radius:999px}
+  .plan .pt{font-size:30px; font-weight:900}
+  .plan .pt small{font-size:13px; color:var(--muted); font-weight:500}
+  .plan .bonus{color:var(--key); font-size:12px; font-weight:700; margin:4px 0 12px}
+  .plan .price{font-size:15px; font-weight:700; margin-bottom:12px}
+  .plan .btn{width:100%; justify-content:center; font-size:14px; padding:10px}
+  .fineprint{margin-top:18px; font-size:12px; color:var(--muted); line-height:1.7}
+  .fineprint a{color:var(--key); text-decoration:underline}
+
+  /* FAQ */
+  .faq{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq details:last-child{border-bottom:0}
+  .faq summary{padding:16px 18px; cursor:pointer; font-weight:700; font-size:15px; list-style:none; display:flex; justify-content:space-between; align-items:center}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"＋"; color:var(--key); font-weight:700}
+  .faq details[open] summary::after{content:"−"}
+  .faq .ans{padding:0 18px 16px; color:var(--ink-2); font-size:14px}
+  .faq-cta{margin-top:16px; font-size:14px; color:var(--muted)}
+  .faq-cta a{color:var(--key); text-decoration:underline}
+
+  /* エントリー詳細 */
+  .entry-hero{display:grid; grid-template-columns:340px 1fr; gap:28px; margin-top:28px; align-items:center}
+  .entry-photo{aspect-ratio:3/4; border-radius:18px; background:linear-gradient(160deg,#F7C6D5,var(--key))}
+  .entry-eno{color:var(--muted); margin:12px 0 2px; font-size:14px}
+  .entry-info h1{font-size:38px; font-weight:900; margin:0 0 4px}
+  .entry-uni{color:var(--ink-2); margin-bottom:16px}
+  .entry-cta{display:flex; gap:10px; margin-top:8px}
+  .entry-cta .btn-key{padding:13px 28px}
+  .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px}
+  .gallery i{aspect-ratio:1; border-radius:12px; display:block}
+  .qa{margin-top:16px; display:grid; gap:10px}
+  .qa .qi{border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+  .qa .qi .q{font-weight:700; font-size:14px; color:var(--key)}
+  .qa .qi .a{font-size:14px; color:var(--ink-2); margin-top:3px}
+  .qa .qi.hide{display:none}
+  .qa.cols2{grid-template-columns:1fr 1fr}
+  /* ===== オーディション 2パターン共通 ===== */
+  .aud-banner{aspect-ratio:16/9; max-height:420px; border-radius:18px; margin-top:24px; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--c1,#1E73E8),var(--c2,#0B3C7A)); display:flex; align-items:flex-end; padding:26px}
+  .aud-banner .ab-logo{position:absolute; top:16px; left:16px; background:rgba(255,255,255,.92); color:var(--ink); font-weight:800; font-size:12px; padding:6px 12px; border-radius:8px}
+  .aud-banner .ab-cap{color:#fff; font-weight:800; font-size:clamp(20px,3.2vw,34px); line-height:1.2; text-shadow:0 2px 14px rgba(0,0,0,.35)}
+  .aud-head{margin-top:26px; display:flex; flex-direction:column; gap:9px; align-items:flex-start}
+  .aud-head h2{margin:0}
+  .aud-period{font-size:14px; color:var(--ink-2); font-weight:700}
+  .aud-summary{margin-top:12px; color:var(--ink-2); line-height:1.95; font-size:15px; max-width:780px}
+  .prize-list{list-style:none; margin:18px 0 0; padding:0; display:grid; gap:10px}
+  .prize-list li{display:flex; gap:13px; align-items:flex-start; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; background:#fff}
+  .prize-list .pz-ico{font-size:22px; line-height:1.2}
+  .prize-list b{display:block; font-size:14px}
+  .prize-list span{font-size:13px; color:var(--muted)}
+  .seg2{display:inline-flex; gap:4px; margin-top:8px; background:var(--surface-2); padding:4px; border-radius:999px}
+  .seg2 button{font:inherit; font-weight:700; font-size:13px; border:0; background:none; color:var(--muted); padding:8px 22px; border-radius:999px; cursor:pointer}
+  .seg2 button.active{background:#fff; color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .entry-kana{font-size:13px; color:var(--muted); margin:-2px 0 8px}
+  .r43{aspect-ratio:3/4 !important}
+  .gallery.g43 i{aspect-ratio:3/4}
+  .sns-row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+  .sns-row a{display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
+  .sns-row a:hover{border-color:var(--key); color:var(--key)}
+  .pts-live{display:inline-flex; align-items:center; gap:12px; margin:6px 0 16px; padding:12px 18px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface-2)}
+  .pts-live .lbl{font-size:12px; color:var(--muted); font-weight:700}
+  .pts-live .val{font-family:'Oswald',sans-serif; font-weight:700; font-size:30px; color:var(--key); line-height:1}
+  .pts-live .live{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; color:#E0245E}
+  .pts-live .live::before{content:""; width:7px; height:7px; border-radius:50%; background:#E0245E; animation:pulse 1.6s infinite}
+  .person .pts-mini{display:block; margin-top:6px; font-family:'Oswald',sans-serif; font-weight:700; color:var(--key); font-size:15px}
+  .person .pts-mini small{font-size:10px; color:var(--muted); font-weight:700; margin-left:2px; font-family:inherit}
+  .entry-video{aspect-ratio:16/9; border-radius:14px; margin-top:14px; background:linear-gradient(135deg,#1c1c22,#3a3a44); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.85); font-size:13px; font-weight:700; position:relative}
+  .entry-video::after{content:"▶"; position:absolute; width:62px; height:62px; border-radius:50%; background:rgba(255,255,255,.92); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:20px; padding-left:4px}
+  /* ランク・部門・獲得ポイント（投票ページ） */
+  .rank-badge{position:absolute; top:14px; left:14px; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:21px; color:#7a5b00; background:linear-gradient(135deg,#FCE08A,#E6B422); box-shadow:0 4px 14px rgba(0,0,0,.22); z-index:2}
+  .rank-badge small{font-size:11px; margin-left:1px}
+  .rank-badge.silver{color:#3a3a42; background:linear-gradient(135deg,#EDEDED,#BFC3C9)}
+  .rank-badge.bronze{color:#5a3a1a; background:linear-gradient(135deg,#E9C39B,#C98A55)}
+  .dept-badge{position:absolute; top:16px; right:14px; background:rgba(22,22,26,.78); color:#fff; font-size:12px; font-weight:700; padding:6px 13px; border-radius:999px; z-index:2}
+  .rank-bar{display:inline-flex; align-items:baseline; gap:2px; background:linear-gradient(135deg,#FCE08A,#E6B422); color:#7a5b00; font-weight:900; font-size:18px; padding:6px 24px; border-radius:8px}
+  .rank-bar small{font-size:12px}
+  .pt-bar{display:flex; align-items:center; gap:8px; margin:12px 0 14px; padding:12px 18px; border-radius:10px; background:var(--key-weak); border:1px solid var(--key-line)}
+  .pt-bar b{font-family:'Oswald',sans-serif; font-size:30px; color:var(--key); line-height:1}
+  .pt-bar .u{font-weight:800; color:var(--key); font-size:15px}
+  .pt-bar .live{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; color:#E0245E; margin-left:auto}
+  .pt-bar .live::before{content:""; width:7px; height:7px; border-radius:50%; background:#E0245E; animation:pulse 1.6s infinite}
+  .entry-intro{color:var(--ink-2); line-height:1.9; font-size:14px; margin:0 0 14px}
+  /* 応援コメント */
+  .comment-box{margin-top:16px}
+  .comment-box textarea{width:100%; min-height:90px; resize:vertical; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; font:inherit; font-size:14px; line-height:1.7; box-sizing:border-box}
+  .comment-box textarea:focus{outline:2px solid var(--key-line); border-color:var(--key)}
+  .cmt-actions{display:flex; align-items:center; justify-content:flex-end; gap:14px; margin-top:10px}
+  .cmt-count{font-size:12px; color:var(--muted)}
+  .cmt-gate,.cmt-done{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding:18px 20px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface-2); font-size:14px; color:var(--ink-2)}
+  .cmt-gate{border-style:dashed}
+  .cmt-done{border-color:var(--key); background:var(--key-weak)}
+  .comment-list{margin-top:20px; display:grid; gap:12px}
+  .cmt{border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; background:#fff}
+  .cmt-head{display:flex; align-items:center; gap:9px; margin-bottom:6px}
+  .cmt-av{width:28px; height:28px; border-radius:50%; background:var(--yell-grad); flex:0 0 auto}
+  .cmt-head b{font-size:14px}
+  .cmt-head span{font-size:12px; color:var(--muted); margin-left:auto}
+  .cmt-body{font-size:14px; line-height:1.8; color:var(--ink-2)}
+  .login-toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:120; display:flex; align-items:center; gap:14px; background:var(--ink); color:#fff; padding:12px 16px 12px 20px; border-radius:999px; box-shadow:0 12px 30px rgba(0,0,0,.25); font-size:14px; font-weight:600}
+  .login-toast[hidden]{display:none}
+  .login-toast .btn{padding:8px 18px; font-size:13px}
+  .person .ph{position:relative}
+  .person .rank-chip{position:absolute; top:10px; right:10px; background:rgba(22,22,26,.7); color:#fff; font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px}
+  .person .rank-chip.gold{background:linear-gradient(135deg,#FCE08A,#E6B422); color:#7a5b00}
+  .person .rank-chip.silver{background:linear-gradient(135deg,#EDEDED,#BFC3C9); color:#3a3a42}
+  .person .rank-chip.bronze{background:linear-gradient(135deg,#E9C39B,#C98A55); color:#5a3a1a}
+  .entrant-ad{grid-column:1/-1; border-radius:var(--radius); overflow:hidden; min-height:120px; padding:22px 24px; color:#fff; display:flex; flex-direction:column; justify-content:center; gap:6px; cursor:pointer}
+  .entrant-ad .ea-tag{font-size:11px; font-weight:800; opacity:.92; letter-spacing:.05em}
+  .entrant-ad .ea-name{font-size:18px; font-weight:800}
+  /* 充実セクション */
+  .info-list{list-style:none; margin:16px 0 0; padding:0; display:grid; gap:10px}
+  .info-list li{position:relative; padding:13px 16px 13px 40px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; font-size:14px; line-height:1.8; color:var(--ink-2)}
+  .info-list li::before{content:"●"; position:absolute; left:16px; top:13px; color:var(--key); font-size:10px}
+  .sched{margin-top:16px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+  .sched .sr{display:flex; gap:14px; padding:14px 18px; font-size:14px}
+  .sched .sr+.sr{border-top:1px solid var(--line)}
+  .sched .sr .sd{min-width:150px; font-weight:700; color:var(--key); font-family:'Oswald',sans-serif}
+  .sched .sr.done{background:var(--surface-2); color:var(--muted)}
+  .sched .sr.now{background:var(--key-weak)}
+  /* オーディション内タブ */
+  .aud-tabs{display:flex; gap:4px; margin-top:24px; border-bottom:2px solid var(--line)}
+  .aud-tabs button{font:inherit; font-weight:700; font-size:15px; border:0; background:none; color:var(--muted); padding:13px 26px; cursor:pointer; margin-bottom:-2px; border-bottom:2px solid transparent}
+  .aud-tabs button.active{color:var(--ink); border-bottom-color:var(--key)}
+  .aud-panel[hidden]{display:none}
+  /* エントリー一覧の下の広告（TOP広告と同サイズ 300×250） */
+  .aud-ad{position:relative; max-width:300px; margin:22px auto 0}
+  .aud-ad-tag{position:absolute; top:8px; left:8px; z-index:2; font-size:10px; font-weight:800; color:#fff; background:rgba(0,0,0,.42); padding:3px 8px; border-radius:6px}
+
+  /* 法務 */
+  .legal-body{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); padding:24px 26px; line-height:1.8; font-size:14px; color:var(--ink-2)}
+  .legal-body h4{color:var(--ink); margin:18px 0 6px; font-size:15px}
+  .legal-body h4:first-child{margin-top:0}
+  .legal-body dl{display:grid; grid-template-columns:140px 1fr; gap:0}
+  .legal-body dt{font-weight:700; color:var(--ink); padding:8px 0}
+  .legal-body dd{margin:0; padding:8px 0}
+
+  /* confetti */
+  .confetti{position:fixed; width:9px; height:14px; z-index:80; pointer-events:none; will-change:transform,opacity}
+
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.28)}30%{transform:scale(1)}45%{transform:scale(1.22)}}
+
+  /* ====== レスポンシブ：PC / タブレット / SP ====== */
+  @media (max-width:1024px){
+    .grid{grid-template-columns:repeat(3,1fr)}
+    .people{grid-template-columns:repeat(3,1fr)}
+    /* iPad：ナビを1行に収める */
+    .gnav-inner{gap:10px; padding:12px 16px}
+    .gnav nav{gap:1px; margin-left:2px}
+    .gnav nav button{padding:8px 8px; font-size:13px}
+    .gnav .ghost{padding:8px 12px; font-size:12px}
+  }
+  @media (max-width:640px){
+    .gnav nav{display:none}
+    .grid{grid-template-columns:repeat(2,1fr); gap:12px}
+    .people{grid-template-columns:repeat(2,1fr); gap:12px}
+    .outline dl{grid-template-columns:1fr}
+    .outline dt{border-bottom:0}
+    .gp-grid{grid-template-columns:1fr}
+    /* SP：広告は中央・大きく1枚 */
+    .ad-rotator{max-width:360px; margin:24px auto 0}
+    .ad-slide{font-size:20px}
+    /* SP：オーディションカードの文字を控えめに */
+    .card .body{padding:11px 12px 13px}
+    .card .uni{font-size:10px}
+    .card .ttl{font-size:13px; margin:2px 0 6px; line-height:1.3}
+    .card .row{font-size:11px; flex-direction:column; align-items:flex-start; gap:3px}
+    .card .period{font-size:11px; white-space:nowrap}
+    .news .cat{display:none}
+    .news .date{min-width:64px; font-size:11px}
+    .feat-grid{grid-template-columns:1fr}
+    .steps{grid-template-columns:repeat(2,1fr)}
+    .gacha-payout{grid-template-columns:repeat(2,1fr); gap:10px}
+    .mp-cols{grid-template-columns:1fr}
+    .mp-bal{flex-direction:column; align-items:flex-start; gap:10px}
+    .mp-bal-split{padding-left:0; border-left:0}
+    .mp-actions .btn-line{flex:1; justify-content:center; text-align:center}
+    .plan-grid{grid-template-columns:repeat(2,1fr)}
+    .entry-hero{grid-template-columns:1fr}
+    .entry-info h1{font-size:30px}
+    .gallery{grid-template-columns:repeat(3,1fr)}
+    .qa.cols2{grid-template-columns:1fr}
+    .legal-body dl{grid-template-columns:1fr}
+    .search{margin-left:0; max-width:none}
+    .hero-body{padding:22px}
+    main{padding-bottom:96px}
+    .switcher{left:12px; right:12px; bottom:12px; width:auto}
+    /* SP：下部固定の投票CTA */
+    .sp-cta{display:flex}
+  }
+  .sp-cta{
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.92); backdrop-filter:blur(10px); border-top:1px solid var(--line);
+  }
+  .sp-cta .btn-key{flex:1; justify-content:center}
+
+  .view{display:none}
+  .view.active{display:block}
+</style>
+</head>
+<body>
+
+<header class="gnav">
+  <div class="gnav-inner">
+    <a class="logo" data-view="home"><img src="img/yellvoto02.svg" alt="YELL VOTE"></a>
+    <nav>
+      <button data-view="about">YELL VOTEとは</button>
+      <button data-view="auditions">オーディション</button>
+      <button data-view="points">ポイント購入</button>
+      <button data-view="news">NEWS</button>
+      <button data-view="faq">よくある質問</button>
+    </nav>
+    <div class="spacer"></div>
+    <button class="ghost" id="login-btn">ログアウト</button>
+    <button class="ghost ghost-key" data-view="mypage">マイページ</button>
+  </div>
+</header>
+
+<!-- ============ HOME (TOP) ============ -->
+<div class="view active" id="view-home">
+<main>
+  <!-- 一番上：広告枠（最大5社・順々にローテーション） -->
+  <div class="ad-rotator" id="ad-rotator">
+    <div class="ad-track" id="ad-track"></div>
+    <div class="ad-dots" id="ad-dots"></div>
+    <span class="ad-tag">AD</span>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Auditions</span>
+        <h2 class="sec">開催中のオーディション</h2>
+      </div>
+      <button class="more" data-view="auditions">すべて見る →</button>
+    </div>
+    <div class="grid" id="home-grid"></div>
+  </section>
+
+  <!-- 記事内 AdSense 枠 -->
+  <div class="adsense"><span>広告 — Google AdSense</span></div>
+
+  <section id="news-sec">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">News</span>
+        <h2 class="sec">インフォメーション</h2>
+      </div>
+      <button class="more" data-view="news">一覧へ →</button>
+    </div>
+    <div class="news" id="news-list"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ AUDITIONS LIST ============ -->
+<div class="view" id="view-auditions">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">Auditions</span>
+    <h2 class="sec">オーディション一覧</h2>
+    <p class="sec-sub">ステータス・期間・エントリー数を一目で。フィルタと検索で回遊しやすく。</p>
+
+    <div class="filters">
+      <div class="seg" id="seg">
+        <button class="active" data-f="all">すべて</button>
+        <button data-f="live">開催中</button>
+        <button data-f="result">結果発表</button>
+        <button data-f="end">終了</button>
+      </div>
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" placeholder="大学名・コンテスト名で検索" />
+      </div>
+    </div>
+
+    <div class="grid" id="aud-grid"></div>
+    <div class="empty" id="aud-empty" style="display:none">
+      <div class="ico">🔥</div>
+      <h3>該当するオーディションはありません</h3>
+      <p>条件を変えるか、次回開催のお知らせをチェックしてください。</p>
+      <button class="btn btn-key">次回開催の通知を受け取る</button>
+    </div>
+  </section>
+
+  <section id="archive-sec">
+    <span class="eyebrow">Archive</span>
+    <h2 class="sec">過去のコンテスト</h2>
+    <p class="sec-sub">終了したコンテストはグランプリと一緒にアーカイブ。応援の記録は流れて消えません。</p>
+    <div class="grid" id="archive-grid"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ DETAIL（ミスコンパターン LP） ============ -->
+<div class="view" id="view-detail">
+<main>
+  <div class="aud-banner" style="--c1:#DD1C5D;--c2:#7A2050">
+    <span class="ab-logo">◯◯ MISS&amp;MISTER</span>
+    <span class="ab-cap">ミス・ミスター◯◯コンテスト 2026</span>
+  </div>
+
+  <div class="aud-head">
+    <span class="badge live">投票受付中</span>
+    <h2 class="sec">ミス・ミスター◯◯コンテスト 2026</h2>
+    <div class="aud-period num">🗓 投票期間：2026.07.05 – 2026.10.24</div>
+  </div>
+
+  <div class="aud-tabs" data-tabs>
+    <button class="active" data-tab="top">TOP</button>
+    <button data-tab="about">概要</button>
+  </div>
+
+  <!-- TOP タブ -->
+  <div class="aud-panel" data-panel="top">
+    <section>
+      <p class="aud-summary">◯◯大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。あなたのYELL（投票）が、候補者の背中を押します。投票ポイントはリアルタイムでランキングに反映されます。</p>
+    </section>
+
+    <section>
+      <span class="eyebrow">Finalists</span>
+      <h2 class="sec">ファイナリスト</h2>
+      <div class="seg2" id="final-tabs"><button class="active" data-g="miss">ミス</button><button data-g="mister">ミスター</button></div>
+      <div class="people" id="final-people"></div>
+      <div id="miscon-ad"></div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Notes</span>
+      <h2 class="sec">注意事項</h2>
+      <ul class="info-list">
+        <li>不正投票（複数アカウント・自動ツール等）が確認された場合、投票の無効化およびアカウント停止を行います。</li>
+        <li>応援メッセージは誹謗中傷・個人情報・公序良俗に反する内容を禁止します。</li>
+        <li>購入したポイントの払い戻しはできません。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Outline</span>
+      <h2 class="sec">開催概要</h2>
+      <div class="outline">
+        <dl>
+          <dt>コンテスト名</dt><dd>ミス・ミスター◯◯コンテスト2026</dd>
+          <dt>主催</dt><dd>◯◯コンテスト実行委員会</dd>
+          <dt>投票期間</dt><dd class="num">2026.07.05 14:00 – 2026.10.24 23:59</dd>
+          <dt>本番日</dt><dd>2026年10月25日（土）</dd>
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <!-- 概要 タブ -->
+  <div class="aud-panel" data-panel="about" hidden>
+    <section>
+      <span class="eyebrow">Overview</span>
+      <h2 class="sec">オーディション概要</h2>
+      <p class="aud-summary">◯◯大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。ファイナリストたちが活動期間の挑戦を通して個性を磨き、グランプリを目指します。本コンテストはYELL VOTE上で投票を受け付け、投票ポイントと当日審査の合算で総合グランプリを決定します。</p>
+      <div class="theme-card">
+        <p>テーマ「あなたのオンリーワンが輝く舞台へ」</p>
+        <span>活動期間の挑戦を通して、候補者一人ひとりの個性が輝くコンテストを目指します。</span>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Prize</span>
+      <h2 class="sec">特典・賞品</h2>
+      <ul class="prize-list">
+        <li><span class="pz-ico">👑</span><div><b>グランプリ</b><span>賞金10万円 ＋ 協賛企業の広告モデル出演権</span></div></li>
+        <li><span class="pz-ico">🥈</span><div><b>準グランプリ</b><span>賞金3万円 ＋ 記念トロフィー</span></div></li>
+        <li><span class="pz-ico">📸</span><div><b>フォトジェニック賞</b><span>プロ撮影によるフォトブック制作</span></div></li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Schedule</span>
+      <h2 class="sec">スケジュール</h2>
+      <div class="sched">
+        <div class="sr done"><span class="sd num">06.20</span><span>エントリー受付・ファイナリスト発表</span></div>
+        <div class="sr now"><span class="sd num">07.05</span><span>WEB投票スタート（受付中）</span></div>
+        <div class="sr"><span class="sd num">09.01</span><span>中間結果発表</span></div>
+        <div class="sr"><span class="sd num">10.24</span><span>WEB投票締切 23:59</span></div>
+        <div class="sr"><span class="sd num">10.25</span><span>本番ステージ・総合グランプリ発表</span></div>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Judging</span>
+      <h2 class="sec">審査内容</h2>
+      <ul class="info-list">
+        <li>WEB投票（YELL VOTEの獲得ポイント）：総合評価に加算されます。</li>
+        <li>当日ステージ審査：ウォーキング・スピーチ・質疑応答などを審査員が評価。</li>
+        <li>総合グランプリ＝WEB投票ポイント ＋ 当日審査の合算で決定（ミス・ミスター各部門）。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Notes</span>
+      <h2 class="sec">注意事項</h2>
+      <ul class="info-list">
+        <li>不正投票（複数アカウント・自動ツール等）が確認された場合、投票の無効化およびアカウント停止を行います。</li>
+        <li>応援メッセージは誹謗中傷・個人情報・公序良俗に反する内容を禁止します。</li>
+        <li>購入したポイントの払い戻しはできません。</li>
+        <li>やむを得ない事情により、日程・内容が変更となる場合があります。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Contact</span>
+      <h2 class="sec">問い合わせ先</h2>
+      <div class="outline">
+        <dl>
+          <dt>主催</dt><dd>◯◯コンテスト実行委員会</dd>
+          <dt>運営</dt><dd>YELL VOTE 運営事務局</dd>
+          <dt>お問い合わせ</dt><dd>YELLサポートデスク（マイページ → よくある質問）</dd>
+        </dl>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<!-- ============ RESULT ============ -->
+<div class="view" id="view-result">
+<main>
+  <div class="result-hero">
+    <span class="eyebrow" style="color:#fff;opacity:.85">Result Announcement</span>
+    <h1>結果発表</h1>
+    <p>ミス・ミスター◯◯コンテスト2026</p>
+    <div class="personal">
+      <span class="hb">🔥</span> あなたの応援が、<b>斉藤花音</b>さんをここまで押し上げました。
+    </div>
+  </div>
+
+  <section>
+    <span class="eyebrow">Grand Prix</span>
+    <h2 class="sec">グランプリ</h2>
+    <p class="sec-sub">総合グランプリ（YELL VOTE票数＋全審査基準の合算）。ミス・ミスター同時発表。</p>
+    <div class="gp-grid" id="gp-grid"></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Ranking</span>
+    <h2 class="sec">入賞者</h2>
+    <div class="rank" id="rank"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ ABOUT（YELL VOTEとは） ============ -->
+<div class="view" id="view-about">
+<main>
+  <div class="result-hero" style="background:linear-gradient(135deg,var(--ink),color-mix(in srgb,var(--yell-accent) 55%,var(--ink)))">
+    <span class="eyebrow" style="color:#fff;opacity:.85">About</span>
+    <h1>応援が、ちゃんと届く場所。</h1>
+    <p>その場で流れて消えるのではなく、必ず本人に届いて、残る応援を。</p>
+  </div>
+
+  <section>
+    <span class="eyebrow">Welcome to YELL VOTE</span>
+    <h2 class="sec">応援が、夢を動かす。</h2>
+    <p class="lead">YELL VOTEは、若者の夢と希望を応援する投票コミュニティサイトです。YELL VOTEのミッションは、このコミュニティに集う人々や企業、地域社会が「応援」というキーワードで繋がり、応援≒投票を通して、より多くの若者が夢を実現させていくことです。</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">What you can do</span>
+    <h2 class="sec">YELL VOTE でできること</h2>
+    <div class="feat-grid">
+      <div class="feat"><div class="fic">📣</div><h3>夢を持つ若者にYELLを送る</h3><p>オーディション参加者への投票を通じて、応援の気持ちを届けられる。</p></div>
+      <div class="feat"><div class="fic">✨</div><h3>夢のキッカケに出会う</h3><p>オーディションへの参加で、自分の夢を考えるキッカケに出会える。</p></div>
+      <div class="feat"><div class="fic">🎓</div><h3>チャンスが広がる</h3><p>YELL CAMPUS ID登録で、就職や仕事探しのチャンスが広がる。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">How it works</span>
+    <h2 class="sec">応援のながれ</h2>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><b>ID登録・ログイン</b><p>YELL CAMPUS IDで簡単ログイン</p></div>
+      <div class="step"><span class="num">2</span><b>デイリーガチャ</b><p>1日1回引いてポイント獲得</p></div>
+      <div class="step"><span class="num">3</span><b>推しに投票</b><p>ポイントでYELLを届ける</p></div>
+      <div class="step"><span class="num">4</span><b>ランキング・結果</b><p>応援が形になる</p></div>
+    </div>
+    <div style="margin-top:24px"><button class="btn btn-key" data-view="auditions">オーディションを見る</button></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Audition</span>
+    <h2 class="sec">オーディションの投票ルール</h2>
+    <ul class="rule-list">
+      <li>YELL CAMPUS ID登録した会員（会員登録は無料）のみ投票することができます。</li>
+      <li>会員登録後、毎日1日1回ログインガチャを引くと、当たったYELLポイントを投票することができます。</li>
+      <li>無料でサービスを利用できますが、有料でコインを購入しYELLポイントに変換することで、より多くのYELLを送ることができます。</li>
+      <li>会員はオーディション参加者に応援メッセージを送れます。誹謗中傷やパーソナルな問題になるメッセージは避け、マナーを持って送りましょう。</li>
+    </ul>
+  </section>
+
+  <section>
+    <span class="eyebrow">Fan Ranking</span>
+    <h2 class="sec">ファンランキング</h2>
+    <p class="lead">投票したポイントによってランキングされます。ファン同士で競い合い、オーディション参加者にあなたの応援をアピールしましょう。</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">YELL CAMPUS ID</span>
+    <h2 class="sec">YELL CAMPUS ID とは</h2>
+    <p class="lead">YELL CAMPUS IDアカウントを作成すると、サービス毎にアカウントを作成することなくログインできるSSO（Single Sign On）を採用しています。ひとつのIDで、以下のサービスを横断して利用できます。</p>
+    <div class="sso-list">
+      <span>YELL VOTE（投票コミュニティ）</span>
+      <span>YELL CAMPUS（2025年4月リニューアル予定）</span>
+      <span>MONAQA（WEBクリエイティブスクール）</span>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Daily Gacha</span>
+    <h2 class="sec">デイリーガチャ</h2>
+    <p class="lead">1日1回、ログインしてガチャをひいて、当たったYELLポイントを推しに投票しよう。</p>
+    <div class="payout-list" id="gacha-payout"></div>
+    <p class="payout-note">※ 表示の数値は当選確率（配当率）です。</p>
+  </section>
+</main>
+</div>
+
+<!-- ============ MYPAGE ============ -->
+<div class="view" id="view-mypage">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">My Page</span>
+    <h2 class="sec">マイページ</h2>
+    <div class="mp-head">
+      <div class="mp-user"><div class="mp-av"></div><div><b>daisuke さん</b><span>YELL CAMPUS ID 連携済み</span></div></div>
+      <div class="mp-points">
+        <div class="mp-bal">
+          <div class="mp-bal-total"><span>合計ポイント</span><div><b class="num">1,250</b> pt</div></div>
+          <div class="mp-bal-split">
+            <div><span>有料</span><b class="num">800</b><small>pt</small></div>
+            <div><span>無料</span><b class="num">450</b><small>pt</small></div>
+          </div>
+        </div>
+        <button class="btn btn-key" data-view="points">チャージ</button>
+      </div>
+    </div>
+    <div class="mp-actions">
+      <button class="btn btn-line" data-stub>✏️ プロフィールを編集</button>
+      <button class="btn btn-line" data-stub>YELL CAMPUS マイページ（アカウント編集・退会）↗</button>
+    </div>
+    <div class="mp-gacha-cta" id="mp-gacha-cta">
+      <div><b>🎁 本日のデイリーガチャがまだです</b><span>1日1回引いて、当たったYELLポイントで応援しよう</span></div>
+      <button class="btn btn-key" data-gacha>ガチャを引く</button>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec" style="font-size:20px">応援中の候補者</h2>
+    <div class="people" id="mp-supporting"></div>
+  </section>
+
+  <section>
+    <div class="mp-cols">
+      <div>
+        <h2 class="sec" style="font-size:20px">応援履歴</h2>
+        <div class="timeline" id="mp-history"></div>
+      </div>
+      <div>
+        <h2 class="sec" style="font-size:20px">ガチャ履歴</h2>
+        <div class="timeline" id="mp-gacha"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec" style="font-size:20px">有料ポイント購入履歴</h2>
+    <div class="timeline" id="mp-purchase"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ POINTS（ポイント購入） ============ -->
+<div class="view" id="view-points">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">Points</span>
+    <h2 class="sec">ポイント購入</h2>
+    <p class="sec-sub">ポイントはオーディション参加者への投票（YELLを送る）に使えます。</p>
+
+    <div class="mp-head" style="margin-top:18px">
+      <div class="mp-bal">
+        <div class="mp-bal-total"><span>合計ポイント</span><div><b class="num">1,250</b> pt</div></div>
+        <div class="mp-bal-split">
+          <div><span>有料</span><b class="num">800</b><small>pt</small></div>
+          <div><span>無料</span><b class="num">450</b><small>pt</small></div>
+        </div>
+      </div>
+    </div>
+    <p class="buy-note">※ ここで購入したポイントはすべて<b>有料ポイント</b>になります。</p>
+
+    <div class="seg2" id="buy-tabs" style="margin-top:18px">
+      <button class="active" data-buy="jpy">JPY（円）で購入</button>
+      <button data-buy="coin">YELLコインで購入</button>
+    </div>
+    <p class="sec-sub" id="buy-tab-desc">日本円のお支払いでポイントを購入します。</p>
+    <div class="plan-grid" id="plan-grid"></div>
+
+    <p class="fineprint">※ 表示は税込。未成年の方は保護者の同意が必要です。決済はLINE Pay／クレジットカード／キャリア決済に対応予定。購入後のポイントは払い戻しできません。詳しくは<a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>をご確認ください。</p>
+  </section>
+</main>
+</div>
+
+<!-- ============ FAQ ============ -->
+<div class="view" id="view-faq">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">FAQ</span>
+    <h2 class="sec">よくある質問</h2>
+    <div class="faq" id="faq-list"></div>
+    <div class="faq-cta">解決しない場合は <a href="#">YELLサポートデスク</a> へ。</div>
+  </section>
+</main>
+</div>
+
+<!-- ============ NEWS一覧 ============ -->
+<div class="view" id="view-news">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">News</span>
+    <h2 class="sec">インフォメーション</h2>
+    <div class="filters">
+      <div class="seg" id="news-seg">
+        <button class="active" data-nf="all">すべて</button>
+        <button data-nf="重要">重要</button>
+        <button data-nf="お知らせ">お知らせ</button>
+        <button data-nf="機能">機能</button>
+        <button data-nf="メンテ">メンテ</button>
+      </div>
+    </div>
+    <div class="news" id="news-full"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ ENTRY（候補者詳細） ============ -->
+<div class="view" id="view-entry">
+<main>
+  <div class="entry-hero">
+    <div class="entry-photo r43">
+      <span class="rank-badge">1<small>位</small></span>
+      <span class="dept-badge">Miss部門</span>
+    </div>
+    <div class="entry-info">
+      <div class="rank-bar">1<small>位</small></div>
+      <div class="entry-kana" style="margin-top:10px">さいとう かのん</div>
+      <h1>斉藤花音</h1>
+      <div class="entry-uni">◯◯大学</div>
+      <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
+      <p class="entry-intro">「自分らしさ」を大切に、コンテストに挑戦しています。私の表現に何か感じていただけたら、ぜひ一票を。応援よろしくお願いします！</p>
+      <div class="sns-row">
+        <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
+      </div>
+      <div class="entry-cta">
+        <button class="btn btn-key" id="entry-vote"><span class="hb">♥</span> 投票する</button>
+        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <span class="eyebrow">Profile</span>
+    <h2 class="sec">プロフィール</h2>
+    <div class="outline">
+      <dl>
+        <dt>学年</dt><dd>3年</dd>
+        <dt>学部</dt><dd>文学部</dd>
+        <dt>学科</dt><dd>日本文学科</dd>
+        <dt>誕生日</dt><dd>5月31日</dd>
+        <dt>出身地</dt><dd>神奈川県</dd>
+        <dt>身長</dt><dd class="num">159.4cm</dd>
+        <dt>血液型</dt><dd>O型</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Photo</span>
+    <h2 class="sec">写真</h2>
+    <p class="sec-sub">メイン1枚＋サブ最大6枚（4:3）</p>
+    <div class="gallery g43" id="entry-gallery"></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Interview</span>
+    <h2 class="sec">インタビュー</h2>
+    <div class="qa cols2" id="entry-qa"></div>
+    <button class="more" id="qa-more" style="margin-top:14px">もっと見る ＋</button>
+  </section>
+
+  <section>
+    <span class="eyebrow">Cheer</span>
+    <h2 class="sec">応援コメント</h2>
+    <p class="sec-sub">1日1回、このオーディションの推しに応援コメントを送れます。マナーを守って応援しよう。</p>
+    <div class="comment-box" id="cmt-box-m"></div>
+    <div class="comment-list" id="cmt-list-m"></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Finalists</span>
+    <h2 class="sec">ほかのファイナリスト</h2>
+    <div class="seg2" id="others-tabs"><button class="active" data-g="miss">ミス</button><button data-g="mister">ミスター</button></div>
+    <div class="people" id="entry-others"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ DETAIL（通常パターン LP） ============ -->
+<div class="view" id="view-detail-n">
+<main>
+  <div class="aud-banner" style="--c1:#1E73E8;--c2:#0B3C7A">
+    <span class="ab-cap">△△ Campus Audition 2026</span>
+  </div>
+
+  <div class="aud-head">
+    <span class="badge live">投票受付中</span>
+    <h2 class="sec">△△ Campus Audition 2026</h2>
+    <div class="aud-period num">🗓 投票期間：2026.06.20 – 2026.09.30</div>
+  </div>
+
+  <div class="aud-tabs" data-tabs>
+    <button class="active" data-tab="top">TOP</button>
+    <button data-tab="about">概要</button>
+  </div>
+
+  <!-- TOP タブ -->
+  <div class="aud-panel" data-panel="top">
+    <section>
+      <p class="aud-summary">次世代のクリエイター・パフォーマーを発掘する公開オーディション。ジャンルを問わずエントリーした参加者へ、YELL（投票）で応援を届けられます。獲得ポイントはリアルタイムでランキングに反映されます。</p>
+    </section>
+
+    <section>
+      <span class="eyebrow">Entrants</span>
+      <h2 class="sec">エントリー者</h2>
+      <div class="people" id="nentrants"></div>
+      <div id="normal-ad"></div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Notes</span>
+      <h2 class="sec">注意事項</h2>
+      <ul class="info-list">
+        <li>不正投票（複数アカウント・自動ツール等）が確認された場合、投票の無効化およびアカウント停止を行います。</li>
+        <li>応援メッセージは誹謗中傷・個人情報・公序良俗に反する内容を禁止します。</li>
+        <li>購入したポイントの払い戻しはできません。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Outline</span>
+      <h2 class="sec">開催概要</h2>
+      <div class="outline">
+        <dl>
+          <dt>オーディション名</dt><dd>△△ Campus Audition 2026</dd>
+          <dt>主催</dt><dd>△△ Audition 事務局</dd>
+          <dt>投票期間</dt><dd class="num">2026.06.20 12:00 – 2026.09.30 23:59</dd>
+          <dt>結果発表</dt><dd>2026年10月上旬</dd>
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <!-- 概要 タブ -->
+  <div class="aud-panel" data-panel="about" hidden>
+    <section>
+      <span class="eyebrow">Overview</span>
+      <h2 class="sec">オーディション概要</h2>
+      <p class="aud-summary">次世代のクリエイター・パフォーマーを発掘する公開オーディション。ジャンルを問わずエントリーした参加者へ、YELL（投票）で応援を届けられます。獲得ポイントはリアルタイムでランキングに反映され、上位入賞者には活動サポートやメディア出演のチャンスが用意されています。</p>
+      <ul class="info-list">
+        <li>YELL CAMPUS ID（無料登録）があれば誰でも投票に参加できます。</li>
+        <li>デイリーガチャで獲得したポイント、または購入ポイントで応援できます。</li>
+        <li>各エントリー者の獲得ポイントはリアルタイムで表示されます。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Prize</span>
+      <h2 class="sec">特典・賞品</h2>
+      <ul class="prize-list">
+        <li><span class="pz-ico">🏆</span><div><b>グランプリ</b><span>賞金20万円 ＋ 活動サポート契約</span></div></li>
+        <li><span class="pz-ico">🎬</span><div><b>特別賞</b><span>プロによるPV制作</span></div></li>
+        <li><span class="pz-ico">🎤</span><div><b>オーディエンス賞</b><span>協賛イベントへの出演権</span></div></li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Schedule</span>
+      <h2 class="sec">スケジュール</h2>
+      <div class="sched">
+        <div class="sr done"><span class="sd num">06.01</span><span>エントリー受付開始</span></div>
+        <div class="sr now"><span class="sd num">06.20</span><span>WEB投票スタート（受付中）</span></div>
+        <div class="sr"><span class="sd num">08.15</span><span>中間ランキング発表</span></div>
+        <div class="sr"><span class="sd num">09.30</span><span>WEB投票締切 23:59</span></div>
+        <div class="sr"><span class="sd num">10月上旬</span><span>結果発表・表彰</span></div>
+      </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Judging</span>
+      <h2 class="sec">審査内容</h2>
+      <ul class="info-list">
+        <li>WEB投票（YELL VOTEの獲得ポイント）が選考の主要指標となります。</li>
+        <li>上位入賞者は、運営・協賛による最終選考（書類・面談等）を経て各賞を決定します。</li>
+        <li>表現力・将来性・応援の熱量などを総合的に評価します。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Notes</span>
+      <h2 class="sec">注意事項</h2>
+      <ul class="info-list">
+        <li>不正投票（複数アカウント・自動ツール等）が確認された場合、投票の無効化およびアカウント停止を行います。</li>
+        <li>応援メッセージは誹謗中傷・個人情報・公序良俗に反する内容を禁止します。</li>
+        <li>購入したポイントの払い戻しはできません。</li>
+        <li>やむを得ない事情により、日程・内容が変更となる場合があります。</li>
+      </ul>
+    </section>
+
+    <section>
+      <span class="eyebrow">Contact</span>
+      <h2 class="sec">問い合わせ先</h2>
+      <div class="outline">
+        <dl>
+          <dt>主催</dt><dd>△△ Audition 事務局</dd>
+          <dt>運営</dt><dd>YELL VOTE 運営事務局</dd>
+          <dt>お問い合わせ</dt><dd>YELLサポートデスク（マイページ → よくある質問）</dd>
+        </dl>
+      </div>
+    </section>
+  </div>
+</main>
+</div>
+
+<!-- ============ ENTRY（通常パターン エントリー者） ============ -->
+<div class="view" id="view-entry-n">
+<main>
+  <div class="entry-hero">
+    <div class="entry-photo r43" id="nentry-photo">
+      <span class="rank-badge">1<small>位</small></span>
+    </div>
+    <div class="entry-info">
+      <div class="rank-bar">1<small>位</small></div>
+      <div class="entry-kana" id="nentry-kana" style="margin-top:10px">さとう だいち</div>
+      <h1 id="nentry-name">佐藤大地</h1>
+      <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
+      <p class="entry-intro" id="nentry-intro">ダンス歴12年。ストリートからコンテンポラリーまで幅広く踊ります。いつか世界の舞台に立つのが夢です。応援よろしくお願いします！</p>
+      <div class="sns-row">
+        <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
+      </div>
+      <div class="entry-cta">
+        <button class="btn btn-key" id="nentry-vote"><span class="hb">♥</span> 投票する</button>
+        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <span class="eyebrow">Photo &amp; Movie</span>
+    <h2 class="sec">写真・動画</h2>
+    <p class="sec-sub">写真 最大8枚（4:3）＋ 紹介動画 1本（16:9）</p>
+    <div class="gallery g43" id="nentry-gallery"></div>
+    <div class="entry-video">紹介ムービー（16:9）</div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Cheer</span>
+    <h2 class="sec">応援コメント</h2>
+    <p class="sec-sub">1日1回、このオーディションの推しに応援コメントを送れます。マナーを守って応援しよう。</p>
+    <div class="comment-box" id="cmt-box-n"></div>
+    <div class="comment-list" id="cmt-list-n"></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Entrants</span>
+    <h2 class="sec">ほかのエントリー者</h2>
+    <div class="people" id="nentry-others"></div>
+  </section>
+</main>
+</div>
+
+<!-- ============ LEGAL（法務） ============ -->
+<div class="view" id="view-legal">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">Legal</span>
+    <h2 class="sec" id="legal-title">利用規約について</h2>
+    <div class="seg" id="legal-seg" style="margin-top:14px">
+      <button class="active" data-lg="terms">利用規約</button>
+      <button data-lg="privacy">プライバシー</button>
+      <button data-lg="tokushoho">特商法</button>
+      <button data-lg="company">運営会社</button>
+    </div>
+    <div class="legal-body" id="legal-body"></div>
+  </section>
+</main>
+</div>
+
+<!-- SP固定CTA（詳細用） -->
+<div class="sp-cta"><button class="btn btn-key">この候補者に投票する</button></div>
+
+<footer class="gfoot">
+  <div class="gfoot-inner">
+    <div class="foot-brand"><img src="img/yellvoto01.svg" alt="YELL VOTE" class="foot-logo"><span>応援が、ちゃんと届く場所。</span></div>
+    <nav class="foot-links">
+      <a data-view="legal" data-legal="terms">利用規約について</a>
+      <a data-view="legal" data-legal="privacy">プライバシーポリシー</a>
+      <a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>
+      <a data-view="legal" data-legal="company">運営会社</a>
+    </nav>
+  </div>
+  <div class="foot-copy">© 2026 YELL VOTE</div>
+</footer>
+
+<!-- 1日1回ガチャ ポップアップ -->
+<div class="gacha-overlay" id="gacha" hidden>
+  <div class="gacha-modal">
+    <button class="gacha-close" data-gacha-close>×</button>
+    <span class="eyebrow" style="color:var(--yell-accent)">Daily Gacha</span>
+    <h3>1日1回 応援ガチャ</h3>
+    <p>毎日ログインで回せる。今日のエールを受け取ろう。</p>
+    <div class="gacha-capsule" id="capsule">🎁</div>
+    <div class="gacha-result" id="gacha-result" hidden></div>
+    <button class="btn btn-key" id="gacha-spin">ガチャを回す</button>
+  </div>
+</div>
+
+<div class="login-toast" id="login-toast" hidden>
+  <span id="login-toast-msg">ログインすると投票・コメントできます</span>
+  <button class="btn btn-key" id="toast-login">ログイン</button>
+</div>
+
+<script>
+const AUD=[
+  {uni:"◯◯大学",  ttl:"ミス・ミスター◯◯コンテスト2026", st:"live",  stl:"開催中",   period:"07.05 – 10.24", ent:"Miss 6 / Mister 6", c:["#DD1C5D","#7A2050"], ck:"#DD1C5D", type:"miscon"},
+  {uni:"△△大学",  ttl:"△△ Campus Audition 2026",        st:"live",  stl:"開催中",   period:"06.20 – 09.30", ent:"12組",            c:["#1E73E8","#0B3C7A"], ck:"#1E73E8", type:"normal"},
+  {uni:"□□大学",  ttl:"MR/MISS □□ 2026",                st:"soon",  stl:"近日",     period:"08.01 開始",    ent:"準備中",          c:["#15A36A","#0C5C3C"], ck:"#15A36A", type:"miscon"},
+  {uni:"◇◇芸術大",ttl:"◇◇ Talent Contest 2026",         st:"result",stl:"結果発表", period:"結果公開中",    ent:"GP発表済",        c:["#7A5CFF","#3A2A8A"], ck:"#7A5CFF", type:"normal"},
+  {uni:"☆☆大学",  ttl:"ミスコン☆☆2025",                 st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 斉藤花音",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
+  {uni:"◎◎大学",  ttl:"◎◎ Beauty Pageant 2025",         st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 田中優花",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
+  {uni:"▲▲大学",  ttl:"▲▲ Campus Star 2026",            st:"live",  stl:"開催中",   period:"07.10 – 10.10", ent:"Miss 8 / Mister 8",c:["#E8730A","#8A3C00"], ck:"#E8730A", type:"miscon"},
+  {uni:"●●大学",  ttl:"●● Contest 2026",                st:"soon",  stl:"近日",     period:"09.01 開始",    ent:"準備中",          c:["#0FB5C4","#075660"], ck:"#0FB5C4", type:"normal"},
+];
+const PEOPLE=[
+  {no:"ENTRY 01", name:"斉藤花音", gp:"グランプリ", heat:92, c:["#F7C6D5","#DD1C5D"]},
+  {no:"ENTRY 02", name:"野田さつき",gp:"準グランプリ",heat:78, c:["#FAD9C0","#E8730A"]},
+  {no:"ENTRY 03", name:"田中優花", gp:"",          heat:64, c:["#CFE0FA","#1E73E8"]},
+  {no:"ENTRY 04", name:"山形光美", gp:"",          heat:55, c:["#D2F0E2","#15A36A"]},
+];
+
+function cardHTML(a){
+  return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
+    <div class="thumb"><span class="st ${a.st}">${a.stl}</span></div>
+    <div class="keybar"></div>
+    <div class="body">
+      <div class="uni">${a.uni}</div>
+      <div class="ttl">${a.ttl}</div>
+      <div class="row"><span class="period num">${a.period}</span><span class="ent">${a.ent}</span></div>
+    </div>
+  </article>`;
+}
+document.getElementById('home-grid').innerHTML=AUD.filter(a=>a.st==='live').slice(0,4).map(cardHTML).join('');
+
+// 広告ローテーター（最大5社・自動切替）
+const ADS=[
+  {name:"SPONSOR A｜留学 ONE BRIDGE", c:"linear-gradient(120deg,#1E73E8,#0B3C7A)"},
+  {name:"SPONSOR B｜CAMPUS COLLECTION", c:"linear-gradient(120deg,#DD1C5D,#7A2050)"},
+  {name:"SPONSOR C｜YELL TICKET", c:"linear-gradient(120deg,#15A36A,#0C5C3C)"},
+  {name:"SPONSOR D｜◯◯大学 生協", c:"linear-gradient(120deg,#7A5CFF,#3A2A8A)"},
+  {name:"SPONSOR E｜募集中", c:"linear-gradient(120deg,#FF5A3C,#E8730A)"},
+];
+const track=document.getElementById('ad-track'), dots=document.getElementById('ad-dots');
+dots.innerHTML=ADS.map((_,i)=>`<i data-i="${i}" class="${i===0?'on':''}"></i>`).join('');
+let adStart=0;
+const L=ADS.length;
+function renderAds(){
+  const three=window.innerWidth>=641; // SP=中央1枚 / それ以上=コインフロー3枚
+  if(three){
+    track.style.gridTemplateColumns='1fr 1.35fr 1fr';
+    const li=(adStart-1+L)%L, ri=(adStart+1)%L;
+    track.innerHTML=
+      `<div class="ad-slide side l" style="background:${ADS[li].c}">${ADS[li].name}</div>`+
+      `<div class="ad-slide" style="background:${ADS[adStart].c}">${ADS[adStart].name}</div>`+
+      `<div class="ad-slide side r" style="background:${ADS[ri].c}">${ADS[ri].name}</div>`;
+  }else{
+    track.style.gridTemplateColumns='1fr';
+    track.innerHTML=`<div class="ad-slide" style="background:${ADS[adStart].c}">${ADS[adStart].name}</div>`;
+  }
+  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===adStart));
+}
+renderAds();
+function cycleAd(i){track.style.opacity=0; setTimeout(()=>{adStart=((i==null?adStart+1:i)+ADS.length)%ADS.length; renderAds(); track.style.opacity=1;},250);}
+let adTimer=setInterval(()=>cycleAd(),3500);
+dots.addEventListener('click',e=>{const i=e.target.dataset.i; if(i==null)return; clearInterval(adTimer); cycleAd(+i); adTimer=setInterval(()=>cycleAd(),3500);});
+window.addEventListener('resize',renderAds);
+
+// NEWS 最新5件
+const NEWS=[
+  {date:"2026.02.01", cat:"重要", title:"不正投票行為に関する重要なお知らせ", isNew:true},
+  {date:"2026.01.20", cat:"お知らせ", title:"新オーディション「▲▲ Campus Star 2026」公開", isNew:true},
+  {date:"2025.12.15", cat:"機能", title:"マイページにポイント履歴を追加しました", isNew:false},
+  {date:"2025.11.30", cat:"メンテ", title:"システムメンテナンス実施のお知らせ", isNew:false},
+  {date:"2025.11.06", cat:"お知らせ", title:"特集枠スポンサー募集を開始しました", isNew:false},
+];
+document.getElementById('news-list').innerHTML=NEWS.map(n=>`
+  <a href="#"><span class="date num">${n.date}</span><span class="cat">${n.cat}</span>
+   <span class="nt">${n.title}</span>${n.isNew?'<span class="new">NEW</span>':''}</a>`).join('');
+
+// 1日1回ガチャ ポップアップ
+const gacha=document.getElementById('gacha'), capsule=document.getElementById('capsule'), gres=document.getElementById('gacha-result'), spin=document.getElementById('gacha-spin');
+const PRIZES=["🎉 500ポイント獲得！","✨ 応援エールチケット ×1","💎 レアフレーム獲得！","🎁 100ポイント獲得！","🔥 熱量ブーストスタンプ"];
+let gachaDrawn=false; // 本日ガチャを引いたか
+function updateGachaCta(){const el=document.getElementById('mp-gacha-cta'); if(el) el.style.display=gachaDrawn?'none':'flex';}
+function openGacha(){gacha.hidden=false; capsule.textContent='🎁'; capsule.classList.remove('spin'); gres.hidden=true; spin.hidden=false;}
+function closeGacha(){gacha.hidden=true;}
+spin.onclick=()=>{
+  spin.hidden=true; capsule.classList.add('spin');
+  setTimeout(()=>{
+    capsule.classList.remove('spin'); capsule.textContent='🎊';
+    gres.textContent=PRIZES[Math.floor(Math.random()*PRIZES.length)]; gres.hidden=false;
+    burst(capsule);
+    gachaDrawn=true; updateGachaCta(); // 引いたらマイページの導線を消す
+  },1100);
+};
+updateGachaCta();
+document.querySelectorAll('[data-gacha]').forEach(b=>b.onclick=openGacha);
+document.querySelectorAll('[data-gacha-close]').forEach(b=>b.onclick=closeGacha);
+gacha.addEventListener('click',e=>{if(e.target===gacha)closeGacha();});
+setTimeout(openGacha,600); // ログイン時に自動表示
+
+const audGrid=document.getElementById('aud-grid'), audEmpty=document.getElementById('aud-empty'), q=document.getElementById('q');
+let filter='all';
+function renderAud(){
+  const kw=q.value.trim();
+  const list=AUD.filter(a=>(filter==='all'||a.st===filter)&&(!kw||(a.uni+a.ttl).includes(kw)));
+  audGrid.innerHTML=list.map(cardHTML).join('');
+  audEmpty.style.display=list.length?'none':'block';
+  audGrid.style.display=list.length?'grid':'none';
+}
+document.getElementById('seg').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); filter=b.dataset.f; renderAud();
+});
+q.addEventListener('input',renderAud);
+renderAud();
+
+// 過去アーカイブ（終了分）
+document.getElementById('archive-grid').innerHTML=AUD.filter(a=>a.st==='end').map(cardHTML).join('');
+
+// 結果発表
+const GP=[
+  {cat:"Miss グランプリ", name:"斉藤花音",  score:"892", c:["#F7C6D5","#DD1C5D"]},
+  {cat:"Mister グランプリ", name:"隈部飛鵬", score:"845", c:["#CFE0FA","#1E73E8"]},
+];
+const RANK=[
+  {pos:"2", name:"野田さつき", cat:"Miss 準グランプリ", c:["#FAD9C0","#E8730A"]},
+  {pos:"2", name:"斎藤大河",   cat:"Mister 準グランプリ", c:["#D2F0E2","#15A36A"]},
+  {pos:"3", name:"田中優花",   cat:"Miss 3位", c:["#E5D6FA","#7A5CFF"]},
+  {pos:"3", name:"市川滉太",   cat:"Mister 3位", c:["#FCE2B8","#E8B500"]},
+];
+document.getElementById('gp-grid').innerHTML=GP.map(g=>`
+  <article class="gp" style="--c1:${g.c[0]};--c2:${g.c[1]}">
+    <span class="crown">👑 GRAND PRIX</span>
+    <div class="ph"></div>
+    <div class="gpb">
+      <div class="cat">${g.cat}</div>
+      <div class="nm">${g.name}</div>
+      <div class="score"><span class="n num" data-to="${g.score}">0</span><small>総合スコア（票数＋審査）</small></div>
+    </div>
+  </article>`).join('');
+document.getElementById('rank').innerHTML=RANK.map(r=>`
+  <div class="row" style="--c1:${r.c[0]};--c2:${r.c[1]}">
+    <div class="pos num">${r.pos}</div><div class="av"></div>
+    <div><div class="rn">${r.name}</div></div><div class="rc">${r.cat}</div>
+  </div>`).join('');
+
+// 総合スコアのカウントアップ（票数ではなく合算スコア）
+function countUp(){
+  document.querySelectorAll('.gp .score .n').forEach(el=>{
+    const to=+el.dataset.to; let cur=0; const step=Math.ceil(to/40);
+    const t=setInterval(()=>{cur=Math.min(to,cur+step); el.textContent=cur; if(cur>=to)clearInterval(t)},24);
+  });
+}
+
+// 熱量メーター アニメ（票数は出さず相対値のみ）
+function animateHeat(){document.querySelectorAll('.heat-bar > i').forEach(i=>i.style.width=i.dataset.w+'%')}
+
+// 広告（エントリー一覧の下）：TOP広告と同サイズ(300×250)・TOP60% / オーディション帰属40%
+const AUD_ADS=[{name:"△△ Campus Audition 提供｜スポンサー募集中", c:"linear-gradient(120deg,#16161A,#3A3A42)"}];
+function adBoxHTML(){let a,tag;
+  if(Math.random()<0.6){a=ADS[Math.floor(Math.random()*ADS.length)]; tag='AD｜YELL VOTE';}
+  else{a=AUD_ADS[0]; tag='AD｜オーディション提供';}
+  return `<div class="aud-ad"><span class="aud-ad-tag">${tag}</span><div class="ad-slide" style="background:${a.c}">${a.name}</div></div>`;}
+function renderAdBox(id){var el=document.getElementById(id); if(el)el.innerHTML=adBoxHTML();}
+// 統一カード（順位＋獲得ポイント表示）
+function entrantCard(p,rank){const rc=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+  return `<article class="person" style="--c1:${p.c[0]};--c2:${p.c[1]}">
+  <div class="ph"><span class="eno num">${p.no}</span><span class="rank-chip ${rc}">${rank}位</span></div>
+  <div class="pbody">
+    <div class="pname">${p.name}</div>
+    <div class="pkana">${p.kana}</div>
+    <div class="pts-mini">${p.pts.toLocaleString()}<small>PT</small></div>
+    <button class="vote-btn"><span class="hb">♥</span> 投票する</button>
+  </div></article>`;}
+// 順位付けレンダリング
+function renderList(id,list){const sorted=[...list].sort((a,b)=>b.pts-a.pts);
+  document.getElementById(id).innerHTML=sorted.map((p,i)=>entrantCard(p,i+1)).join('');}
+// オーディション内タブ切替
+document.querySelectorAll('[data-tabs]').forEach(function(tb){tb.addEventListener('click',function(e){var b=e.target.closest('button'); if(!b)return; var root=tb.parentNode; [...tb.children].forEach(x=>x.classList.remove('active')); b.classList.add('active'); var t=b.dataset.tab; root.querySelectorAll('.aud-panel').forEach(function(p){p.hidden=(p.dataset.panel!==t);}); window.scrollTo(0,0);});});
+
+// ===== ファイナリスト（ミスコンパターン：ミス／ミスター タブ） =====
+const FINAL={
+  miss:[
+    {no:"ENTRY 01", name:"斉藤花音",  kana:"さいとう かのん", pts:77300, c:["#F7C6D5","#DD1C5D"]},
+    {no:"ENTRY 02", name:"野田さつき",kana:"のだ さつき",     pts:54200, c:["#FAD9C0","#E8730A"]},
+    {no:"ENTRY 03", name:"田中優花",  kana:"たなか ゆうか",   pts:48900, c:["#CFE0FA","#1E73E8"]},
+    {no:"ENTRY 04", name:"山形光美",  kana:"やまがた みつみ", pts:31500, c:["#D2F0E2","#15A36A"]},
+  ],
+  mister:[
+    {no:"ENTRY 01", name:"高橋蓮",    kana:"たかはし れん",   pts:62100, c:["#CFE0FA","#1E73E8"]},
+    {no:"ENTRY 02", name:"中村颯太",  kana:"なかむら そうた", pts:45300, c:["#D2F0E2","#15A36A"]},
+    {no:"ENTRY 03", name:"小林大輝",  kana:"こばやし だいき", pts:38800, c:["#E5DAFB","#7A5CFF"]},
+  ],
+};
+function renderFinal(g){renderList('final-people',FINAL[g]); renderAdBox('miscon-ad');}
+function renderOthers(g){const sorted=[...FINAL[g]].sort((a,b)=>b.pts-a.pts).slice(1);
+  document.getElementById('entry-others').innerHTML=sorted.map((p,i)=>entrantCard(p,i+2)).join('');}
+renderFinal('miss'); renderOthers('miss');
+function segTab(id,fn){document.getElementById(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;[...e.currentTarget.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');fn(b.dataset.g);});}
+segTab('final-tabs',renderFinal); segTab('others-tabs',renderOthers);
+
+// ===== エントリー者（通常パターン：獲得ポイント表示） =====
+const NENTRANTS=[
+  {no:"ENTRY 01", name:"佐藤大地", kana:"さとう だいち",   pts:12480, c:["#CFE0FA","#1E73E8"]},
+  {no:"ENTRY 02", name:"鈴木彩花", kana:"すずき あやか",   pts:9830,  c:["#F7C6D5","#DD1C5D"]},
+  {no:"ENTRY 03", name:"伊藤健",   kana:"いとう けん",     pts:7210,  c:["#D2F0E2","#15A36A"]},
+  {no:"ENTRY 04", name:"渡辺美咲", kana:"わたなべ みさき", pts:5640,  c:["#FAD9C0","#E8730A"]},
+];
+renderList('nentrants',NENTRANTS); renderAdBox('normal-ad');
+document.getElementById('nentry-others').innerHTML=[...NENTRANTS].sort((a,b)=>b.pts-a.pts).slice(1).map((p,i)=>entrantCard(p,i+2)).join('');
+
+// カード→詳細（投票ボタン・広告は除外）
+function navCards(id,view){var el=document.getElementById(id); if(el)el.addEventListener('click',e=>{if(e.target.closest('.vote-btn')||e.target.closest('.entrant-ad'))return; if(e.target.closest('.person'))go(view);});}
+navCards('final-people','entry'); navCards('entry-others','entry');
+navCards('nentrants','entryN'); navCards('nentry-others','entryN');
+
+// 投票演出（委譲・ログイン必須）
+document.addEventListener('click',e=>{const b=e.target.closest('.vote-btn,#entry-vote,#nentry-vote'); if(!b||b.disabled)return; if(!loggedIn){requireLogin('投票するには');return;} burst(b); b.innerHTML='✓ 投票しました'; b.disabled=true;});
+
+// 獲得ポイント リアルタイム風更新（通常パターンの投票ページ）
+let nPts=12480;
+setInterval(()=>{const el=document.getElementById('nentry-pts'); if(el&&document.getElementById('view-entry-n').classList.contains('active')){nPts+=Math.floor(Math.random()*45); el.textContent=nPts.toLocaleString();}},2200);
+function burst(el){
+  const r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top;
+  const cols=['#FF5A3C','#FF8A3C','#DD1C5D','#7A5CFF','#15A36A','#1E73E8'];
+  for(let i=0;i<26;i++){
+    const c=document.createElement('i'); c.className='confetti';
+    c.style.background=cols[i%cols.length]; c.style.left=cx+'px'; c.style.top=cy+'px';
+    c.style.borderRadius=Math.random()>.5?'2px':'50%';
+    document.body.appendChild(c);
+    const ang=Math.random()*Math.PI-Math.PI/2, dist=80+Math.random()*120, dur=600+Math.random()*500;
+    const dx=Math.cos(ang)*dist*(Math.random()>.5?1:-1), dy=-Math.abs(Math.sin(ang)*dist)-40;
+    c.animate([{transform:'translate(0,0) rotate(0)',opacity:1},
+      {transform:`translate(${dx}px,${dy+220}px) rotate(${Math.random()*720}deg)`,opacity:0}],
+      {duration:dur,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>c.remove();
+  }
+}
+
+// ---- 下層ページ ----
+function personHTML(p,gp){return `<article class="person" data-view="entry" style="--c1:${p.c[0]};--c2:${p.c[1]}">
+  <div class="ph"><span class="eno num">${p.no||''}</span>${gp?`<span class="gp">${gp}</span>`:''}</div>
+  <div class="pbody"><div class="pname">${p.name}</div></div></article>`;}
+
+// マイページ
+document.getElementById('mp-supporting').innerHTML=PEOPLE.slice(0,3).map(p=>personHTML(p)).join('');
+document.getElementById('mp-history').innerHTML=[
+  ["06.01","◯◯コンテスト・斉藤花音さんに投票"],["05.31","◯◯コンテスト・斉藤花音さんに投票"],
+  ["05.30","△△ Audition・チームBに投票"],["05.29","有料エール（500pt）を送りました"],
+].map(([d,t])=>`<div class="ti"><span class="d num">${d}</span><span>${t}</span></div>`).join('');
+document.getElementById('mp-gacha').innerHTML=[
+  ["06.01","🎉 500ポイント獲得"],["05.31","✨ 応援エールチケット ×1"],["05.30","🎁 100ポイント獲得"],
+].map(([d,t])=>`<div class="ti"><span class="d num">${d}</span><span>${t}</span></div>`).join('');
+document.getElementById('mp-purchase').innerHTML=[
+  ["06.01","¥1,100 → 1,050P 購入（クレジットカード）","+1,050P"],
+  ["05.20","¥330 → 310P 購入（LINE Pay）","+310P"],
+  ["05.02","20,000C → 24,000P 交換（YELLコイン）","+24,000P"],
+].map(([d,t,p])=>`<div class="ti"><span class="d num">${d}</span><span>${t}</span><span class="ti-amt">${p}</span></div>`).join('');
+
+// ポイント購入
+// 購入プラン（JPY/コイン共通。bonus = pt - coin）
+const BUY=[
+  {jpy:110,    coin:100,    pt:100},
+  {jpy:330,    coin:300,    pt:310},
+  {jpy:1100,   coin:1000,   pt:1050,  best:true},
+  {jpy:3300,   coin:3000,   pt:3300},
+  {jpy:5500,   coin:5000,   pt:5500},
+  {jpy:11000,  coin:10000,  pt:11500},
+  {jpy:22000,  coin:20000,  pt:24000},
+  {jpy:55000,  coin:50000,  pt:62500},
+  {jpy:110000, coin:100000, pt:130000},
+  {jpy:220000, coin:200000, pt:270000},
+];
+const yen=n=>'¥'+n.toLocaleString();
+function renderBuy(method){
+  document.getElementById('plan-grid').innerHTML=BUY.map(p=>{const bonus=p.pt-p.coin;
+    return `<div class="plan ${p.best?'best':''}">${p.best?'<span class="tag">人気</span>':''}
+      <div class="pt num">${p.pt.toLocaleString()}<small> P</small></div>
+      <div class="bonus">${bonus>0?'+'+bonus.toLocaleString()+' ボーナス':'&nbsp;'}</div>
+      <div class="price">${method==='jpy'?yen(p.jpy):p.coin.toLocaleString()+' C'}</div>
+      <button class="btn btn-key" data-stub>${method==='jpy'?'購入する':'コインで交換'}</button>
+    </div>`;}).join('');
+}
+renderBuy('jpy');
+document.getElementById('buy-tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  renderBuy(b.dataset.buy);
+  document.getElementById('buy-tab-desc').textContent=b.dataset.buy==='jpy'?'日本円のお支払いでポイントを購入します。':'保有しているYELLコインをポイントに交換します。';});
+
+// デイリーガチャ 配当
+const PAYOUT=[
+  {pt:"50",    rate:23,     tag:"コモン",       c:"#15A36A"},
+  {pt:"100",   rate:69.695, tag:"コモン",       c:"#15A36A"},
+  {pt:"300",   rate:5,      tag:"レア",         c:"#1E73E8"},
+  {pt:"500",   rate:1,      tag:"レア",         c:"#1E73E8"},
+  {pt:"1,000", rate:0.75,   tag:"スーパーレア", c:"#7A5CFF"},
+  {pt:"2,000", rate:0.5,    tag:"スーパーレア", c:"#7A5CFF"},
+  {pt:"5,000", rate:0.05,   tag:"激レア",       c:"#E0A100"},
+  {pt:"10,000",rate:0.005,  tag:"激レア",       c:"#E0A100"},
+];
+const gpEl=document.getElementById('gacha-payout');
+if(gpEl){gpEl.innerHTML='<div class="pl-row pl-head"><span class="pl-pt">獲得ポイント</span><span class="pl-rate">当選確率</span></div>'+
+  PAYOUT.map(p=>`<div class="pl-row"><span class="pl-pt">${p.pt} pt</span><span class="pl-rate">${p.rate}%</span></div>`).join('');}
+function animatePayout(){}
+
+// FAQ
+const FAQ=[
+  ["投票は無料でできますか？","はい。YELL CAMPUS ID（無料登録）があれば、毎日1回のログインガチャで当たったYELLポイントを使って無料で投票できます。"],
+  ["もっとたくさん応援したいときは？","有料でコインを購入し、YELLポイントに変換することで、より多くのYELLを送れます。ポイント購入ページからどうぞ。"],
+  ["票数は見られますか？","公平性のため、ユーザー画面には票数を表示していません。投票したポイントはファンランキングに反映されます。"],
+  ["ポイントは何に使えますか？","オーディション参加者への投票（YELLを送る）にご利用いただけます。投票ポイントに応じてファンランキングが決まります。"],
+  ["ログイン方法は？","YELL CAMPUS ID（SSO）でログインします。ひとつのIDでYELL VOTE・YELL CAMPUS・MONAQAを横断して使えます。"],
+  ["応援メッセージのマナーは？","誹謗中傷やパーソナルな問題になるメッセージは避けてください。違反が認められた場合、メッセージの削除やアカウント停止を行うことがあります。"],
+];
+document.getElementById('faq-list').innerHTML=FAQ.map(([q,a])=>`<details><summary>${q}</summary><div class="ans">${a}</div></details>`).join('');
+
+// NEWS一覧（フィルタ付き）
+function newsRowHTML(n){return `<a href="#"><span class="date num">${n.date}</span><span class="cat">${n.cat}</span><span class="nt">${n.title}</span>${n.isNew?'<span class="new">NEW</span>':''}</a>`;}
+let newsFilter='all';
+function renderNewsFull(){const list=NEWS.filter(n=>newsFilter==='all'||n.cat===newsFilter);
+  document.getElementById('news-full').innerHTML=list.map(newsRowHTML).join('')||'<div style="padding:24px;color:var(--muted)">該当する記事はありません</div>';}
+document.getElementById('news-seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');newsFilter=b.dataset.nf;renderNewsFull();});
+renderNewsFull();
+
+// エントリー詳細
+function galleryHTML(colors){return colors.map(c=>`<i style="background:linear-gradient(160deg,${c[0]},${c[1]})"></i>`).join('');}
+const MISC_PH=[["#F7C6D5","#DD1C5D"],["#FAD9C0","#E8730A"],["#CFE0FA","#1E73E8"],["#D2F0E2","#15A36A"],["#E5DAFB","#7A5CFF"],["#FCE5B0","#E0A100"]];
+const NORM_PH=[["#CFE0FA","#1E73E8"],["#D2F0E2","#15A36A"],["#F7C6D5","#DD1C5D"],["#FAD9C0","#E8730A"],["#E5DAFB","#7A5CFF"],["#FCE5B0","#E0A100"],["#C9F0F5","#0FB5C4"],["#E6E6EA","#6B6B73"]];
+document.getElementById('entry-gallery').innerHTML=galleryHTML(MISC_PH);
+document.getElementById('nentry-gallery').innerHTML=galleryHTML(NORM_PH);
+const QA=[
+  ["Q. 意気込みは？","全力で楽しみます。応援、よろしくお願いします！"],
+  ["Q. 好きな食べ物は？","抹茶系のスイーツが大好きです。"],
+  ["Q. 趣味は？","カフェ巡りと写真。休日はよく歩き回ります。"],
+  ["Q. 特技は？","クラシックバレエを10年続けています。"],
+  ["Q. 最近ハマっていることは？","フィルムカメラでの撮影です。"],
+  ["Q. 好きな言葉は？","「継続は力なり」。"],
+  ["Q. 休日の過ごし方は？","友人とカフェ、または家で映画鑑賞。"],
+  ["Q. 将来の夢は？","人に元気を届けられる仕事に就くことです。"],
+  ["Q. チャームポイントは？","笑ったときの目元だとよく言われます。"],
+  ["Q. 応援してくれる方へ","あなたの一票が本当に力になります。届け、わたしの想い！"],
+];
+document.getElementById('entry-qa').innerHTML=QA.map((qa,i)=>`<div class="qi ${i>=4?'hide':''}"><div class="q">${qa[0]}</div><div class="a">${qa[1]}</div></div>`).join('');
+document.getElementById('qa-more').onclick=function(){document.querySelectorAll('#entry-qa .qi.hide').forEach(e=>e.classList.remove('hide'));this.style.display='none';};
+
+// 法務
+const LEGAL={
+  terms:{t:"利用規約について",b:`<h4>第1条（適用）</h4><p>本規約は、YELL VOTE（以下「本サービス」）の利用に関する条件を、利用者と運営会社との間で定めるものです。</p><h4>第2条（投票）</h4><p>投票は、デイリーガチャで獲得したYELLポイント、または購入したコインから変換したYELLポイントを用いて行います。同一人物による複数アカウントの作成、自動ツールによる投票その他の不正行為を禁止します。</p><h4>第3条（禁止事項）</h4><p>なりすまし、第三者の権利侵害、本サービスの運営を妨げる行為を禁止します。違反が認められた場合、アカウント停止および当該投票の無効化を行います。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
+  privacy:{t:"プライバシーポリシー",b:`<h4>取得する情報</h4><p>LINEログインに伴う識別子、投票・購入履歴、アクセスログ等を取得します。</p><h4>利用目的</h4><p>本サービスの提供、不正防止、品質向上、お知らせの配信のために利用します。</p><h4>第三者提供</h4><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
+  tokushoho:{t:"特定商取引法に基づく表記",b:`<dl><dt>販売事業者</dt><dd>株式会社◯◯（運営会社）</dd><dt>運営責任者</dt><dd>◯◯ ◯◯</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>お問い合わせ</dt><dd>YELLサポートデスク</dd><dt>販売価格</dt><dd>各ポイントプランに表示（税込）</dd><dt>支払方法</dt><dd>クレジットカード／LINE Pay／キャリア決済</dd><dt>引渡時期</dt><dd>決済完了後ただちにポイントを付与</dd><dt>返品・キャンセル</dt><dd>商品の性質上、購入後のポイントの払い戻しはできません</dd></dl>`},
+  company:{t:"運営会社",b:`<dl><dt>会社名</dt><dd>株式会社◯◯</dd><dt>事業内容</dt><dd>YELL CAMPUS プラットフォームの企画・運営</dd><dt>設立</dt><dd>20XX年</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>関連サービス</dt><dd>YELL VOTE ／ YELL TICKET ／ YELL SUPPORT</dd></dl>`},
+};
+function setLegal(key){const d=LEGAL[key]||LEGAL.terms;document.getElementById('legal-title').textContent=d.t;
+  document.getElementById('legal-body').innerHTML=d.b;
+  [...document.getElementById('legal-seg').children].forEach(b=>b.classList.toggle('active',b.dataset.lg===key));}
+document.getElementById('legal-seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setLegal(b.dataset.lg);});
+setLegal('terms');
+
+// ===== ログイン状態 ＆ 応援コメント =====
+let loggedIn=true; // 既定：ログイン中（ヘッダーのボタンで切替＝ゲートのデモ可能）
+const loginBtn=document.getElementById('login-btn');
+function setLogin(v){loggedIn=v;
+  loginBtn.textContent=v?'ログアウト':'ログイン';
+  loginBtn.classList.toggle('ghost-key',!v);
+  hideToast(); renderAllComments();}
+loginBtn.onclick=()=>setLogin(!loggedIn);
+
+// ログイン誘導トースト
+const toast=document.getElementById('login-toast');
+let toastTimer=null;
+function requireLogin(prefix){document.getElementById('login-toast-msg').textContent=(prefix||'')+'ログインが必要です';
+  toast.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(hideToast,4000);}
+function hideToast(){toast.hidden=true;}
+document.getElementById('toast-login').onclick=()=>setLogin(true);
+
+// コメント（1日1オーディションにつき1件）
+const commented={}; // audition key -> true
+function addComment(listId,text){const list=document.getElementById(listId); if(!list)return;
+  const el=document.createElement('div'); el.className='cmt';
+  el.innerHTML='<div class="cmt-head"><span class="cmt-av"></span><b>daisuke</b><span>たった今</span></div><div class="cmt-body"></div>';
+  el.querySelector('.cmt-body').textContent=text; list.insertBefore(el,list.firstChild);}
+function renderCommentBox(boxId,listId,key){const box=document.getElementById(boxId); if(!box)return;
+  if(!loggedIn){box.innerHTML='<div class="cmt-gate">応援コメントを送るにはログインが必要です。<button class="btn btn-key">ログインする</button></div>';
+    box.querySelector('button').onclick=()=>setLogin(true); return;}
+  if(commented[key]){box.innerHTML='<div class="cmt-done">✓ 本日の応援コメントを送信しました。また明日応援してね！</div>'; return;}
+  box.innerHTML='<textarea maxlength="100" placeholder="推しへの応援メッセージを書こう（1日1回・100文字まで）"></textarea><div class="cmt-actions"><span class="cmt-count">0/100</span><button class="btn btn-key">コメントを送る</button></div>';
+  const ta=box.querySelector('textarea'), cnt=box.querySelector('.cmt-count');
+  ta.oninput=()=>cnt.textContent=ta.value.length+'/100';
+  box.querySelector('button').onclick=()=>{const v=ta.value.trim(); if(!v)return; addComment(listId,v); commented[key]=true; renderCommentBox(boxId,listId,key);};}
+function renderAllComments(){renderCommentBox('cmt-box-m','cmt-list-m','miscon'); renderCommentBox('cmt-box-n','cmt-list-n','normal');}
+// 既存コメントのサンプル
+const SAMPLE_CMT=[["みおり","2時間前","ステージ楽しみにしてます！自信もって、いつも応援してます📣"],["けんた","昨日","投票しました！最後まで駆け抜けてください🔥"],["なな","2日前","写真どれも素敵でした。これからも応援します！"]];
+['cmt-list-m','cmt-list-n'].forEach(id=>{const list=document.getElementById(id); if(list)list.innerHTML=SAMPLE_CMT.map(c=>`<div class="cmt"><div class="cmt-head"><span class="cmt-av"></span><b>${c[0]}</b><span>${c[1]}</span></div><div class="cmt-body">${c[2]}</div></div>`).join('');});
+setLogin(true);
+
+// ビュー切替
+const views={home:'view-home',auditions:'view-auditions',detail:'view-detail',detailN:'view-detail-n',result:'view-result',
+  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal'};
+function go(v){
+  Object.values(views).forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById(views[v]).classList.add('active');
+  document.querySelectorAll('.gnav nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  window.scrollTo(0,0);
+  if(v==='detail'||v==='entry') setTimeout(animateHeat,200);
+  if(v==='result') setTimeout(countUp,300);
+  if(v==='about') setTimeout(animatePayout,200);
+  if(v==='mypage') updateGachaCta();
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{go(b.dataset.view); if(b.dataset.view==='legal'&&b.dataset.legal) setLegal(b.dataset.legal);});
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{go('home'); setTimeout(()=>document.getElementById(b.dataset.scroll).scrollIntoView({behavior:'smooth'}),60);});
+document.querySelectorAll('[data-stub]').forEach(b=>b.onclick=()=>alert('（プロトタイプ）この画面は別途設計します：'+b.textContent.trim()));
+// オーディションカード → 詳細へ（タイプ別に通常／ミスコン）
+['home-grid','aud-grid','archive-grid'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{const card=e.target.closest('.card'); if(card)go(card.dataset.type==='normal'?'detailN':'detail');});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# 社外秘・公開しないファイル
+YELL_VOTE_ミスコン_要件定義書_まとめ.md
+requirements_preview.html
+DESIGN_CONCEPT.md
+
+# OS / ツール
+.DS_Store
+.claude/
+node_modules/
