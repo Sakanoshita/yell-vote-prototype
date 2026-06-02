@@ -331,6 +331,23 @@
   .mp-gacha-cta span{font-size:13px; color:var(--ink-2)}
 
   /* ポイント購入 */
+  /* 月間ファンランキング */
+  .rank-month{font-size:14px; font-weight:700; color:var(--muted); background:var(--surface-2); border:1px solid var(--line); padding:5px 12px; border-radius:999px}
+  .rankboard{margin-top:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:#fff}
+  .rb-row{display:flex; align-items:center; gap:14px; padding:13px 18px}
+  .rb-row+.rb-row{border-top:1px solid var(--line)}
+  .rb-row.top1,.rb-row.top2,.rb-row.top3{background:var(--key-weak)}
+  .rb-pos{width:30px; text-align:center; font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; color:var(--muted); flex:0 0 auto}
+  .rb-medal{width:30px; text-align:center; font-size:20px; flex:0 0 auto}
+  .rb-av{width:40px; height:40px; border-radius:50%; background:var(--yell-grad); flex:0 0 auto}
+  .rb-row.top1 .rb-av{background:linear-gradient(135deg,#FCE08A,#E6B422)}
+  .rb-row.top2 .rb-av{background:linear-gradient(135deg,#EDEDED,#BFC3C9)}
+  .rb-row.top3 .rb-av{background:linear-gradient(135deg,#E9C39B,#C98A55)}
+  .rb-main{min-width:0}
+  .rb-name{font-weight:700; font-size:15px}
+  .rb-sub{font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .rb-pt{margin-left:auto; font-family:'Oswald',sans-serif; font-weight:700; font-size:17px; color:var(--key); flex:0 0 auto}
+  .rb-pt small{font-size:11px; color:var(--muted); font-family:inherit; margin-left:2px}
   .buy-note{margin-top:12px; font-size:13px; color:var(--ink-2); background:var(--key-weak); border:1px solid var(--key-line); border-radius:10px; padding:11px 14px}
   .buy-note b{color:var(--key)}
   .plan-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:16px}
@@ -579,6 +596,19 @@
   <!-- 記事内 AdSense 枠 -->
   <div class="adsense"><span>広告 — Google AdSense</span></div>
 
+  <!-- 月間ランキング -->
+  <section id="rank-sec">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Monthly Ranking</span>
+        <h2 class="sec">月間ファンランキング</h2>
+      </div>
+      <span class="rank-month num">2026.05</span>
+    </div>
+    <p class="sec-sub">今月いちばん応援したトップ10ファンを表彰。あなたのYELLが、誰かの夢を後押ししています。</p>
+    <div class="rankboard" id="rankboard"></div>
+  </section>
+
   <section id="news-sec">
     <div class="sec-head">
       <div>
@@ -804,9 +834,9 @@
     <span class="eyebrow">What you can do</span>
     <h2 class="sec">YELL VOTE でできること</h2>
     <div class="feat-grid">
-      <div class="feat"><div class="fic">📣</div><h3>夢を持つ若者にYELLを送る</h3><p>オーディション参加者への投票を通じて、応援の気持ちを届けられる。</p></div>
-      <div class="feat"><div class="fic">✨</div><h3>夢のキッカケに出会う</h3><p>オーディションへの参加で、自分の夢を考えるキッカケに出会える。</p></div>
-      <div class="feat"><div class="fic">🎓</div><h3>チャンスが広がる</h3><p>YELL CAMPUS ID登録で、就職や仕事探しのチャンスが広がる。</p></div>
+      <div class="feat"><div class="fic">📣</div><h3>夢を持つ若者にYELLを送れる</h3><p>オーディション参加者への投票で、応援の気持ちをまっすぐ本人に届けられる。</p></div>
+      <div class="feat"><div class="fic">✨</div><h3>自分の夢を考えるキッカケに出会える</h3><p>挑戦する同世代に触れることで、自分の「やりたい」を見つけるキッカケに出会える。</p></div>
+      <div class="feat"><div class="fic">🚀</div><h3>チャンスが広がる</h3><p>オーディションをきっかけに、活動・出演・仕事など“その先”へとつながるチャンスが広がる。</p></div>
     </div>
   </section>
 
@@ -1348,6 +1378,25 @@ const NEWS=[
 document.getElementById('news-list').innerHTML=NEWS.map(n=>`
   <a href="#"><span class="date num">${n.date}</span><span class="cat">${n.cat}</span>
    <span class="nt">${n.title}</span>${n.isNew?'<span class="new">NEW</span>':''}</a>`).join('');
+
+// 月間ファンランキング（応援した人＝ファンのTOP10）
+const FANS=[
+  {name:"はるか",   sub:"ミス・ミスター◯◯ を応援",       pt:48200},
+  {name:"ゆうと",   sub:"△△ Campus Audition を応援",      pt:41600},
+  {name:"みお",     sub:"ミス・ミスター◯◯ を応援",       pt:37850},
+  {name:"けんじ",   sub:"▲▲ Campus Star を応援",         pt:29400},
+  {name:"さき",     sub:"△△ Campus Audition を応援",      pt:24130},
+  {name:"りく",     sub:"ミス・ミスター◯◯ を応援",       pt:19880},
+  {name:"あや",     sub:"▲▲ Campus Star を応援",         pt:16450},
+  {name:"だいき",   sub:"△△ Campus Audition を応援",      pt:13270},
+  {name:"のぞみ",   sub:"ミス・ミスター◯◯ を応援",       pt:10940},
+  {name:"しょう",   sub:"▲▲ Campus Star を応援",         pt:8620},
+];
+document.getElementById('rankboard').innerHTML=FANS.map((f,i)=>{const r=i+1;
+  const pos=r<=3?`<div class="rb-medal">${r===1?'🥇':r===2?'🥈':'🥉'}</div>`:`<div class="rb-pos">${r}</div>`;
+  return `<div class="rb-row ${r<=3?'top'+r:''}">${pos}<div class="rb-av"></div>
+    <div class="rb-main"><div class="rb-name">${f.name}</div><div class="rb-sub">${f.sub}</div></div>
+    <div class="rb-pt">${f.pt.toLocaleString()}<small>YELL</small></div></div>`;}).join('');
 
 // 1日1回ガチャ ポップアップ
 const gacha=document.getElementById('gacha'), capsule=document.getElementById('capsule'), gres=document.getElementById('gacha-result'), spin=document.getElementById('gacha-spin');
