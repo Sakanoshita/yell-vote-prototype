@@ -433,6 +433,11 @@
   .aud-head{margin-top:26px; display:flex; flex-direction:column; gap:9px; align-items:flex-start}
   .aud-head h2{margin:0}
   .aud-period{font-size:14px; color:var(--ink-2); font-weight:700}
+  .aud-countdown{display:inline-flex; align-items:center; gap:9px; background:var(--key-weak); border:1px solid var(--key-line); border-radius:999px; padding:7px 14px}
+  .aud-countdown .cd-label{font-size:12px; font-weight:700; color:var(--ink-2)}
+  .aud-countdown .cd-val{font-family:'Oswald',sans-serif; font-weight:700; font-size:16px; color:var(--key); letter-spacing:.02em}
+  .final-group{font-size:15px; margin:22px 0 0; padding-bottom:8px; border-bottom:2px solid var(--key-weak); color:var(--ink); display:flex; align-items:center; gap:8px}
+  .final-group::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--key)}
   .aud-summary{margin-top:12px; color:var(--ink-2); line-height:1.95; font-size:15px; max-width:780px}
   .prize-list{list-style:none; margin:18px 0 0; padding:0; display:grid; gap:10px}
   .prize-list li{display:flex; gap:13px; align-items:flex-start; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; background:#fff}
@@ -699,15 +704,13 @@
 <!-- ============ DETAIL（ミスコンパターン LP） ============ -->
 <div class="view" id="view-detail">
 <main>
-  <div class="aud-banner" style="--c1:#DD1C5D;--c2:#7A2050">
-    <span class="ab-logo">◯◯ MISS&amp;MISTER</span>
-    <span class="ab-cap">ミス・ミスター◯◯コンテスト 2026</span>
-  </div>
+  <div class="aud-banner" style="--c1:#DD1C5D;--c2:#7A2050"></div>
 
   <div class="aud-head">
-    <span class="badge live">投票受付中</span>
+    <span class="badge live">開催中</span>
     <h2 class="sec">ミス・ミスター◯◯コンテスト 2026</h2>
-    <div class="aud-period num">🗓 投票期間：2026.07.05 – 2026.10.24</div>
+    <div class="aud-period num">投票期間：2026.07.05 14:00 〜 2026.10.24 23:59</div>
+    <div class="aud-countdown"><span class="cd-label">投票終了まで</span><span class="cd-val num" id="cd-detail" data-end="2026-10-24T23:59:59+09:00">--</span></div>
   </div>
 
   <div class="aud-tabs" data-tabs>
@@ -718,14 +721,18 @@
   <!-- TOP タブ -->
   <div class="aud-panel" data-panel="top">
     <section>
+      <span class="eyebrow">Overview</span>
+      <h2 class="sec">オーディション開催概要</h2>
       <p class="aud-summary">◯◯大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。あなたのYELL（投票）が、候補者の背中を押します。投票ポイントはリアルタイムでランキングに反映されます。</p>
     </section>
 
     <section>
       <span class="eyebrow">Finalists</span>
       <h2 class="sec">ファイナリスト</h2>
-      <div class="seg2" id="final-tabs"><button class="active" data-g="miss">ミス</button><button data-g="mister">ミスター</button></div>
-      <div class="people" id="final-people"></div>
+      <h3 class="final-group">Miss 部門</h3>
+      <div class="people" id="final-miss"></div>
+      <h3 class="final-group">Mister 部門</h3>
+      <div class="people" id="final-mister"></div>
       <div id="miscon-ad"></div>
     </section>
 
@@ -746,7 +753,7 @@
         <dl>
           <dt>コンテスト名</dt><dd>ミス・ミスター◯◯コンテスト2026</dd>
           <dt>主催</dt><dd>◯◯コンテスト実行委員会</dd>
-          <dt>投票期間</dt><dd class="num">2026.07.05 14:00 – 2026.10.24 23:59</dd>
+          <dt>投票期間</dt><dd class="num">2026.07.05 14:00 〜 2026.10.24 23:59</dd>
           <dt>本番日</dt><dd>2026年10月25日（土）</dd>
         </dl>
       </div>
@@ -756,13 +763,29 @@
   <!-- 概要 タブ -->
   <div class="aud-panel" data-panel="about" hidden>
     <section>
-      <span class="eyebrow">Overview</span>
-      <h2 class="sec">オーディション概要</h2>
-      <p class="aud-summary">◯◯大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。ファイナリストたちが活動期間の挑戦を通して個性を磨き、グランプリを目指します。本コンテストはYELL VOTE上で投票を受け付け、投票ポイントと当日審査の合算で総合グランプリを決定します。</p>
+      <span class="eyebrow">Event</span>
+      <h2 class="sec">イベント概要</h2>
+      <p class="aud-summary">◯◯大学 学園祭の目玉企画として開催される、ミス・ミスターコンテスト2026。WEB投票（YELL VOTE）と当日のステージ審査で、各部門のグランプリを決定します。</p>
+    </section>
+
+    <section>
+      <span class="eyebrow">Theme</span>
+      <h2 class="sec">テーマ</h2>
       <div class="theme-card">
-        <p>テーマ「あなたのオンリーワンが輝く舞台へ」</p>
+        <p>「あなたのオンリーワンが輝く舞台へ」</p>
         <span>活動期間の挑戦を通して、候補者一人ひとりの個性が輝くコンテストを目指します。</span>
       </div>
+    </section>
+
+    <section>
+      <span class="eyebrow">Overview</span>
+      <h2 class="sec">オーディション概要</h2>
+      <p class="aud-summary">ファイナリストたちが活動期間の挑戦を通して個性を磨き、グランプリを目指します。本コンテストはYELL VOTE上で投票を受け付け、投票ポイントと当日審査の合算で総合グランプリを決定します。</p>
+      <ul class="info-list">
+        <li>YELL CAMPUS ID（無料登録）があれば誰でも投票に参加できます。</li>
+        <li>デイリーガチャで獲得したポイント、または購入ポイントで応援できます。</li>
+        <li>投票ポイントはリアルタイムでランキングに反映されます。</li>
+      </ul>
     </section>
 
     <section>
@@ -1552,12 +1575,30 @@ const FINAL={
     {no:"ENTRY 03", name:"小林大輝",  kana:"こばやし だいき", pts:38800, c:["#E5DAFB","#7A5CFF"]},
   ],
 };
-function renderFinal(g){renderList('final-people',FINAL[g]); renderAdBox('miscon-ad');}
+// ファイナリスト：Miss → Mister を続けて表示（管理画面で表示部門を選べる想定）
+const FINAL_SHOW={miss:true, mister:true}; // 管理画面で各部門の表示ON/OFF
+function renderFinalists(){
+  const m=document.getElementById('final-miss'), mr=document.getElementById('final-mister');
+  m.closest('section').querySelectorAll('.final-group')[0].style.display=FINAL_SHOW.miss?'':'none';
+  m.closest('section').querySelectorAll('.final-group')[1].style.display=FINAL_SHOW.mister?'':'none';
+  m.style.display=FINAL_SHOW.miss?'':'none'; mr.style.display=FINAL_SHOW.mister?'':'none';
+  if(FINAL_SHOW.miss) renderList('final-miss',FINAL.miss);
+  if(FINAL_SHOW.mister) renderList('final-mister',FINAL.mister);
+  renderAdBox('miscon-ad');
+}
+renderFinalists();
 function renderOthers(g){const sorted=[...FINAL[g]].sort((a,b)=>b.pts-a.pts).slice(1);
   document.getElementById('entry-others').innerHTML=sorted.map((p,i)=>entrantCard(p,i+2)).join('');}
-renderFinal('miss'); renderOthers('miss');
+renderOthers('miss');
 function segTab(id,fn){document.getElementById(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;[...e.currentTarget.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');fn(b.dataset.g);});}
-segTab('final-tabs',renderFinal); segTab('others-tabs',renderOthers);
+segTab('others-tabs',renderOthers);
+// 投票終了までのカウントダウン（リアルタイム更新）
+function tickCountdown(){document.querySelectorAll('.cd-val[data-end]').forEach(el=>{
+  const diff=new Date(el.dataset.end)-new Date();
+  if(diff<=0){el.textContent='投票終了';return;}
+  const d=Math.floor(diff/864e5), h=Math.floor(diff%864e5/36e5), m=Math.floor(diff%36e5/6e4), s=Math.floor(diff%6e4/1e3);
+  el.textContent=`${d}日 ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;});}
+tickCountdown(); setInterval(tickCountdown,1000);
 
 // ===== エントリー者（通常パターン：獲得ポイント表示） =====
 const NENTRANTS=[
@@ -1571,7 +1612,7 @@ document.getElementById('nentry-others').innerHTML=[...NENTRANTS].sort((a,b)=>b.
 
 // カード→詳細（投票ボタン・広告は除外）
 function navCards(id,view){var el=document.getElementById(id); if(el)el.addEventListener('click',e=>{if(e.target.closest('.vote-btn')||e.target.closest('.entrant-ad'))return; if(e.target.closest('.person'))go(view);});}
-navCards('final-people','entry'); navCards('entry-others','entry');
+navCards('final-miss','entry'); navCards('final-mister','entry'); navCards('entry-others','entry');
 navCards('nentrants','entryN'); navCards('nentry-others','entryN');
 
 // 投票演出（委譲・ログイン必須）
