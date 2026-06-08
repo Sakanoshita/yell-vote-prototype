@@ -462,9 +462,10 @@
   .entry-kana{font-size:13px; color:var(--muted); margin:-2px 0 8px}
   .r43{aspect-ratio:3/4 !important}
   .gallery.g43 i{aspect-ratio:3/4}
-  .sns-row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
-  .sns-row a{display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
-  .sns-row a:hover{border-color:var(--key); color:var(--key)}
+  .sns-row{display:flex; gap:12px; margin-top:14px; flex-wrap:wrap}
+  .sns-row a{display:inline-flex; cursor:pointer; transition:transform .15s ease}
+  .sns-row a:hover{transform:translateY(-2px)}
+  .sns-row img{width:38px; height:38px; display:block}
   .pts-live{display:inline-flex; align-items:center; gap:12px; margin:6px 0 16px; padding:12px 18px; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface-2)}
   .pts-live .lbl{font-size:12px; color:var(--muted); font-weight:700}
   .pts-live .val{font-family:'Oswald',sans-serif; font-weight:700; font-size:30px; color:var(--key); line-height:1}
@@ -1073,7 +1074,9 @@
       <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
       <p class="entry-intro">「自分らしさ」を大切に、コンテストに挑戦しています。私の表現に何か感じていただけたら、ぜひ一票を。応援よろしくお願いします！</p>
       <div class="sns-row">
-        <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
+        <a data-stub aria-label="X"><img src="img/X.svg" alt="X"></a>
+        <a data-stub aria-label="Instagram"><img src="img/instagram.svg" alt="Instagram"></a>
+        <a data-stub aria-label="TikTok"><img src="img/tiktok.svg" alt="TikTok"></a>
       </div>
       <div class="vote-panel">
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
@@ -1281,7 +1284,9 @@
       <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
       <p class="entry-intro" id="nentry-intro">ダンス歴12年。ストリートからコンテンポラリーまで幅広く踊ります。いつか世界の舞台に立つのが夢です。応援よろしくお願いします！</p>
       <div class="sns-row">
-        <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
+        <a data-stub aria-label="X"><img src="img/X.svg" alt="X"></a>
+        <a data-stub aria-label="Instagram"><img src="img/instagram.svg" alt="Instagram"></a>
+        <a data-stub aria-label="TikTok"><img src="img/tiktok.svg" alt="TikTok"></a>
       </div>
       <div class="vote-panel">
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
