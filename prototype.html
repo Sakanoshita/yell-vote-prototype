@@ -418,6 +418,17 @@
   .entry-uni{color:var(--ink-2); margin-bottom:16px}
   .entry-cta{display:flex; gap:10px; margin-top:8px}
   .entry-cta .btn-key{padding:13px 28px}
+  /* ポイント選択して投票 */
+  .vote-panel{margin-top:6px}
+  .vp-label{font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px}
+  .vp-amounts{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+  .vp-amounts button{font:inherit; font-weight:700; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink-2); padding:9px 18px; border-radius:999px; cursor:pointer; transition:.15s}
+  .vp-amounts button.sel{border-color:var(--key); color:var(--key); background:var(--key-weak)}
+  .vp-amounts button:disabled{opacity:.5; cursor:default}
+  .vp-other{font:inherit; padding:9px 14px; border:1px solid var(--line); border-radius:10px; width:160px}
+  .vp-other:focus{outline:2px solid var(--key-line); border-color:var(--key)}
+  .vp-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:14px}
+  .vp-vote b{font-weight:800; font-family:'Oswald',sans-serif; font-size:17px}
   .gallery{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px}
   .gallery i{aspect-ratio:1; border-radius:12px; display:block}
   .qa{margin-top:16px; display:grid; gap:10px}
@@ -427,7 +438,8 @@
   .qa .qi.hide{display:none}
   .qa.cols2{grid-template-columns:1fr 1fr}
   /* ===== オーディション 2パターン共通 ===== */
-  .aud-banner{aspect-ratio:16/9; max-height:420px; border-radius:var(--aud-radius,18px); margin-top:24px; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--c1,#1E73E8),var(--c2,#0B3C7A)); display:flex; align-items:flex-end; padding:26px}
+  .aud-banner{width:100vw; margin-left:calc(50% - 50vw); margin-top:0; aspect-ratio:16/9; max-height:620px; border-radius:0; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--c1,#1E73E8),var(--c2,#0B3C7A)); background-size:cover; background-position:center; display:flex; align-items:flex-end; padding:26px}
+  #view-detail > main, #view-detail-n > main{padding-top:0}
   .aud-banner .ab-logo{position:absolute; top:16px; left:16px; background:rgba(255,255,255,.92); color:var(--ink); font-weight:800; font-size:12px; padding:6px 12px; border-radius:8px}
   .aud-banner .ab-cap{color:#fff; font-weight:800; font-size:clamp(20px,3.2vw,34px); line-height:1.2; text-shadow:0 2px 14px rgba(0,0,0,.35)}
   .aud-head{margin-top:26px; display:flex; flex-direction:column; gap:9px; align-items:flex-start}
@@ -778,17 +790,6 @@
     </section>
 
     <section>
-      <span class="eyebrow">Overview</span>
-      <h2 class="sec">オーディション概要</h2>
-      <p class="aud-summary">ファイナリストたちが活動期間の挑戦を通して個性を磨き、グランプリを目指します。本コンテストはYELL VOTE上で投票を受け付け、投票ポイントと当日審査の合算で総合グランプリを決定します。</p>
-      <ul class="info-list">
-        <li>YELL CAMPUS ID（無料登録）があれば誰でも投票に参加できます。</li>
-        <li>デイリーガチャで獲得したポイント、または購入ポイントで応援できます。</li>
-        <li>投票ポイントはリアルタイムでランキングに反映されます。</li>
-      </ul>
-    </section>
-
-    <section>
       <span class="eyebrow">Prize</span>
       <h2 class="sec">特典・賞品</h2>
       <ul class="prize-list">
@@ -1074,9 +1075,21 @@
       <div class="sns-row">
         <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
       </div>
-      <div class="entry-cta">
-        <button class="btn btn-key" id="entry-vote"><span class="hb">♥</span> 投票する</button>
-        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+      <div class="vote-panel">
+        <div class="vp-label">投票するYELLポイントを選ぶ</div>
+        <div class="vp-amounts">
+          <button type="button" data-amt="50">50</button>
+          <button type="button" data-amt="100">100</button>
+          <button type="button" data-amt="300">300</button>
+          <button type="button" data-amt="500">500</button>
+          <button type="button" data-amt="1000">1,000</button>
+          <button type="button" data-amt="other">その他</button>
+          <input type="number" class="vp-other" placeholder="ポイント数を入力" min="1" hidden>
+        </div>
+        <div class="vp-row">
+          <button class="btn btn-key vp-vote"><span class="hb">♥</span>&nbsp;<b class="vp-amt">100</b>&nbsp;ポイント投票する</button>
+          <button class="btn btn-ghost vp-share" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1186,8 +1199,8 @@
   <!-- 概要 タブ -->
   <div class="aud-panel" data-panel="about" hidden>
     <section>
-      <span class="eyebrow">Overview</span>
-      <h2 class="sec">オーディション概要</h2>
+      <span class="eyebrow">Event</span>
+      <h2 class="sec">イベント概要</h2>
       <p class="aud-summary">次世代のクリエイター・パフォーマーを発掘する公開オーディション。ジャンルを問わずエントリーした参加者へ、YELL（投票）で応援を届けられます。獲得ポイントはリアルタイムでランキングに反映され、上位入賞者には活動サポートやメディア出演のチャンスが用意されています。</p>
       <ul class="info-list">
         <li>YELL CAMPUS ID（無料登録）があれば誰でも投票に参加できます。</li>
@@ -1270,9 +1283,21 @@
       <div class="sns-row">
         <a data-stub>𝕏 / X</a><a data-stub>📷 Instagram</a><a data-stub>🎵 TikTok</a>
       </div>
-      <div class="entry-cta">
-        <button class="btn btn-key" id="nentry-vote"><span class="hb">♥</span> 投票する</button>
-        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+      <div class="vote-panel">
+        <div class="vp-label">投票するYELLポイントを選ぶ</div>
+        <div class="vp-amounts">
+          <button type="button" data-amt="50">50</button>
+          <button type="button" data-amt="100">100</button>
+          <button type="button" data-amt="300">300</button>
+          <button type="button" data-amt="500">500</button>
+          <button type="button" data-amt="1000">1,000</button>
+          <button type="button" data-amt="other">その他</button>
+          <input type="number" class="vp-other" placeholder="ポイント数を入力" min="1" hidden>
+        </div>
+        <div class="vp-row">
+          <button class="btn btn-key vp-vote"><span class="hb">♥</span>&nbsp;<b class="vp-amt">100</b>&nbsp;ポイント投票する</button>
+          <button class="btn btn-ghost vp-share" style="color:var(--ink);border-color:var(--line)">SHARE</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1280,7 +1305,6 @@
   <section>
     <span class="eyebrow">Photo &amp; Movie</span>
     <h2 class="sec">写真・動画</h2>
-    <p class="sec-sub">写真 最大8枚（4:3）＋ 紹介動画 1本（16:9）</p>
     <div class="gallery g43" id="nentry-gallery"></div>
     <div class="entry-video">紹介ムービー（16:9）</div>
   </section>
@@ -1545,19 +1569,18 @@ const AUD_ADS=[{name:"△△ Campus Audition 提供｜スポンサー募集中",
 function adBoxHTML(){const a=(Math.random()<0.6)?ADS[Math.floor(Math.random()*ADS.length)]:AUD_ADS[0];
   return `<div class="aud-ad"><div class="ad-slide" style="background:${a.c}">${a.name}</div></div>`;}
 function renderAdBox(id){var el=document.getElementById(id); if(el)el.innerHTML=adBoxHTML();}
-// 統一カード（順位＋獲得ポイント表示）
-function entrantCard(p,rank){const rc=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+// 統一カード（順位＋獲得ポイント。投票ボタンは無し＝投票は個人ページのみ。showNo=false でENTRY番号非表示）
+function entrantCard(p,rank,showNo){const rc=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
   return `<article class="person" style="--c1:${p.c[0]};--c2:${p.c[1]}">
-  <div class="ph"><span class="eno num">${p.no}</span><span class="rank-chip ${rc}">${rank}位</span></div>
+  <div class="ph">${showNo!==false?`<span class="eno num">${p.no}</span>`:''}<span class="rank-chip ${rc}">${rank}位</span></div>
   <div class="pbody">
     <div class="pname">${p.name}</div>
     <div class="pkana">${p.kana}</div>
     <div class="pts-mini">${p.pts.toLocaleString()}<small>PT</small></div>
-    <button class="vote-btn"><span class="hb">♥</span> 投票する</button>
   </div></article>`;}
-// 順位付けレンダリング
-function renderList(id,list){const sorted=[...list].sort((a,b)=>b.pts-a.pts);
-  document.getElementById(id).innerHTML=sorted.map((p,i)=>entrantCard(p,i+1)).join('');}
+// 順位付けレンダリング（showNo: ENTRY番号の表示。一般パターンは false）
+function renderList(id,list,showNo){const sorted=[...list].sort((a,b)=>b.pts-a.pts);
+  document.getElementById(id).innerHTML=sorted.map((p,i)=>entrantCard(p,i+1,showNo)).join('');}
 // オーディション内タブ切替
 document.querySelectorAll('[data-tabs]').forEach(function(tb){tb.addEventListener('click',function(e){var b=e.target.closest('button'); if(!b)return; var root=tb.parentNode; [...tb.children].forEach(x=>x.classList.remove('active')); b.classList.add('active'); var t=b.dataset.tab; root.querySelectorAll('.aud-panel').forEach(function(p){p.hidden=(p.dataset.panel!==t);}); window.scrollTo(0,0);});});
 
@@ -1607,16 +1630,38 @@ const NENTRANTS=[
   {no:"ENTRY 03", name:"伊藤健",   kana:"いとう けん",     pts:7210,  c:["#D2F0E2","#15A36A"]},
   {no:"ENTRY 04", name:"渡辺美咲", kana:"わたなべ みさき", pts:5640,  c:["#FAD9C0","#E8730A"]},
 ];
-renderList('nentrants',NENTRANTS); renderAdBox('normal-ad');
-document.getElementById('nentry-others').innerHTML=[...NENTRANTS].sort((a,b)=>b.pts-a.pts).slice(1).map((p,i)=>entrantCard(p,i+2)).join('');
+renderList('nentrants',NENTRANTS,false); renderAdBox('normal-ad');
+document.getElementById('nentry-others').innerHTML=[...NENTRANTS].sort((a,b)=>b.pts-a.pts).slice(1).map((p,i)=>entrantCard(p,i+2,false)).join('');
 
 // カード→詳細（投票ボタン・広告は除外）
 function navCards(id,view){var el=document.getElementById(id); if(el)el.addEventListener('click',e=>{if(e.target.closest('.vote-btn')||e.target.closest('.entrant-ad'))return; if(e.target.closest('.person'))go(view);});}
 navCards('final-miss','entry'); navCards('final-mister','entry'); navCards('entry-others','entry');
 navCards('nentrants','entryN'); navCards('nentry-others','entryN');
 
-// 投票演出（委譲・ログイン必須）
-document.addEventListener('click',e=>{const b=e.target.closest('.vote-btn,#entry-vote,#nentry-vote'); if(!b||b.disabled)return; if(!loggedIn){requireLogin('投票するには');return;} burst(b); b.innerHTML='✓ 投票しました'; b.disabled=true;});
+// 投票パネル（ポイント選択して投票・ログイン必須）
+document.querySelectorAll('.vote-panel').forEach(function(panel){
+  const amtBtns=[...panel.querySelectorAll('.vp-amounts button')];
+  const other=panel.querySelector('.vp-other');
+  const voteBtn=panel.querySelector('.vp-vote');
+  const amtLabel=panel.querySelector('.vp-amt');
+  let amt=100;
+  function setAmt(v){amt=v; amtLabel.textContent=(v>0?v.toLocaleString():'—');}
+  amtBtns.forEach(b=>b.onclick=()=>{
+    amtBtns.forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+    if(b.dataset.amt==='other'){other.hidden=false; other.focus(); setAmt(+other.value||0);}
+    else{other.hidden=true; setAmt(+b.dataset.amt);}
+  });
+  other.oninput=()=>setAmt(+other.value||0);
+  panel.querySelector('[data-amt="100"]').classList.add('sel');
+  voteBtn.onclick=()=>{
+    if(voteBtn.disabled)return;
+    if(!loggedIn){requireLogin('投票するには');return;}
+    if(!(amt>0)){other.focus();return;}
+    burst(voteBtn);
+    voteBtn.innerHTML='✓ '+amt.toLocaleString()+'ポイント投票しました';
+    voteBtn.disabled=true; amtBtns.forEach(x=>x.disabled=true); other.disabled=true;
+  };
+});
 
 // 獲得ポイント リアルタイム風更新（通常パターンの投票ページ）
 let nPts=12480;
