@@ -510,6 +510,24 @@
   .login-toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:120; display:flex; align-items:center; gap:14px; background:var(--ink); color:#fff; padding:12px 16px 12px 20px; border-radius:999px; box-shadow:0 12px 30px rgba(0,0,0,.25); font-size:14px; font-weight:600}
   .login-toast[hidden]{display:none}
   .login-toast .btn{padding:8px 18px; font-size:13px}
+  /* シェアシート */
+  .share-overlay{position:fixed; inset:0; z-index:140; background:rgba(22,22,26,.5); display:flex; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(2px)}
+  .share-overlay[hidden]{display:none}
+  .ss-card{position:relative; background:#fff; border-radius:22px; padding:28px 26px; max-width:380px; width:100%; box-shadow:0 24px 70px rgba(0,0,0,.3); text-align:center}
+  .ss-card h3{margin:0 0 4px; font-size:19px}
+  .ss-card p{margin:0 0 18px; font-size:13px; color:var(--muted)}
+  .ss-card p b{color:var(--key)}
+  .ss-close{position:absolute; top:12px; right:14px; border:0; background:none; font-size:24px; color:var(--muted); cursor:pointer; line-height:1}
+  .ss-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  .ss-btn{display:flex; flex-direction:column; align-items:center; gap:9px; border:1px solid var(--line); border-radius:var(--radius); padding:18px 10px; background:#fff; font:inherit; font-weight:700; font-size:13px; color:var(--ink); cursor:pointer; transition:.15s}
+  .ss-btn:hover{border-color:var(--key); transform:translateY(-2px)}
+  .ss-ico{width:40px; height:40px; display:flex; align-items:center; justify-content:center}
+  .ss-ico img{width:40px; height:40px}
+  .ss-ico.ss-line{background:#06C755; color:#fff; border-radius:50%; font-size:11px; font-weight:800}
+  .ss-ico.ss-copy{background:var(--surface-2); border-radius:50%; font-size:18px}
+  /* 汎用トースト */
+  .flash-toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(10px); z-index:150; background:var(--ink); color:#fff; padding:12px 20px; border-radius:999px; font-size:14px; font-weight:600; opacity:0; transition:.3s; box-shadow:0 12px 30px rgba(0,0,0,.25)}
+  .flash-toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
   .person .ph{position:relative}
   .person .rank-chip{position:absolute; top:10px; right:10px; background:rgba(22,22,26,.7); color:#fff; font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px}
   .person .rank-chip.gold{background:linear-gradient(135deg,#FCE08A,#E6B422); color:#7a5b00}
@@ -1401,6 +1419,21 @@
   <button class="btn btn-key" id="toast-login">ログイン</button>
 </div>
 
+<!-- シェアシート -->
+<div class="share-overlay" id="share-sheet" hidden>
+  <div class="ss-card">
+    <button class="ss-close" id="ss-close" aria-label="閉じる">×</button>
+    <h3>シェアして応援を広げよう</h3>
+    <p>あなたのシェアが、<b id="ss-name">この候補者</b>への新しい一票につながります。</p>
+    <div class="ss-grid">
+      <button class="ss-btn" data-share="instagram"><span class="ss-ico"><img src="img/instagram.svg" alt=""></span>Instagram</button>
+      <button class="ss-btn" data-share="x"><span class="ss-ico"><img src="img/X.svg" alt=""></span>X</button>
+      <button class="ss-btn" data-share="line"><span class="ss-ico ss-line">LINE</span>LINE</button>
+      <button class="ss-btn" data-share="copy"><span class="ss-ico ss-copy">🔗</span>リンクをコピー</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const AUD=[
   {uni:"青山学院大学",ttl:"ミス・ミスター青山コンテスト2026", st:"live", stl:"開催中", period:"07.05 – 10.24", ent:"Miss 6 / Mister 6", c:["#DD1C5D","#7A2050"], ck:"#DD1C5D", type:"miscon"},
@@ -1676,6 +1709,33 @@ document.querySelectorAll('.vote-panel').forEach(function(panel){
     voteBtn.innerHTML='✓ '+amt.toLocaleString()+'ポイント投票しました';
     voteBtn.disabled=true; amtBtns.forEach(x=>x.disabled=true); other.disabled=true;
   };
+});
+
+// ===== シェアシート（Instagram / X / LINE / コピー） =====
+function flash(msg){var t=document.createElement('div'); t.className='flash-toast'; t.textContent=msg; document.body.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show')); setTimeout(()=>{t.classList.remove('show'); setTimeout(()=>t.remove(),300);},2400);}
+const shareSheet=document.getElementById('share-sheet');
+function openShare(name){document.getElementById('ss-name').textContent=name||'この候補者'; shareSheet.hidden=false;}
+function closeShare(){shareSheet.hidden=true;}
+document.getElementById('ss-close').onclick=closeShare;
+shareSheet.addEventListener('click',e=>{if(e.target===shareSheet)closeShare();});
+// SHAREボタン → シート表示（候補者名を反映）
+document.querySelectorAll('.vp-share').forEach(b=>b.onclick=()=>{
+  const view=b.closest('.view'); const h1=view?view.querySelector('.entry-info h1'):null;
+  openShare(h1?h1.textContent+'さん':'この候補者');
+});
+// 各シェア先
+document.querySelector('#share-sheet .ss-grid').addEventListener('click',e=>{
+  const b=e.target.closest('.ss-btn'); if(!b)return;
+  const url='https://vote.yellcampus.com/'; // 本番は候補者ページURL
+  const name=document.getElementById('ss-name').textContent;
+  const text=name+'を応援しています！YELL VOTEで一緒に応援しよう📣';
+  const k=b.dataset.share;
+  if(k==='x'){window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url),'_blank'); flash('Xのシェア画面を開きます');}
+  else if(k==='line'){window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(url),'_blank'); flash('LINEのシェア画面を開きます');}
+  else if(k==='instagram'){flash('Instagramのストーリーズでシェア（アプリ連携）');}
+  else if(k==='copy'){(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>flash('リンクをコピーしました')).catch(()=>flash('リンク：'+url));}
+  closeShare();
 });
 
 // 獲得ポイント リアルタイム風更新（通常パターンの投票ページ）
