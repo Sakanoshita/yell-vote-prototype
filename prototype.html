@@ -275,21 +275,17 @@
   .result-hero h1{font-size:clamp(30px,5vw,48px); font-weight:900; margin:6px 0 4px}
   .result-hero p{margin:0; opacity:.85}
   /* About ヒーロー専用の背景（エールが広がって届くモチーフ） */
-  .about-hero{padding:64px 34px;
+  /* About ヒーロー画像（文字入り） */
+  .about-hero-img{margin-top:28px; border-radius:24px; overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.18)}
+  .about-hero-img img{display:block; width:100%; height:auto}
+  /* About ページ全体の背景テクスチャ（シンプルすぎ対策） */
+  #view-about.active{
     background:
-      radial-gradient(90% 130% at 86% -25%, color-mix(in srgb,var(--yell-accent) 78%, #000) 0%, transparent 55%),
-      radial-gradient(80% 120% at -12% 125%, #FF8A3C 0%, transparent 48%),
-      linear-gradient(135deg, var(--ink) 8%, color-mix(in srgb,var(--yell-accent) 42%, var(--ink)) 100%);}
-  .about-hero::before{content:""; position:absolute; inset:0; z-index:0;
-    background-image:radial-gradient(circle, rgba(255,255,255,.7) 1.4px, transparent 1.7px);
-    background-size:26px 26px; opacity:.10}
-  .about-hero::after{content:""; position:absolute; right:-130px; top:-130px; width:420px; height:420px; z-index:0; pointer-events:none;
-    background:radial-gradient(circle,
-      transparent 36%, rgba(255,255,255,.12) 37%, transparent 39%,
-      transparent 50%, rgba(255,255,255,.09) 51%, transparent 53%,
-      transparent 64%, rgba(255,255,255,.06) 65%, transparent 67%,
-      transparent 78%, rgba(255,255,255,.04) 79%, transparent 81%)}
-  .about-hero .eyebrow, .about-hero h1, .about-hero p{position:relative; z-index:1}
+      radial-gradient(60% 45% at 100% 2%, color-mix(in srgb,var(--yell-accent) 8%, transparent), transparent 70%),
+      radial-gradient(55% 40% at 0% 60%, color-mix(in srgb,#1E73E8 5%, transparent), transparent 70%);
+  }
+  #view-about.active::before{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background-image:radial-gradient(rgba(22,22,26,.045) 1px, transparent 1.6px); background-size:22px 22px}
   .personal{margin:20px auto 0; max-width:520px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); border-radius:14px; padding:14px 18px; font-size:14px}
   .personal .hb{display:inline-block; animation:beat 1.3s infinite}
   .personal b{font-weight:900}
@@ -315,9 +311,10 @@
 
   /* About */
   .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:20px}
-  .feat{border:1px solid var(--line); border-radius:var(--radius); padding:24px 22px; background:#fff}
-  .feat .fic{font-size:34px; margin-bottom:10px}
-  .feat h3{margin:0 0 8px; font-size:18px}
+  .feat{position:relative; border:1px solid var(--line); border-top:3px solid var(--key); border-radius:var(--radius); padding:22px 22px; background:#fff; transition:transform .18s ease, box-shadow .18s ease}
+  .feat:hover{transform:translateY(-3px); box-shadow:0 12px 26px rgba(0,0,0,.08)}
+  .feat h3{margin:0 0 8px; font-size:18px; padding-left:14px; position:relative}
+  .feat h3::before{content:""; position:absolute; left:0; top:5px; bottom:3px; width:4px; border-radius:2px; background:var(--key)}
   .feat p{margin:0; color:var(--ink-2); font-size:14px}
   .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px}
   .step{border:1px solid var(--line); border-radius:var(--radius); padding:20px 18px; text-align:center}
@@ -856,11 +853,7 @@
 <!-- ============ ABOUT（YELL VOTEとは） ============ -->
 <div class="view" id="view-about">
 <main>
-  <div class="result-hero about-hero">
-    <span class="eyebrow" style="color:#fff;opacity:.85">About</span>
-    <h1>応援が、ちゃんと届く場所。</h1>
-    <p>その場で流れて消えるのではなく、必ず本人に届いて、残る応援を。</p>
-  </div>
+  <div class="about-hero-img"><img src="img/about.png" alt="応援が、ちゃんと届く場所。その場で流れて消えるのではなく、本人に届き、残る応援を。"></div>
 
   <section>
     <span class="eyebrow">Welcome to YELL VOTE</span>
@@ -872,9 +865,9 @@
     <span class="eyebrow">What you can do</span>
     <h2 class="sec">YELL VOTE でできること</h2>
     <div class="feat-grid">
-      <div class="feat"><div class="fic">📣</div><h3>夢を持つ若者にYELLを送れる</h3><p>オーディション参加者への投票で、応援の気持ちをまっすぐ本人に届けられる。</p></div>
-      <div class="feat"><div class="fic">✨</div><h3>自分の夢を考えるキッカケに出会える</h3><p>挑戦する同世代に触れることで、自分の「やりたい」を見つけるキッカケに出会える。</p></div>
-      <div class="feat"><div class="fic">🚀</div><h3>チャンスが広がる</h3><p>オーディションをきっかけに、活動・出演・仕事など“その先”へとつながるチャンスが広がる。</p></div>
+      <div class="feat"><h3>夢を持つ若者にYELLを送れる</h3><p>オーディション参加者への投票で、応援の気持ちをまっすぐ本人に届けられる。</p></div>
+      <div class="feat"><h3>自分の夢を考えるキッカケに出会える</h3><p>挑戦する同世代に触れることで、自分の「やりたい」を見つけるキッカケに出会える。</p></div>
+      <div class="feat"><h3>チャンスが広がる</h3><p>オーディションをきっかけに、活動・出演・仕事など“その先”へとつながるチャンスが広がる。</p></div>
     </div>
   </section>
 
@@ -910,12 +903,7 @@
   <section>
     <span class="eyebrow">YELL CAMPUS ID</span>
     <h2 class="sec">YELL CAMPUS ID とは</h2>
-    <p class="lead">YELL CAMPUS IDアカウントを作成すると、サービス毎にアカウントを作成することなくログインできるSSO（Single Sign On）を採用しています。ひとつのIDで、以下のサービスを横断して利用できます。</p>
-    <div class="sso-list">
-      <span>YELL VOTE（投票コミュニティ）</span>
-      <span>YELL CAMPUS（2025年4月リニューアル予定）</span>
-      <span>MONAQA（WEBクリエイティブスクール）</span>
-    </div>
+    <p class="lead">YELL CAMPUS IDアカウントを作成すると、サービス毎にアカウントを作成することなくログインできるSSO（Single Sign On）を採用しています。ひとつのIDで、サービスを横断して利用できます。</p>
   </section>
 
   <section>
