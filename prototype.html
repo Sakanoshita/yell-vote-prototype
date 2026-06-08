@@ -1381,7 +1381,7 @@ const PEOPLE=[
 ];
 
 function cardHTML(a){
-  return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
+  return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" data-ck="${a.ck}" data-c1="${a.c[0]}" data-c2="${a.c[1]}" data-ttl="${a.ttl}" data-uni="${a.uni}" data-period="${a.period}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
     <div class="thumb"><span class="st ${a.st}">${a.stl}</span></div>
     <div class="keybar"></div>
     <div class="body">
@@ -1812,8 +1812,18 @@ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go)
 document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{go('home'); setTimeout(()=>document.getElementById(b.dataset.scroll).scrollIntoView({behavior:'smooth'}),60);});
 document.querySelectorAll('[data-stub]').forEach(b=>b.onclick=()=>alert('（プロトタイプ）この画面は別途設計します：'+b.textContent.trim()));
 // オーディションカード → 詳細へ（タイプ別に通常／ミスコン）
+// クリックした大学のテーマ（色・バナー・タイトル）を詳細テンプレに反映＝大学ごとに見た目が変わる
+function applyAuditionTheme(card, viewId){
+  const v=document.getElementById(viewId); if(!v)return;
+  if(card.dataset.ck) v.style.setProperty('--key', card.dataset.ck);
+  const banner=v.querySelector('.aud-banner');
+  if(banner){banner.style.setProperty('--c1',card.dataset.c1||'#1E73E8'); banner.style.setProperty('--c2',card.dataset.c2||'#0B3C7A');}
+  const ttl=v.querySelector('.aud-head h2'); if(ttl&&card.dataset.ttl) ttl.textContent=card.dataset.ttl;
+}
 ['home-grid','aud-grid','archive-grid'].forEach(id=>{
-  document.getElementById(id).addEventListener('click',e=>{const card=e.target.closest('.card'); if(card)go(card.dataset.type==='normal'?'detailN':'detail');});
+  document.getElementById(id).addEventListener('click',e=>{const card=e.target.closest('.card'); if(!card)return;
+    const isNormal=card.dataset.type==='normal'; const viewId=isNormal?'view-detail-n':'view-detail';
+    applyAuditionTheme(card,viewId); go(isNormal?'detailN':'detail');});
 });
 </script>
 </body>
