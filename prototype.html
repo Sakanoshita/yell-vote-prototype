@@ -346,7 +346,12 @@
   .mp-points{display:flex; align-items:center; gap:16px}
   .mp-points b{font-size:30px; color:var(--ink)}
   .mp-bal{display:flex; align-items:center; gap:18px}
+  .mp-bal-total b{font-size:30px; color:var(--ink)}
   .mp-bal-total span{font-size:12px; color:var(--muted)}
+  .mp-coin{text-align:right; padding-left:18px; border-left:1px solid var(--line)}
+  .mp-coin > span{font-size:12px; color:var(--muted)}
+  .mp-coin b{font-size:30px; color:var(--key); font-family:'Oswald',sans-serif}
+  .mp-coin .u{font-weight:800; color:var(--key); font-size:15px}
   .mp-bal-split{display:flex; gap:16px; padding-left:18px; border-left:1px solid var(--line)}
   .mp-bal-split > div{font-size:11px; color:var(--muted)}
   .mp-bal-split > div span{display:block}
@@ -1034,6 +1039,10 @@
           <div><span>無料</span><b class="num">450</b><small>pt</small></div>
         </div>
       </div>
+      <div class="mp-coin">
+        <span>保有YELLコイン</span>
+        <div><b class="num">1,200</b> <span class="u">C</span></div>
+      </div>
     </div>
     <p class="buy-note">※ ここで購入したポイントはすべて<b>有料ポイント</b>になります。</p>
 
@@ -1044,7 +1053,10 @@
     <p class="sec-sub" id="buy-tab-desc">日本円のお支払いでポイントを購入します。</p>
     <div class="plan-grid" id="plan-grid"></div>
 
-    <p class="fineprint">※ 表示は税込。未成年の方は保護者の同意が必要です。決済はLINE Pay／クレジットカード／キャリア決済に対応予定。購入後のポイントは払い戻しできません。詳しくは<a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>をご確認ください。</p>
+    <p class="fineprint">※ 表示は税込となっております。<br>
+    ※ 未成年の方は保護者の同意が必要です。<br>
+    ※ 決済はクレジットカードのみとなっております。<br>
+    ※ 購入後のポイントは払い戻しできません。詳しくは<a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>をご確認ください。</p>
   </section>
 </main>
 </div>
@@ -1868,7 +1880,7 @@ document.getElementById('qa-more').onclick=function(){document.querySelectorAll(
 const LEGAL={
   terms:{t:"利用規約について",b:`<h4>第1条（適用）</h4><p>本規約は、YELL VOTE（以下「本サービス」）の利用に関する条件を、利用者と運営会社との間で定めるものです。</p><h4>第2条（投票）</h4><p>投票は、デイリーガチャで獲得したYELLポイント、または購入したコインから変換したYELLポイントを用いて行います。同一人物による複数アカウントの作成、自動ツールによる投票その他の不正行為を禁止します。</p><h4>第3条（禁止事項）</h4><p>なりすまし、第三者の権利侵害、本サービスの運営を妨げる行為を禁止します。違反が認められた場合、アカウント停止および当該投票の無効化を行います。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
   privacy:{t:"プライバシーポリシー",b:`<h4>取得する情報</h4><p>LINEログインに伴う識別子、投票・購入履歴、アクセスログ等を取得します。</p><h4>利用目的</h4><p>本サービスの提供、不正防止、品質向上、お知らせの配信のために利用します。</p><h4>第三者提供</h4><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
-  tokushoho:{t:"特定商取引法に基づく表記",b:`<dl><dt>販売事業者</dt><dd>株式会社◯◯（運営会社）</dd><dt>運営責任者</dt><dd>◯◯ ◯◯</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>お問い合わせ</dt><dd>YELLサポートデスク</dd><dt>販売価格</dt><dd>各ポイントプランに表示（税込）</dd><dt>支払方法</dt><dd>クレジットカード／LINE Pay／キャリア決済</dd><dt>引渡時期</dt><dd>決済完了後ただちにポイントを付与</dd><dt>返品・キャンセル</dt><dd>商品の性質上、購入後のポイントの払い戻しはできません</dd></dl>`},
+  tokushoho:{t:"特定商取引法に基づく表記",b:`<dl><dt>販売事業者</dt><dd>株式会社◯◯（運営会社）</dd><dt>運営責任者</dt><dd>◯◯ ◯◯</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>お問い合わせ</dt><dd>YELLサポートデスク</dd><dt>販売価格</dt><dd>各ポイントプランに表示（税込）</dd><dt>支払方法</dt><dd>クレジットカード</dd><dt>引渡時期</dt><dd>決済完了後ただちにポイントを付与</dd><dt>返品・キャンセル</dt><dd>商品の性質上、購入後のポイントの払い戻しはできません</dd></dl>`},
   company:{t:"運営会社",b:`<dl><dt>会社名</dt><dd>株式会社◯◯</dd><dt>事業内容</dt><dd>YELL CAMPUS プラットフォームの企画・運営</dd><dt>設立</dt><dd>20XX年</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>関連サービス</dt><dd>YELL VOTE ／ YELL TICKET ／ YELL SUPPORT</dd></dl>`},
 };
 function setLegal(key){const d=LEGAL[key]||LEGAL.terms;document.getElementById('legal-title').textContent=d.t;
