@@ -411,7 +411,9 @@
   .faq-cta a{color:var(--key); text-decoration:underline}
 
   /* エントリー詳細 */
-  .entry-hero{display:grid; grid-template-columns:340px 1fr; gap:28px; margin-top:28px; align-items:center}
+  .entry-hero{display:grid; grid-template-columns:340px 1fr; gap:28px; margin-top:28px; align-items:start}
+  .entry-photo-col{min-width:0}
+  .dept-label{display:inline-block; margin-bottom:12px; background:var(--ink); color:#fff; font-weight:700; font-size:13px; padding:7px 16px; border-radius:999px}
   .entry-photo{position:relative; aspect-ratio:3/4; border-radius:18px; background:linear-gradient(160deg,#F7C6D5,var(--key))}
   .entry-eno{color:var(--muted); margin:12px 0 2px; font-size:14px}
   .entry-info h1{font-size:38px; font-weight:900; margin:0 0 4px}
@@ -1065,23 +1067,25 @@
 <div class="view" id="view-entry">
 <main>
   <div class="entry-hero">
-    <div class="entry-photo r43">
-      <span class="rank-badge">1<small>位</small></span>
-      <span class="dept-badge">Miss部門</span>
+    <div class="entry-photo-col">
+      <div class="dept-label">Miss部門</div>
+      <div class="entry-photo r43">
+        <span class="rank-badge">1<small>位</small></span>
+      </div>
     </div>
     <div class="entry-info">
-      <div class="entry-eno num">ENTRY No.1</div>
       <div class="rank-bar">1<small>位</small></div>
-      <div class="entry-kana" style="margin-top:10px">さいとう かのん</div>
+      <div class="entry-eno num">ENTRY No.1</div>
+      <div class="entry-kana">さいとう かのん</div>
       <h1>斉藤花音</h1>
       <div class="entry-uni">◯◯大学</div>
-      <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
       <p class="entry-intro">はじめまして、◯◯大学文学部3年の斉藤花音です。クラシックバレエを10年続けてきて、舞台で表現することの楽しさと難しさを学んできました。今回のコンテストでは、これまで積み重ねた努力を出し切って、見てくださる方の心に少しでも残る表現をお届けしたいと思っています。普段はカフェ巡りや写真を撮ることが好きで、休日は街を歩きながら季節の景色を切り取っています。まだ未熟ですが、この挑戦を通してもっと成長して、誰かの背中をそっと押せる存在になりたいです。みなさんの一票一票が本当に大きな力になります。最後まで全力で駆け抜けますので、どうか温かい応援をよろしくお願いいたします！</p>
       <div class="sns-row">
         <a data-stub aria-label="X"><img src="img/X.svg" alt="X"></a>
         <a data-stub aria-label="Instagram"><img src="img/instagram.svg" alt="Instagram"></a>
         <a data-stub aria-label="TikTok"><img src="img/tiktok.svg" alt="TikTok"></a>
       </div>
+      <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
       <div class="vote-panel">
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
@@ -1278,20 +1282,22 @@
 <div class="view" id="view-entry-n">
 <main>
   <div class="entry-hero">
-    <div class="entry-photo r43" id="nentry-photo">
-      <span class="rank-badge">1<small>位</small></span>
+    <div class="entry-photo-col">
+      <div class="entry-photo r43" id="nentry-photo">
+        <span class="rank-badge">1<small>位</small></span>
+      </div>
     </div>
     <div class="entry-info">
       <div class="rank-bar">1<small>位</small></div>
-      <div class="entry-kana" id="nentry-kana" style="margin-top:10px">さとう だいち</div>
+      <div class="entry-kana" id="nentry-kana">さとう だいち</div>
       <h1 id="nentry-name">佐藤大地</h1>
-      <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
       <p class="entry-intro" id="nentry-intro">はじめまして、佐藤大地です。ダンスを始めたのは小学2年生のとき、テレビで見たパフォーマンスに心を奪われたのがきっかけでした。それから12年間、ストリートを軸にコンテンポラリーやヒップホップなど幅広いジャンルに挑戦しています。音楽に合わせて体を動かし、見ている人の表情が変わる瞬間が何よりの原動力です。将来は世界の舞台に立つことが夢で、今回のオーディションはその夢に近づく大切な一歩だと思っています。まだ発展途上ですが、一回一回のステージに全力を注ぎ、見てくれる人をワクワクさせられるダンサーを目指します。みなさんの一票が、僕の挑戦を後押しする大きな力になります。どうか最後まで応援をよろしくお願いします！</p>
       <div class="sns-row">
         <a data-stub aria-label="X"><img src="img/X.svg" alt="X"></a>
         <a data-stub aria-label="Instagram"><img src="img/instagram.svg" alt="Instagram"></a>
         <a data-stub aria-label="TikTok"><img src="img/tiktok.svg" alt="TikTok"></a>
       </div>
+      <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
       <div class="vote-panel">
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
