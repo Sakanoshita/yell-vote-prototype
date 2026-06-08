@@ -274,6 +274,22 @@
   }
   .result-hero h1{font-size:clamp(30px,5vw,48px); font-weight:900; margin:6px 0 4px}
   .result-hero p{margin:0; opacity:.85}
+  /* About ヒーロー専用の背景（エールが広がって届くモチーフ） */
+  .about-hero{padding:64px 34px;
+    background:
+      radial-gradient(90% 130% at 86% -25%, color-mix(in srgb,var(--yell-accent) 78%, #000) 0%, transparent 55%),
+      radial-gradient(80% 120% at -12% 125%, #FF8A3C 0%, transparent 48%),
+      linear-gradient(135deg, var(--ink) 8%, color-mix(in srgb,var(--yell-accent) 42%, var(--ink)) 100%);}
+  .about-hero::before{content:""; position:absolute; inset:0; z-index:0;
+    background-image:radial-gradient(circle, rgba(255,255,255,.7) 1.4px, transparent 1.7px);
+    background-size:26px 26px; opacity:.10}
+  .about-hero::after{content:""; position:absolute; right:-130px; top:-130px; width:420px; height:420px; z-index:0; pointer-events:none;
+    background:radial-gradient(circle,
+      transparent 36%, rgba(255,255,255,.12) 37%, transparent 39%,
+      transparent 50%, rgba(255,255,255,.09) 51%, transparent 53%,
+      transparent 64%, rgba(255,255,255,.06) 65%, transparent 67%,
+      transparent 78%, rgba(255,255,255,.04) 79%, transparent 81%)}
+  .about-hero .eyebrow, .about-hero h1, .about-hero p{position:relative; z-index:1}
   .personal{margin:20px auto 0; max-width:520px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); border-radius:14px; padding:14px 18px; font-size:14px}
   .personal .hb{display:inline-block; animation:beat 1.3s infinite}
   .personal b{font-weight:900}
@@ -368,6 +384,7 @@
   .rb-main{min-width:0}
   .rb-name{font-weight:700; font-size:15px}
   .rb-sub{font-size:12px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .rb-sub .rb-ev{color:var(--ink-2); font-weight:600}
   .rb-pt{margin-left:auto; font-family:'Oswald',sans-serif; font-weight:700; font-size:17px; color:var(--key); flex:0 0 auto}
   .rb-pt small{font-size:11px; color:var(--muted); font-family:inherit; margin-left:2px}
   .buy-note{margin-top:12px; font-size:13px; color:var(--ink-2); background:var(--key-weak); border:1px solid var(--key-line); border-radius:10px; padding:11px 14px}
@@ -839,7 +856,7 @@
 <!-- ============ ABOUT（YELL VOTEとは） ============ -->
 <div class="view" id="view-about">
 <main>
-  <div class="result-hero" style="background:linear-gradient(135deg,var(--ink),color-mix(in srgb,var(--yell-accent) 55%,var(--ink)))">
+  <div class="result-hero about-hero">
     <span class="eyebrow" style="color:#fff;opacity:.85">About</span>
     <h1>応援が、ちゃんと届く場所。</h1>
     <p>その場で流れて消えるのではなく、必ず本人に届いて、残る応援を。</p>
@@ -1411,22 +1428,23 @@ document.getElementById('news-list').innerHTML=NEWS.map(n=>`
    <span class="nt">${n.title}</span>${n.isNew?'<span class="new">NEW</span>':''}</a>`).join('');
 
 // 月間ファンランキング（応援した人＝ファンのTOP10）
+// sub＝そのファンが「一番投票したイベント」と「応援している人」
 const FANS=[
-  {name:"はるか",   sub:"ミス・ミスター◯◯ を応援",       pt:48200},
-  {name:"ゆうと",   sub:"△△ Campus Audition を応援",      pt:41600},
-  {name:"みお",     sub:"ミス・ミスター◯◯ を応援",       pt:37850},
-  {name:"けんじ",   sub:"▲▲ Campus Star を応援",         pt:29400},
-  {name:"さき",     sub:"△△ Campus Audition を応援",      pt:24130},
-  {name:"りく",     sub:"ミス・ミスター◯◯ を応援",       pt:19880},
-  {name:"あや",     sub:"▲▲ Campus Star を応援",         pt:16450},
-  {name:"だいき",   sub:"△△ Campus Audition を応援",      pt:13270},
-  {name:"のぞみ",   sub:"ミス・ミスター◯◯ を応援",       pt:10940},
-  {name:"しょう",   sub:"▲▲ Campus Star を応援",         pt:8620},
+  {name:"はるか", ev:"ミス・ミスター◯◯コンテスト", who:"斉藤花音", pt:48200},
+  {name:"ゆうと", ev:"△△ Campus Audition",          who:"佐藤大地", pt:41600},
+  {name:"みお",   ev:"ミス・ミスター◯◯コンテスト", who:"高橋蓮",   pt:37850},
+  {name:"けんじ", ev:"▲▲ Campus Star",              who:"野田さつき", pt:29400},
+  {name:"さき",   ev:"△△ Campus Audition",          who:"鈴木彩花", pt:24130},
+  {name:"りく",   ev:"ミス・ミスター◯◯コンテスト", who:"田中優花", pt:19880},
+  {name:"あや",   ev:"▲▲ Campus Star",              who:"中村颯太", pt:16450},
+  {name:"だいき", ev:"△△ Campus Audition",          who:"伊藤健",   pt:13270},
+  {name:"のぞみ", ev:"ミス・ミスター◯◯コンテスト", who:"山形光美", pt:10940},
+  {name:"しょう", ev:"▲▲ Campus Star",              who:"渡辺美咲", pt:8620},
 ];
 document.getElementById('rankboard').innerHTML=FANS.map((f,i)=>{const r=i+1;
   const pos=r<=3?`<div class="rb-medal">${r===1?'🥇':r===2?'🥈':'🥉'}</div>`:`<div class="rb-pos">${r}</div>`;
   return `<div class="rb-row ${r<=3?'top'+r:''}">${pos}<div class="rb-av"></div>
-    <div class="rb-main"><div class="rb-name">${f.name}</div><div class="rb-sub">${f.sub}</div></div>
+    <div class="rb-main"><div class="rb-name">${f.name}</div><div class="rb-sub"><span class="rb-ev">${f.ev}</span>／${f.who} を応援</div></div>
     <div class="rb-pt">${f.pt.toLocaleString()}<small>YELL</small></div></div>`;}).join('');
 
 // 1日1回ガチャ ポップアップ
