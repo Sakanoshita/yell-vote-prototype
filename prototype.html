@@ -427,7 +427,7 @@
   .qa .qi.hide{display:none}
   .qa.cols2{grid-template-columns:1fr 1fr}
   /* ===== オーディション 2パターン共通 ===== */
-  .aud-banner{aspect-ratio:16/9; max-height:420px; border-radius:18px; margin-top:24px; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--c1,#1E73E8),var(--c2,#0B3C7A)); display:flex; align-items:flex-end; padding:26px}
+  .aud-banner{aspect-ratio:16/9; max-height:420px; border-radius:var(--aud-radius,18px); margin-top:24px; position:relative; overflow:hidden; background:linear-gradient(135deg,var(--c1,#1E73E8),var(--c2,#0B3C7A)); display:flex; align-items:flex-end; padding:26px}
   .aud-banner .ab-logo{position:absolute; top:16px; left:16px; background:rgba(255,255,255,.92); color:var(--ink); font-weight:800; font-size:12px; padding:6px 12px; border-radius:8px}
   .aud-banner .ab-cap{color:#fff; font-weight:800; font-size:clamp(20px,3.2vw,34px); line-height:1.2; text-shadow:0 2px 14px rgba(0,0,0,.35)}
   .aud-head{margin-top:26px; display:flex; flex-direction:column; gap:9px; align-items:flex-start}
@@ -704,11 +704,11 @@
 <!-- ============ DETAIL（ミスコンパターン LP） ============ -->
 <div class="view" id="view-detail">
 <main>
-  <div class="aud-banner" style="--c1:#DD1C5D;--c2:#7A2050"></div>
+  <div class="aud-banner" id="det-banner" style="--c1:#DD1C5D;--c2:#7A2050"></div>
 
   <div class="aud-head">
     <span class="badge live">開催中</span>
-    <h2 class="sec">ミス・ミスター◯◯コンテスト 2026</h2>
+    <h2 class="sec" id="det-title">ミス・ミスター青山コンテスト 2026</h2>
     <div class="aud-period num">投票期間：2026.07.05 14:00 〜 2026.10.24 23:59</div>
     <div class="aud-countdown"><span class="cd-label">投票終了まで</span><span class="cd-val num" id="cd-detail" data-end="2026-10-24T23:59:59+09:00">--</span></div>
   </div>
@@ -723,7 +723,7 @@
     <section>
       <span class="eyebrow">Overview</span>
       <h2 class="sec">オーディション開催概要</h2>
-      <p class="aud-summary">◯◯大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。あなたのYELL（投票）が、候補者の背中を押します。投票ポイントはリアルタイムでランキングに反映されます。</p>
+      <p class="aud-summary" id="det-summary">青山学院大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。あなたのYELL（投票）が、候補者の背中を押します。投票ポイントはリアルタイムでランキングに反映されます。</p>
     </section>
 
     <section>
@@ -772,8 +772,8 @@
       <span class="eyebrow">Theme</span>
       <h2 class="sec">テーマ</h2>
       <div class="theme-card">
-        <p>「あなたのオンリーワンが輝く舞台へ」</p>
-        <span>活動期間の挑戦を通して、候補者一人ひとりの個性が輝くコンテストを目指します。</span>
+        <p id="det-theme-title">「あなたのオンリーワンが輝く舞台へ」</p>
+        <span id="det-theme-body">活動期間の挑戦を通して、候補者一人ひとりの個性が輝くコンテストを目指します。</span>
       </div>
     </section>
 
@@ -1364,9 +1364,9 @@
 
 <script>
 const AUD=[
-  {uni:"◯◯大学",  ttl:"ミス・ミスター◯◯コンテスト2026", st:"live",  stl:"開催中",   period:"07.05 – 10.24", ent:"Miss 6 / Mister 6", c:["#DD1C5D","#7A2050"], ck:"#DD1C5D", type:"miscon"},
+  {uni:"青山学院大学",ttl:"ミス・ミスター青山コンテスト2026", st:"live", stl:"開催中", period:"07.05 – 10.24", ent:"Miss 6 / Mister 6", c:["#DD1C5D","#7A2050"], ck:"#DD1C5D", type:"miscon"},
   {uni:"△△大学",  ttl:"△△ Campus Audition 2026",        st:"live",  stl:"開催中",   period:"06.20 – 09.30", ent:"12組",            c:["#1E73E8","#0B3C7A"], ck:"#1E73E8", type:"normal"},
-  {uni:"□□大学",  ttl:"MR/MISS □□ 2026",                st:"soon",  stl:"近日",     period:"08.01 開始",    ent:"準備中",          c:["#15A36A","#0C5C3C"], ck:"#15A36A", type:"miscon"},
+  {uni:"立教大学",  ttl:"MISS&MISTER 立教 2026",           st:"live",  stl:"開催中",   period:"07.01 – 10.31", ent:"Miss 5 / Mister 5",c:["#B3122F","#2A1A3A"], ck:"#B3122F", type:"miscon"},
   {uni:"◇◇芸術大",ttl:"◇◇ Talent Contest 2026",         st:"result",stl:"結果発表", period:"結果公開中",    ent:"GP発表済",        c:["#7A5CFF","#3A2A8A"], ck:"#7A5CFF", type:"normal"},
   {uni:"☆☆大学",  ttl:"ミスコン☆☆2025",                 st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 斉藤花音",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
   {uni:"◎◎大学",  ttl:"◎◎ Beauty Pageant 2025",         st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 田中優花",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
@@ -1812,18 +1812,63 @@ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go)
 document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{go('home'); setTimeout(()=>document.getElementById(b.dataset.scroll).scrollIntoView({behavior:'smooth'}),60);});
 document.querySelectorAll('[data-stub]').forEach(b=>b.onclick=()=>alert('（プロトタイプ）この画面は別途設計します：'+b.textContent.trim()));
 // オーディションカード → 詳細へ（タイプ別に通常／ミスコン）
-// クリックした大学のテーマ（色・バナー・タイトル）を詳細テンプレに反映＝大学ごとに見た目が変わる
-function applyAuditionTheme(card, viewId){
+// ===== 大学ごとのデザイン（テンプレ共通・スキンで“染める”） =====
+// 各大学：キーカラー / バナー（画像のみの想定→プロトはCSSビジュアル） / ページ背景 / 角丸 / 本文
+const DETAILS={
+  "ミス・ミスター青山コンテスト2026":{
+    key:"#DD1C5D", radius:"22px",
+    banner:"radial-gradient(120% 150% at 82% -25%, rgba(255,255,255,.30), transparent 48%), linear-gradient(135deg,#DD1C5D 0%,#7A2050 100%)",
+    bg:"radial-gradient(55% 38% at 100% 0%, rgba(221,28,93,.07), transparent 70%), radial-gradient(45% 30% at 0% 100%, rgba(221,28,93,.05), transparent 70%)",
+    title:"ミス・ミスター青山コンテスト 2026",
+    summary:"青山学院大学の学園祭を舞台に開催される、ミス・ミスターコンテスト2026。洗練されたキャンパスから、新しいアイコンが生まれます。あなたのYELLが、候補者の背中を押します。",
+    themeTitle:"「あなたのオンリーワンが輝く舞台へ」",
+    themeBody:"活動期間の挑戦を通して、候補者一人ひとりの個性が輝くコンテストを目指します。"},
+  "MISS&MISTER 立教 2026":{
+    key:"#B3122F", radius:"10px",
+    banner:"linear-gradient(135deg,#2A1A3A 0%,#B3122F 100%), repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 12px, transparent 12px 24px)",
+    bg:"radial-gradient(50% 36% at 100% 0%, rgba(179,18,47,.06), transparent 70%)",
+    title:"MISS&MISTER 立教 2026",
+    summary:"伝統と気品の立教大学から、次世代を担うミス・ミスターを選出。重厚なステージで、あなたの“推し”に確かな一票を。投票ポイントはリアルタイムで反映されます。",
+    themeTitle:"「伝統を、次の世代へ。」",
+    themeBody:"歴史あるキャンパスを舞台に、品格と挑戦を兼ね備えたファイナリストが集います。"},
+  "▲▲ Campus Star 2026":{
+    key:"#E8730A", radius:"18px",
+    banner:"radial-gradient(120% 140% at 15% -10%, rgba(255,221,150,.4), transparent 45%), linear-gradient(120deg,#E8730A 0%,#8A3C00 100%)",
+    bg:"radial-gradient(55% 40% at 0% 0%, rgba(232,115,10,.07), transparent 70%)",
+    title:"▲▲ Campus Star 2026",
+    summary:"ジャンルを越えて“次のスター”を発掘するキャンパス・コンテスト。エネルギッシュなステージで、応援が候補者を上位へ押し上げます。",
+    themeTitle:"「キャンパスから、世界へ。」",
+    themeBody:"歌・ダンス・モデル——多彩な才能が、YELLを力に羽ばたきます。"}
+};
+function fillDetail(card){
+  const v=document.getElementById('view-detail'); const d=DETAILS[card.dataset.ttl];
+  // 既定（DETAILS未登録の大学）はカードの色から生成
+  const key=d?d.key:card.dataset.ck;
+  const banner=d?d.banner:`linear-gradient(135deg,${card.dataset.c1},${card.dataset.c2})`;
+  v.style.setProperty('--key', key);
+  v.style.setProperty('--aud-radius', d?d.radius:'18px');
+  v.style.background = d?d.bg:'';
+  document.getElementById('det-banner').style.background = banner;
+  document.getElementById('det-title').textContent = d?d.title:card.dataset.ttl;
+  if(d){
+    document.getElementById('det-summary').textContent=d.summary;
+    document.getElementById('det-theme-title').textContent=d.themeTitle;
+    document.getElementById('det-theme-body').textContent=d.themeBody;
+  }
+}
+function applyAuditionTheme(card, viewId){ // 通常パターン用（色・バナー・タイトル）
   const v=document.getElementById(viewId); if(!v)return;
   if(card.dataset.ck) v.style.setProperty('--key', card.dataset.ck);
   const banner=v.querySelector('.aud-banner');
-  if(banner){banner.style.setProperty('--c1',card.dataset.c1||'#1E73E8'); banner.style.setProperty('--c2',card.dataset.c2||'#0B3C7A');}
+  if(banner) banner.style.background=`linear-gradient(135deg,${card.dataset.c1||'#1E73E8'},${card.dataset.c2||'#0B3C7A'})`;
   const ttl=v.querySelector('.aud-head h2'); if(ttl&&card.dataset.ttl) ttl.textContent=card.dataset.ttl;
 }
 ['home-grid','aud-grid','archive-grid'].forEach(id=>{
   document.getElementById(id).addEventListener('click',e=>{const card=e.target.closest('.card'); if(!card)return;
-    const isNormal=card.dataset.type==='normal'; const viewId=isNormal?'view-detail-n':'view-detail';
-    applyAuditionTheme(card,viewId); go(isNormal?'detailN':'detail');});
+    const isNormal=card.dataset.type==='normal';
+    if(isNormal){applyAuditionTheme(card,'view-detail-n'); go('detailN');}
+    else{fillDetail(card); go('detail');}
+  });
 });
 </script>
 </body>
