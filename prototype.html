@@ -412,7 +412,7 @@
 
   /* エントリー詳細 */
   .entry-hero{display:grid; grid-template-columns:340px 1fr; gap:28px; margin-top:28px; align-items:center}
-  .entry-photo{aspect-ratio:3/4; border-radius:18px; background:linear-gradient(160deg,#F7C6D5,var(--key))}
+  .entry-photo{position:relative; aspect-ratio:3/4; border-radius:18px; background:linear-gradient(160deg,#F7C6D5,var(--key))}
   .entry-eno{color:var(--muted); margin:12px 0 2px; font-size:14px}
   .entry-info h1{font-size:38px; font-weight:900; margin:0 0 4px}
   .entry-uni{color:var(--ink-2); margin-bottom:16px}
@@ -476,7 +476,7 @@
   .entry-video{aspect-ratio:16/9; border-radius:14px; margin-top:14px; background:linear-gradient(135deg,#1c1c22,#3a3a44); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.85); font-size:13px; font-weight:700; position:relative}
   .entry-video::after{content:"▶"; position:absolute; width:62px; height:62px; border-radius:50%; background:rgba(255,255,255,.92); color:var(--ink); display:flex; align-items:center; justify-content:center; font-size:20px; padding-left:4px}
   /* ランク・部門・獲得ポイント（投票ページ） */
-  .rank-badge{position:absolute; top:14px; left:14px; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:21px; color:#7a5b00; background:linear-gradient(135deg,#FCE08A,#E6B422); box-shadow:0 4px 14px rgba(0,0,0,.22); z-index:2}
+  .rank-badge{position:absolute; top:14px; left:14px; width:56px; height:56px; border-radius:50%; display:none; align-items:center; justify-content:center; font-weight:900; font-size:21px; color:#7a5b00; background:linear-gradient(135deg,#FCE08A,#E6B422); box-shadow:0 4px 14px rgba(0,0,0,.22); z-index:2}
   .rank-badge small{font-size:11px; margin-left:1px}
   .rank-badge.silver{color:#3a3a42; background:linear-gradient(135deg,#EDEDED,#BFC3C9)}
   .rank-badge.bronze{color:#5a3a1a; background:linear-gradient(135deg,#E9C39B,#C98A55)}
@@ -587,6 +587,9 @@
     .plan-grid{grid-template-columns:repeat(2,1fr)}
     .entry-hero{grid-template-columns:1fr}
     .entry-info h1{font-size:30px}
+    /* SP：順位は画像の左上のみに表示（情報側のバッジは隠す） */
+    .rank-badge{display:flex}
+    .rank-bar{display:none}
     .gallery{grid-template-columns:repeat(3,1fr)}
     .qa.cols2{grid-template-columns:1fr}
     .legal-body dl{grid-template-columns:1fr}
@@ -1067,6 +1070,7 @@
       <span class="dept-badge">Miss部門</span>
     </div>
     <div class="entry-info">
+      <div class="entry-eno num">ENTRY No.1</div>
       <div class="rank-bar">1<small>位</small></div>
       <div class="entry-kana" style="margin-top:10px">さいとう かのん</div>
       <h1>斉藤花音</h1>
