@@ -601,7 +601,6 @@
   <div class="ad-rotator" id="ad-rotator">
     <div class="ad-track" id="ad-track"></div>
     <div class="ad-dots" id="ad-dots"></div>
-    <span class="ad-tag">AD</span>
   </div>
 
   <section>
@@ -616,7 +615,7 @@
   </section>
 
   <!-- 記事内 AdSense 枠 -->
-  <div class="adsense"><span>広告 — Google AdSense</span></div>
+  <div class="adsense"><span>Google AdSense 枠</span></div>
 
   <!-- 月間ランキング -->
   <section id="rank-sec">
@@ -1514,10 +1513,8 @@ function animateHeat(){document.querySelectorAll('.heat-bar > i').forEach(i=>i.s
 
 // 広告（エントリー一覧の下）：TOP広告と同サイズ(300×250)・TOP60% / オーディション帰属40%
 const AUD_ADS=[{name:"△△ Campus Audition 提供｜スポンサー募集中", c:"linear-gradient(120deg,#16161A,#3A3A42)"}];
-function adBoxHTML(){let a,tag;
-  if(Math.random()<0.6){a=ADS[Math.floor(Math.random()*ADS.length)]; tag='AD｜YELL VOTE';}
-  else{a=AUD_ADS[0]; tag='AD｜オーディション提供';}
-  return `<div class="aud-ad"><span class="aud-ad-tag">${tag}</span><div class="ad-slide" style="background:${a.c}">${a.name}</div></div>`;}
+function adBoxHTML(){const a=(Math.random()<0.6)?ADS[Math.floor(Math.random()*ADS.length)]:AUD_ADS[0];
+  return `<div class="aud-ad"><div class="ad-slide" style="background:${a.c}">${a.name}</div></div>`;}
 function renderAdBox(id){var el=document.getElementById(id); if(el)el.innerHTML=adBoxHTML();}
 // 統一カード（順位＋獲得ポイント表示）
 function entrantCard(p,rank){const rc=rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
