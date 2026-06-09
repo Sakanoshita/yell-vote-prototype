@@ -55,6 +55,17 @@
     border:1px solid var(--line); color:var(--ink-2); cursor:pointer; background:#fff;
   }
   .gnav .ghost-key{border-color:var(--key); color:var(--key); background:var(--key-weak)}
+  /* SP用ハンバーガー＆メニュー */
+  .hamburger{display:none; flex-direction:column; justify-content:center; gap:5px; width:40px; height:40px; border:1px solid var(--line); border-radius:10px; background:#fff; cursor:pointer; flex:0 0 auto; padding:0}
+  .hamburger span{display:block; width:18px; height:2px; background:var(--ink); margin:0 auto; border-radius:2px; transition:.2s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .m-menu{position:absolute; top:100%; left:0; right:0; z-index:39; background:#fff; border-bottom:1px solid var(--line); box-shadow:0 14px 30px rgba(0,0,0,.12); padding:8px; flex-direction:column; gap:2px; display:flex}
+  .m-menu[hidden]{display:none}
+  .m-menu button{font:inherit; font-weight:700; font-size:15px; text-align:left; border:0; background:none; padding:14px 16px; border-radius:10px; color:var(--ink); cursor:pointer}
+  .m-menu button:active,.m-menu button:hover{background:var(--surface-2)}
+  .m-menu hr{border:0; border-top:1px solid var(--line); margin:6px 8px}
 
   main{max-width:var(--maxw); margin:0 auto; padding:0 20px 80px}
   section{margin-top:48px}
@@ -608,6 +619,8 @@
   }
   @media (max-width:640px){
     .gnav nav{display:none}
+    .hamburger{display:flex}
+    #login-btn{display:none}
     .grid{grid-template-columns:repeat(2,1fr); gap:12px}
     .people{grid-template-columns:repeat(2,1fr); gap:12px}
     .outline dl{grid-template-columns:1fr}
@@ -673,6 +686,18 @@
     <div class="spacer"></div>
     <button class="ghost" id="login-btn">ログアウト</button>
     <button class="ghost ghost-key" data-view="mypage">マイページ</button>
+    <button class="hamburger" id="hamburger" aria-label="メニュー"><span></span><span></span><span></span></button>
+  </div>
+  <!-- SP用メニュー -->
+  <div class="m-menu" id="m-menu" hidden>
+    <button data-view="about">YELL VOTEとは</button>
+    <button data-view="auditions">オーディション</button>
+    <button data-view="points">ポイント購入</button>
+    <button data-view="news">NEWS</button>
+    <button data-view="faq">よくある質問</button>
+    <button data-view="mypage">マイページ</button>
+    <hr>
+    <button id="m-login">ログアウト</button>
   </div>
 </header>
 
@@ -1960,8 +1985,17 @@ const loginBtn=document.getElementById('login-btn');
 function setLogin(v){loggedIn=v;
   loginBtn.textContent=v?'ログアウト':'ログイン';
   loginBtn.classList.toggle('ghost-key',!v);
+  var ml=document.getElementById('m-login'); if(ml)ml.textContent=v?'ログアウト':'ログイン';
   hideToast(); renderAllComments();}
 loginBtn.onclick=()=>setLogin(!loggedIn);
+
+// SP用ハンバーガーメニュー
+const hamburger=document.getElementById('hamburger'), mMenu=document.getElementById('m-menu');
+function setMenu(open){mMenu.hidden=!open; hamburger.classList.toggle('open',open);}
+hamburger.onclick=()=>setMenu(mMenu.hidden);
+mMenu.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setMenu(false)));
+document.getElementById('m-login').onclick=()=>{setLogin(!loggedIn); setMenu(false);};
+document.addEventListener('click',e=>{if(!mMenu.hidden && !e.target.closest('#m-menu') && !e.target.closest('#hamburger')) setMenu(false);});
 
 // ログイン誘導トースト
 const toast=document.getElementById('login-toast');
