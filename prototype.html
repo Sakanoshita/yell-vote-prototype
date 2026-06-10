@@ -1196,6 +1196,8 @@
     </div>
   </section>
 
+  <section><div id="entry-ad"></div></section>
+
   <section>
     <span class="eyebrow">Photo</span>
     <h2 class="sec">写真</h2>
@@ -1386,6 +1388,8 @@
       </div>
     </div>
   </div>
+
+  <section><div id="entryn-ad"></div></section>
 
   <section>
     <span class="eyebrow">Photo &amp; Movie</span>
@@ -1756,6 +1760,8 @@ const NENTRANTS=[
 ];
 renderList('nentrants',NENTRANTS,false); renderAdBox('normal-ad');
 document.getElementById('nentry-others').innerHTML=[...NENTRANTS].sort((a,b)=>b.pts-a.pts).slice(1).map((p,i)=>entrantCard(p,i+2,false)).join('');
+// 個人ページ（プロフィールと写真の間）の広告
+renderAdBox('entry-ad'); renderAdBox('entryn-ad');
 
 // カード→詳細（投票ボタン・広告は除外）
 function navCards(id,view){var el=document.getElementById(id); if(el)el.addEventListener('click',e=>{if(e.target.closest('.vote-btn')||e.target.closest('.entrant-ad'))return; if(e.target.closest('.person'))go(view);});}
