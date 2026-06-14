@@ -674,6 +674,27 @@
   }
   .sp-cta .btn-key{flex:1; justify-content:center}
 
+  /* ログイン画面 */
+  .login-wrap{max-width:440px; margin:40px auto 60px}
+  .login-hero{aspect-ratio:16/9; border-radius:20px; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--ink) 0%, color-mix(in srgb,var(--yell-accent) 60%, var(--ink)) 100%)}
+  .login-hero img{width:160px; filter:brightness(0) invert(1); opacity:.95}
+  .login-card{margin-top:22px; border:1px solid var(--line); border-radius:var(--radius); padding:26px 24px; background:#fff}
+  .login-lead{margin:0 0 18px; font-size:14px; color:var(--ink-2); line-height:1.7; text-align:center}
+  .login-lbl{display:block; font-size:12px; font-weight:700; color:var(--muted); margin-bottom:6px}
+  .login-input{width:100%; box-sizing:border-box; padding:13px 16px; border:1px solid var(--line); border-radius:12px; font:inherit; font-size:15px}
+  .login-input:focus{outline:2px solid var(--key-line); border-color:var(--key)}
+  .login-link{display:inline-block; margin:10px 0 2px; font-size:13px; color:var(--ink-2); text-decoration:underline; cursor:pointer}
+  .login-next{width:100%; justify-content:center; margin-top:14px; background:var(--ink); color:#fff; padding:14px}
+  .login-or{display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--muted); font-size:12px}
+  .login-or::before,.login-or::after{content:""; flex:1; height:1px; background:var(--line)}
+  .login-line{width:100%; justify-content:center; gap:8px; background:#06C755; color:#fff; padding:14px}
+  .login-line .ll-ico{font-weight:900; font-size:12px; background:#fff; color:#06C755; border-radius:5px; padding:1px 5px}
+  .login-note{margin:16px 0 0; font-size:12px; color:var(--muted); text-align:center}
+  .login-foot{display:flex; flex-wrap:wrap; gap:8px 18px; justify-content:center; margin-top:22px}
+  .login-foot a{font-size:12px; color:var(--muted); cursor:pointer}
+  .login-foot a:hover{color:var(--key)}
+
   .view{display:none}
   .view.active{display:block}
 </style>
@@ -1424,10 +1445,36 @@
       <button class="active" data-lg="terms">利用規約</button>
       <button data-lg="privacy">プライバシー</button>
       <button data-lg="tokushoho">特商法</button>
+      <button data-lg="shikin">資金決済法</button>
       <button data-lg="company">運営会社</button>
     </div>
     <div class="legal-body" id="legal-body"></div>
   </section>
+</main>
+</div>
+
+<!-- ============ LOGIN（ログイン／新規登録） ============ -->
+<div class="view" id="view-login">
+<main>
+  <div class="login-wrap">
+    <div class="login-hero"><img src="img/yellvoto02.svg" alt="YELL CAMPUS"></div>
+    <div class="login-card">
+      <p class="login-lead">YELL CAMPUS ID でログインして、応援をはじめよう。</p>
+      <label class="login-lbl">メールアドレス</label>
+      <input class="login-input" type="email" placeholder="メールアドレス">
+      <a class="login-link" data-stub>メールアドレスを忘れた場合</a>
+      <button class="btn login-next" id="login-next">次へ</button>
+      <div class="login-or"><span>または</span></div>
+      <button class="btn login-line" id="login-line"><span class="ll-ico">LINE</span>LINEでログイン / 新規登録</button>
+      <p class="login-note">ログイン・新規登録には YELL CAMPUS ID（無料）が必要です。</p>
+    </div>
+    <nav class="login-foot">
+      <a data-view="legal" data-legal="terms">利用規約</a>
+      <a data-view="legal" data-legal="privacy">プライバシーポリシー</a>
+      <a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>
+      <a data-view="legal" data-legal="shikin">資金決済法に基づく表記</a>
+    </nav>
+  </div>
 </main>
 </div>
 
@@ -1977,6 +2024,7 @@ const LEGAL={
   terms:{t:"利用規約について",b:`<h4>第1条（適用）</h4><p>本規約は、YELL VOTE（以下「本サービス」）の利用に関する条件を、利用者と運営会社との間で定めるものです。</p><h4>第2条（投票）</h4><p>投票は、デイリーガチャで獲得したYELLポイント、または購入したコインから変換したYELLポイントを用いて行います。同一人物による複数アカウントの作成、自動ツールによる投票その他の不正行為を禁止します。</p><h4>第3条（禁止事項）</h4><p>なりすまし、第三者の権利侵害、本サービスの運営を妨げる行為を禁止します。違反が認められた場合、アカウント停止および当該投票の無効化を行います。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
   privacy:{t:"プライバシーポリシー",b:`<h4>取得する情報</h4><p>LINEログインに伴う識別子、投票・購入履歴、アクセスログ等を取得します。</p><h4>利用目的</h4><p>本サービスの提供、不正防止、品質向上、お知らせの配信のために利用します。</p><h4>第三者提供</h4><p>法令に基づく場合を除き、本人の同意なく第三者へ提供しません。</p><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。</p>`},
   tokushoho:{t:"特定商取引法に基づく表記",b:`<dl><dt>販売事業者</dt><dd>株式会社◯◯（運営会社）</dd><dt>運営責任者</dt><dd>◯◯ ◯◯</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>お問い合わせ</dt><dd>YELLサポートデスク</dd><dt>販売価格</dt><dd>各ポイントプランに表示（税込）</dd><dt>支払方法</dt><dd>クレジットカード</dd><dt>引渡時期</dt><dd>決済完了後ただちにポイントを付与</dd><dt>返品・キャンセル</dt><dd>商品の性質上、購入後のポイントの払い戻しはできません</dd></dl>`},
+  shikin:{t:"資金決済法に基づく表記",b:`<dl><dt>前払式支払手段の名称</dt><dd>YELLポイント／YELLコイン</dd><dt>発行事業者</dt><dd>株式会社◯◯</dd><dt>支払可能金額等</dt><dd>各購入プランに表示</dd><dt>有効期限</dt><dd>最終利用日から◯年</dd><dt>利用方法</dt><dd>オーディション参加者への投票（YELLを送る）に利用</dd><dt>未使用残高の確認</dt><dd>マイページに表示</dd><dt>苦情・相談窓口</dt><dd>YELLサポートデスク</dd><dt>払い戻し</dt><dd>原則行いません（資金決済法で定める場合を除く）</dd></dl><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。前払式支払手段の該当性・記載内容は要法務確認。</p>`},
   company:{t:"運営会社",b:`<dl><dt>会社名</dt><dd>株式会社◯◯</dd><dt>事業内容</dt><dd>YELL CAMPUS プラットフォームの企画・運営</dd><dt>設立</dt><dd>20XX年</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>関連サービス</dt><dd>YELL VOTE ／ YELL TICKET ／ YELL SUPPORT</dd></dl>`},
 };
 function setLegal(key){const d=LEGAL[key]||LEGAL.terms;document.getElementById('legal-title').textContent=d.t;
@@ -1993,14 +2041,16 @@ function setLogin(v){loggedIn=v;
   loginBtn.classList.toggle('ghost-key',!v);
   var ml=document.getElementById('m-login'); if(ml)ml.textContent=v?'ログアウト':'ログイン';
   hideToast(); renderAllComments();}
-loginBtn.onclick=()=>setLogin(!loggedIn);
+loginBtn.onclick=()=>{ if(loggedIn) setLogin(false); else go('login'); };
+// ログイン画面の操作（メール次へ／LINE）でログイン完了 → ホームへ
+['login-next','login-line'].forEach(id=>{var b=document.getElementById(id); if(b)b.onclick=()=>{setLogin(true); go('home');};});
 
 // SP用ハンバーガーメニュー
 const hamburger=document.getElementById('hamburger'), mMenu=document.getElementById('m-menu');
 function setMenu(open){mMenu.hidden=!open; hamburger.classList.toggle('open',open);}
 hamburger.onclick=()=>setMenu(mMenu.hidden);
 mMenu.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setMenu(false)));
-document.getElementById('m-login').onclick=()=>{setLogin(!loggedIn); setMenu(false);};
+document.getElementById('m-login').onclick=()=>{ if(loggedIn) setLogin(false); else go('login'); setMenu(false);};
 document.addEventListener('click',e=>{if(!mMenu.hidden && !e.target.closest('#m-menu') && !e.target.closest('#hamburger')) setMenu(false);});
 
 // ログイン誘導トースト
@@ -2009,7 +2059,7 @@ let toastTimer=null;
 function requireLogin(prefix){document.getElementById('login-toast-msg').textContent=(prefix||'')+'ログインが必要です';
   toast.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(hideToast,4000);}
 function hideToast(){toast.hidden=true;}
-document.getElementById('toast-login').onclick=()=>setLogin(true);
+document.getElementById('toast-login').onclick=()=>{hideToast(); go('login');};
 
 // コメント（1日1オーディションにつき1件）
 const commented={}; // audition key -> true
@@ -2019,7 +2069,7 @@ function addComment(listId,text){const list=document.getElementById(listId); if(
   el.querySelector('.cmt-body').textContent=text; list.insertBefore(el,list.firstChild);}
 function renderCommentBox(boxId,listId,key){const box=document.getElementById(boxId); if(!box)return;
   if(!loggedIn){box.innerHTML='<div class="cmt-gate">応援コメントを送るにはログインが必要です。<button class="btn btn-key">ログインする</button></div>';
-    box.querySelector('button').onclick=()=>setLogin(true); return;}
+    box.querySelector('button').onclick=()=>go('login'); return;}
   if(commented[key]){box.innerHTML='<div class="cmt-done">✓ 本日の応援コメントを送信しました。また明日応援してね！</div>'; return;}
   box.innerHTML='<textarea maxlength="100" placeholder="推しへの応援メッセージを書こう（1日1回・100文字まで）"></textarea><div class="cmt-actions"><span class="cmt-count">0/100</span><button class="btn btn-key">コメントを送る</button></div>';
   const ta=box.querySelector('textarea'), cnt=box.querySelector('.cmt-count');
@@ -2033,7 +2083,7 @@ setLogin(true);
 
 // ビュー切替
 const views={home:'view-home',auditions:'view-auditions',detail:'view-detail',detailN:'view-detail-n',result:'view-result',
-  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal'};
+  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal',login:'view-login'};
 function go(v){
   Object.values(views).forEach(id=>document.getElementById(id).classList.remove('active'));
   document.getElementById(views[v]).classList.add('active');
