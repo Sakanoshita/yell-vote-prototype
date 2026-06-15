@@ -695,6 +695,24 @@
   .login-foot a{font-size:12px; color:var(--muted); cursor:pointer}
   .login-foot a:hover{color:var(--key)}
 
+  /* プロフィール編集 */
+  .pe-card{margin-top:20px; max-width:520px; border:1px solid var(--line); border-radius:var(--radius); padding:26px 24px; background:#fff}
+  .pe-avatar{display:flex; gap:20px; align-items:flex-start; padding-bottom:20px; border-bottom:1px solid var(--line)}
+  .pe-av{width:84px; height:84px; border-radius:50%; background:var(--yell-grad); flex:0 0 auto}
+  .pe-av-pick{flex:1; min-width:0}
+  .pe-swatches{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 12px}
+  .pe-sw{width:34px; height:34px; border-radius:50%; cursor:pointer; border:2px solid #fff; box-shadow:0 0 0 1px var(--line)}
+  .pe-sw.sel{box-shadow:0 0 0 2px var(--key)}
+  .pe-field{margin-top:20px}
+  .pe-input{width:100%; box-sizing:border-box; padding:13px 16px; border:1px solid var(--line); border-radius:12px; font:inherit; font-size:15px}
+  .pe-input:focus{outline:2px solid var(--key-line); border-color:var(--key)}
+  .pe-count{text-align:right; font-size:12px; color:var(--muted); margin-top:6px}
+  .pe-lbl{display:block; font-size:12px; font-weight:700; color:var(--muted)}
+  .pe-actions{display:flex; gap:10px; margin-top:24px}
+  .pe-actions .btn{flex:1; justify-content:center}
+  /* 未ログイン時はマイページ導線を隠す */
+  body.logged-out [data-view="mypage"]{display:none !important}
+
   .view{display:none}
   .view.active{display:block}
 </style>
@@ -1042,7 +1060,7 @@
     <span class="eyebrow">My Page</span>
     <h2 class="sec">マイページ</h2>
     <div class="mp-head">
-      <div class="mp-user"><div class="mp-av"></div><div><b>daisuke さん</b><span>YELL CAMPUS ID 連携済み</span></div></div>
+      <div class="mp-user"><div class="mp-av" id="mp-av"></div><div><b id="mp-name">daisuke さん</b></div></div>
       <div class="mp-points">
         <div class="mp-bal">
           <div class="mp-bal-total"><span>合計ポイント</span><div><b class="num">1,250</b> pt</div></div>
@@ -1055,7 +1073,7 @@
       </div>
     </div>
     <div class="mp-actions">
-      <button class="btn btn-line" data-stub>✏️ プロフィールを編集</button>
+      <button class="btn btn-line" data-view="pedit">プロフィールを編集</button>
       <button class="btn btn-line" data-stub>YELL CAMPUS マイページ（アカウント編集・退会）↗</button>
     </div>
     <div class="mp-gacha-cta" id="mp-gacha-cta">
@@ -1475,6 +1493,36 @@
       <a data-view="legal" data-legal="shikin">資金決済法に基づく表記</a>
     </nav>
   </div>
+</main>
+</div>
+
+<!-- ============ PROFILE EDIT（プロフィール編集） ============ -->
+<div class="view" id="view-pedit">
+<main>
+  <section style="margin-top:36px">
+    <span class="eyebrow">Edit Profile</span>
+    <h2 class="sec">プロフィール編集</h2>
+    <p class="sec-sub">変更できるのはアイコンとニックネームです。</p>
+    <div class="pe-card">
+      <div class="pe-avatar">
+        <div class="pe-av" id="pe-av"></div>
+        <div class="pe-av-pick">
+          <span class="pe-lbl">アイコン</span>
+          <div class="pe-swatches" id="pe-swatches"></div>
+          <button class="btn btn-line" data-stub>画像をアップロード</button>
+        </div>
+      </div>
+      <div class="pe-field">
+        <label class="pe-lbl" for="pe-nick">ニックネーム</label>
+        <input class="pe-input" id="pe-nick" type="text" maxlength="20" value="daisuke">
+        <div class="pe-count"><span id="pe-nick-count">7</span>/20</div>
+      </div>
+      <div class="pe-actions">
+        <button class="btn btn-line" data-view="mypage">キャンセル</button>
+        <button class="btn btn-key" id="pe-save">保存する</button>
+      </div>
+    </div>
+  </section>
 </main>
 </div>
 
@@ -2040,10 +2088,27 @@ function setLogin(v){loggedIn=v;
   loginBtn.textContent=v?'ログアウト':'ログイン';
   loginBtn.classList.toggle('ghost-key',!v);
   var ml=document.getElementById('m-login'); if(ml)ml.textContent=v?'ログアウト':'ログイン';
+  document.body.classList.toggle('logged-out',!v); // 未ログインはマイページ導線を隠す
   hideToast(); renderAllComments();}
 loginBtn.onclick=()=>{ if(loggedIn) setLogin(false); else go('login'); };
 // ログイン画面の操作（メール次へ／LINE）でログイン完了 → ホームへ
 ['login-next','login-line'].forEach(id=>{var b=document.getElementById(id); if(b)b.onclick=()=>{setLogin(true); go('home');};});
+
+// プロフィール編集（アイコン・ニックネームのみ）
+const AVATARS=['var(--yell-grad)','linear-gradient(135deg,#1E73E8,#0B3C7A)','linear-gradient(135deg,#15A36A,#0C5C3C)','linear-gradient(135deg,#7A5CFF,#3A2A8A)','linear-gradient(135deg,#DD1C5D,#7A2050)','linear-gradient(135deg,#E8730A,#8A3C00)'];
+let curNick='daisuke', curAvatar=AVATARS[0];
+(function(){var sw=document.getElementById('pe-swatches'); if(!sw)return;
+  sw.innerHTML=AVATARS.map((g,i)=>`<div class="pe-sw${i===0?' sel':''}" data-i="${i}" style="background:${g}"></div>`).join('');
+  sw.addEventListener('click',e=>{var s=e.target.closest('.pe-sw'); if(!s)return; [...sw.children].forEach(x=>x.classList.remove('sel')); s.classList.add('sel'); document.getElementById('pe-av').style.background=AVATARS[+s.dataset.i];});})();
+(function(){var nick=document.getElementById('pe-nick'); if(nick)nick.addEventListener('input',()=>{document.getElementById('pe-nick-count').textContent=nick.value.length;});})();
+function syncPedit(){var nick=document.getElementById('pe-nick'); if(nick){nick.value=curNick; document.getElementById('pe-nick-count').textContent=curNick.length;}
+  document.getElementById('pe-av').style.background=curAvatar;
+  var sw=document.getElementById('pe-swatches'); if(sw)[...sw.children].forEach(x=>x.classList.toggle('sel',AVATARS[+x.dataset.i]===curAvatar));}
+(function(){var save=document.getElementById('pe-save'); if(!save)return;
+  save.onclick=()=>{var nick=document.getElementById('pe-nick'); curNick=((nick&&nick.value)||'').trim()||curNick;
+    var selSw=document.querySelector('#pe-swatches .pe-sw.sel'); if(selSw)curAvatar=AVATARS[+selSw.dataset.i];
+    document.getElementById('mp-name').textContent=curNick+' さん'; document.getElementById('mp-av').style.background=curAvatar;
+    flash('プロフィールを保存しました'); go('mypage');};})();
 
 // SP用ハンバーガーメニュー
 const hamburger=document.getElementById('hamburger'), mMenu=document.getElementById('m-menu');
@@ -2083,8 +2148,9 @@ setLogin(true);
 
 // ビュー切替
 const views={home:'view-home',auditions:'view-auditions',detail:'view-detail',detailN:'view-detail-n',result:'view-result',
-  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal',login:'view-login'};
+  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal',login:'view-login',pedit:'view-pedit'};
 function go(v){
+  if((v==='mypage'||v==='pedit') && !loggedIn){ go('login'); return; } // 未ログインはマイページ/編集に入れない
   Object.values(views).forEach(id=>document.getElementById(id).classList.remove('active'));
   document.getElementById(views[v]).classList.add('active');
   document.querySelectorAll('.gnav nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
@@ -2093,6 +2159,7 @@ function go(v){
   if(v==='result') setTimeout(countUp,300);
   if(v==='about') setTimeout(animatePayout,200);
   if(v==='mypage') updateGachaCta();
+  if(v==='pedit') syncPedit();
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{go(b.dataset.view); if(b.dataset.view==='legal'&&b.dataset.legal) setLegal(b.dataset.legal);});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
