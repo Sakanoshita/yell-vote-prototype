@@ -585,10 +585,10 @@
   .confetti{position:fixed; width:9px; height:14px; z-index:80; pointer-events:none; will-change:transform,opacity}
   /* ガチャ当選演出（全画面） */
   .gc-celebrate{position:fixed; inset:0; z-index:200; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;
-    background:radial-gradient(circle at 50% 44%, color-mix(in srgb,var(--yell-accent) 34%, #18101e) 0%, #0f0a14 70%)}
+    background:radial-gradient(circle at 50% 42%, #FF9D6A 0%, #F0608E 50%, #7A4FC0 100%)}
   .gc-celebrate[hidden]{display:none}
-  .gc-glow{position:absolute; left:50%; top:44%; width:120vmax; height:120vmax; transform:translate(-50%,-50%); pointer-events:none; opacity:0; transition:opacity .6s;
-    background:radial-gradient(circle, rgba(255,205,110,.26) 0%, rgba(255,165,60,.09) 22%, transparent 46%)}
+  .gc-glow{position:absolute; left:50%; top:42%; width:120vmax; height:120vmax; transform:translate(-50%,-50%); pointer-events:none; opacity:0; transition:opacity .6s;
+    background:radial-gradient(circle, rgba(255,255,255,.32) 0%, rgba(255,232,170,.14) 24%, transparent 48%)}
   .gc-celebrate.open .gc-glow{opacity:1; animation:gc-glow 3.4s ease-in-out infinite}
   @keyframes gc-glow{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.09)}}
   /* カプセル（ガチャポン） */
@@ -607,8 +607,8 @@
   .gc-label{font-size:13px; font-weight:800; letter-spacing:.34em; opacity:.85}
   .gc-amount{margin:2px 0 4px; display:flex; align-items:baseline; justify-content:center; gap:8px}
   .gc-amount b{font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(60px,16vw,120px); line-height:1;
-    background:linear-gradient(180deg,#FFF2C4,#FFC04A); -webkit-background-clip:text; background-clip:text; color:transparent;
-    filter:drop-shadow(0 8px 30px rgba(255,178,60,.45))}
+    background:linear-gradient(180deg,#FFFFFF,#FFE9D6); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 6px 22px rgba(0,0,0,.28))}
   .gc-amount .gc-unit{font-size:24px; font-weight:800}
   .gc-msg{font-size:14px; opacity:0; transition:opacity .5s .5s}
   .gc-celebrate.open .gc-msg{opacity:.85}
@@ -1733,8 +1733,8 @@ function showCelebrate(amount){const ov=document.getElementById('gacha-celebrate
     ov.classList.add('open');
     const el=document.getElementById('gc-amount'); let cur=0, step=Math.max(1,Math.ceil(amount/30));
     const t=setInterval(()=>{cur=Math.min(amount,cur+step); el.textContent=cur.toLocaleString(); if(cur>=amount)clearInterval(t);},22);
-    sparklesFall(46); let waves=0; clearInterval(gcSparkTimer);
-    gcSparkTimer=setInterval(()=>{sparklesFall(26); if(++waves>=8)clearInterval(gcSparkTimer);},650);
+    sparklesFall(46); clearInterval(gcSparkTimer);
+    gcSparkTimer=setInterval(()=>sparklesFall(22),600); // 受け取るまでループ
   }, 720);
 }
 document.getElementById('gc-receive').onclick=()=>{clearInterval(gcSparkTimer); document.getElementById('gacha-celebrate').hidden=true;};
