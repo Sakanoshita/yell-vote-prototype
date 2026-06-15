@@ -584,29 +584,39 @@
   /* confetti */
   .confetti{position:fixed; width:9px; height:14px; z-index:80; pointer-events:none; will-change:transform,opacity}
   /* ガチャ当選演出（全画面） */
-  .gc-celebrate{position:fixed; inset:0; z-index:200; display:flex; align-items:center; justify-content:center; overflow:hidden;
-    background:radial-gradient(circle at 50% 38%, color-mix(in srgb,var(--yell-accent) 55%, #1b0f1e) 0%, #140a16 72%)}
+  .gc-celebrate{position:fixed; inset:0; z-index:200; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;
+    background:radial-gradient(circle at 50% 44%, color-mix(in srgb,var(--yell-accent) 34%, #18101e) 0%, #0f0a14 70%)}
   .gc-celebrate[hidden]{display:none}
-  .gc-rays{position:absolute; width:170vmax; height:170vmax; left:50%; top:38%; transform:translate(-50%,-50%);
-    background:repeating-conic-gradient(from 0deg, rgba(255,255,255,.085) 0deg 5deg, transparent 5deg 16deg);
-    animation:gc-spin 16s linear infinite; opacity:.55}
-  @keyframes gc-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-  .gc-inner{position:relative; z-index:1; text-align:center; color:#fff; padding:20px}
-  .gc-spark{display:flex; gap:6px; justify-content:center; align-items:flex-end; height:42px; margin-bottom:6px; animation:gc-pop .6s ease both}
-  .gc-spark i{width:6px; border-radius:3px; background:linear-gradient(180deg,#FFE8A3,#FFB23C); box-shadow:0 4px 18px rgba(255,178,60,.55)}
-  .gc-spark i:nth-child(1){height:22px}
-  .gc-spark i:nth-child(2){height:42px}
-  .gc-spark i:nth-child(3){height:22px}
-  .gc-label{font-size:13px; font-weight:800; letter-spacing:.34em; opacity:.85; margin-top:6px}
-  .gc-amount{margin:4px 0 6px; display:flex; align-items:baseline; justify-content:center; gap:8px}
-  .gc-amount b{font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(64px,17vw,128px); line-height:1;
-    background:linear-gradient(180deg,#FFE8A3,#FFB23C); -webkit-background-clip:text; background-clip:text; color:transparent;
-    filter:drop-shadow(0 8px 30px rgba(255,178,60,.4)); animation:gc-amt .7s cubic-bezier(.2,1.5,.4,1) both}
+  .gc-glow{position:absolute; left:50%; top:44%; width:120vmax; height:120vmax; transform:translate(-50%,-50%); pointer-events:none; opacity:0; transition:opacity .6s;
+    background:radial-gradient(circle, rgba(255,205,110,.26) 0%, rgba(255,165,60,.09) 22%, transparent 46%)}
+  .gc-celebrate.open .gc-glow{opacity:1; animation:gc-glow 3.4s ease-in-out infinite}
+  @keyframes gc-glow{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.09)}}
+  /* カプセル（ガチャポン） */
+  .gc-capsule{position:absolute; left:calc(50% - 75px); top:calc(44% - 75px); width:150px; height:150px; z-index:1; filter:drop-shadow(0 16px 34px rgba(0,0,0,.45)); animation:gc-drop .55s cubic-bezier(.2,1.4,.4,1) both}
+  .gc-cap-top,.gc-cap-bot{position:absolute; left:0; right:0; height:50%; overflow:hidden}
+  .gc-cap-top{top:0; border-radius:75px 75px 8px 8px; background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.22)); box-shadow:inset 0 6px 16px rgba(255,255,255,.45)}
+  .gc-cap-top::after{content:""; position:absolute; left:24px; top:16px; width:42px; height:22px; border-radius:50%; background:rgba(255,255,255,.7); filter:blur(3px)}
+  .gc-cap-bot{bottom:0; border-radius:8px 8px 75px 75px; background:linear-gradient(180deg, color-mix(in srgb,var(--key) 88%,#fff) 0%, var(--key) 100%); box-shadow:inset 0 -8px 18px rgba(0,0,0,.2)}
+  .gc-cap-seam{position:absolute; left:6px; right:6px; top:calc(50% - 5px); height:10px; border-radius:5px; background:rgba(0,0,0,.2); z-index:2; transition:opacity .3s}
+  .gc-celebrate.open .gc-cap-top{transform:translateY(-130px) rotate(-20deg); opacity:0; transition:transform .65s cubic-bezier(.3,1,.5,1), opacity .65s}
+  .gc-celebrate.open .gc-cap-bot{transform:translateY(70px) scale(1.7); opacity:.16; transition:transform .75s ease, opacity .75s}
+  .gc-celebrate.open .gc-cap-seam{opacity:0}
+  /* 中央のポイント */
+  .gc-reveal{position:relative; z-index:2; text-align:center; color:#fff; padding:0 20px; opacity:0; transform:scale(.6); pointer-events:none}
+  .gc-celebrate.open .gc-reveal{opacity:1; transform:scale(1); transition:opacity .5s .28s, transform .6s cubic-bezier(.2,1.5,.4,1) .28s}
+  .gc-label{font-size:13px; font-weight:800; letter-spacing:.34em; opacity:.85}
+  .gc-amount{margin:2px 0 4px; display:flex; align-items:baseline; justify-content:center; gap:8px}
+  .gc-amount b{font-family:'Oswald',sans-serif; font-weight:700; font-size:clamp(60px,16vw,120px); line-height:1;
+    background:linear-gradient(180deg,#FFF2C4,#FFC04A); -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 8px 30px rgba(255,178,60,.45))}
   .gc-amount .gc-unit{font-size:24px; font-weight:800}
-  .gc-msg{font-size:14px; opacity:.85; margin-bottom:24px}
-  .gc-celebrate .btn-key{padding:14px 44px; font-size:16px}
-  @keyframes gc-pop{0%{transform:scale(0)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
-  @keyframes gc-amt{0%{transform:scale(.3); opacity:0}60%{transform:scale(1.18)}100%{transform:scale(1); opacity:1}}
+  .gc-msg{font-size:14px; opacity:0; transition:opacity .5s .5s}
+  .gc-celebrate.open .gc-msg{opacity:.85}
+  .gc-celebrate .btn-key{position:relative; z-index:2; margin-top:30px; padding:14px 44px; font-size:16px; opacity:0; transform:translateY(8px); transition:opacity .5s .6s, transform .5s .6s}
+  .gc-celebrate.open .btn-key{opacity:1; transform:translateY(0)}
+  @keyframes gc-drop{0%{transform:translateY(-230px) scale(.6); opacity:0}60%{transform:translateY(12px) scale(1.05)}100%{transform:translateY(0) scale(1); opacity:1}}
+  /* キラキラ（落下） */
+  .gc-spk{position:fixed; z-index:210; pointer-events:none; clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%); filter:drop-shadow(0 0 6px rgba(255,210,120,.85))}
 
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
   @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.28)}30%{transform:scale(1)}45%{transform:scale(1.22)}}
@@ -1567,14 +1577,18 @@
 
 <!-- ガチャ 当選演出（全画面） -->
 <div class="gc-celebrate" id="gacha-celebrate" hidden>
-  <div class="gc-rays"></div>
-  <div class="gc-inner">
-    <div class="gc-spark"><i></i><i></i><i></i></div>
+  <div class="gc-glow"></div>
+  <div class="gc-capsule" id="gc-capsule">
+    <div class="gc-cap-bot"></div>
+    <div class="gc-cap-top"></div>
+    <div class="gc-cap-seam"></div>
+  </div>
+  <div class="gc-reveal" id="gc-reveal">
     <div class="gc-label">DAILY GACHA</div>
     <div class="gc-amount"><b id="gc-amount">0</b><span class="gc-unit">ポイント</span></div>
     <div class="gc-msg">獲得しました。このポイントで推しを応援しよう。</div>
-    <button class="btn btn-key" id="gc-receive">受け取る</button>
   </div>
+  <button class="btn btn-key" id="gc-receive">受け取る</button>
 </div>
 
 <div class="login-toast" id="login-toast" hidden>
@@ -1701,20 +1715,29 @@ let gachaDrawn=false; // 本日ガチャを引いたか
 function updateGachaCta(){const el=document.getElementById('mp-gacha-cta'); if(el) el.style.display=gachaDrawn?'none':'flex';}
 function openGacha(){gacha.hidden=false; capsule.classList.remove('spinning','done'); gres.hidden=true; spin.style.display=''; spin.disabled=false; spin.textContent='ガチャを回す'; spin.dataset.mode='';}
 function closeGacha(){gacha.hidden=true;}
-// 全画面の当選演出
-function confettiScreen(){const cols=['#FF5A3C','#FF8A3C','#FFD23C','#DD1C5D','#7A5CFF','#15A36A','#1E73E8','#ffffff'];
-  for(let i=0;i<70;i++){const c=document.createElement('i'); c.className='confetti';
-    c.style.background=cols[i%cols.length]; c.style.left=(Math.random()*100)+'vw'; c.style.top='-24px';
-    c.style.borderRadius=Math.random()>.5?'2px':'50%'; c.style.zIndex=210;
-    document.body.appendChild(c);
-    const dx=(Math.random()-.5)*240, dy=window.innerHeight+80, dur=1800+Math.random()*1500, rot=720+Math.random()*1080;
-    c.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${rot}deg)`,opacity:1}],
-      {duration:dur,easing:'cubic-bezier(.15,.5,.4,1)'}).onfinish=()=>c.remove();}}
-function showCelebrate(amount){const ov=document.getElementById('gacha-celebrate'); ov.hidden=false;
-  const el=document.getElementById('gc-amount'); let cur=0, step=Math.max(1,Math.ceil(amount/28));
-  const t=setInterval(()=>{cur=Math.min(amount,cur+step); el.textContent=cur.toLocaleString(); if(cur>=amount)clearInterval(t);},22);
-  confettiScreen(); setTimeout(confettiScreen,450); setTimeout(confettiScreen,950);}
-document.getElementById('gc-receive').onclick=()=>{document.getElementById('gacha-celebrate').hidden=true;};
+// 全画面の当選演出（カプセルが開く → 中央にポイント → キラキラ降下）
+const SPK_COLS=['#FFF2C4','#FFD23C','#FFC04A','#FFFFFF'];
+function sparklesFall(n){for(let i=0;i<n;i++){const s=document.createElement('i'); s.className='gc-spk';
+  const sz=8+Math.random()*16; s.style.width=sz+'px'; s.style.height=sz+'px';
+  s.style.left=(Math.random()*100)+'vw'; s.style.top='-30px'; s.style.background=SPK_COLS[i%SPK_COLS.length];
+  document.body.appendChild(s);
+  const dx=(Math.random()-.5)*120, dy=window.innerHeight+70, dur=2200+Math.random()*1900, rot=120+Math.random()*360;
+  s.animate([{transform:'translate(0,0) rotate(0) scale(1)',opacity:0},{opacity:1,offset:.12},{opacity:1,offset:.85},
+    {transform:`translate(${dx}px,${dy}px) rotate(${rot}deg) scale(.55)`,opacity:0}],{duration:dur,easing:'linear'}).onfinish=()=>s.remove();}}
+let gcSparkTimer=null;
+function showCelebrate(amount){const ov=document.getElementById('gacha-celebrate');
+  ov.hidden=false; ov.classList.remove('open');
+  document.getElementById('gc-amount').textContent='0';
+  void document.getElementById('gc-capsule').offsetWidth; // リフロー（落下アニメ再生）
+  setTimeout(()=>{ // カプセルが落ちてきた後に「開く」
+    ov.classList.add('open');
+    const el=document.getElementById('gc-amount'); let cur=0, step=Math.max(1,Math.ceil(amount/30));
+    const t=setInterval(()=>{cur=Math.min(amount,cur+step); el.textContent=cur.toLocaleString(); if(cur>=amount)clearInterval(t);},22);
+    sparklesFall(46); let waves=0; clearInterval(gcSparkTimer);
+    gcSparkTimer=setInterval(()=>{sparklesFall(26); if(++waves>=8)clearInterval(gcSparkTimer);},650);
+  }, 720);
+}
+document.getElementById('gc-receive').onclick=()=>{clearInterval(gcSparkTimer); document.getElementById('gacha-celebrate').hidden=true;};
 spin.onclick=()=>{
   if(spin.dataset.mode==='close'){closeGacha(); return;}
   spin.style.display='none'; capsule.classList.remove('done'); capsule.classList.add('spinning');
