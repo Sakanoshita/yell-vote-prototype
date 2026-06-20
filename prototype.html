@@ -521,12 +521,13 @@
   .cmt-gate{border-style:dashed}
   .cmt-done{border-color:var(--key); background:var(--key-weak)}
   .comment-list{margin-top:20px; display:grid; gap:12px}
-  .cmt{border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; background:#fff}
-  .cmt-head{display:flex; align-items:center; gap:9px; margin-bottom:6px}
-  .cmt-av{width:28px; height:28px; border-radius:50%; background:var(--yell-grad); flex:0 0 auto}
-  .cmt-head b{font-size:14px}
-  .cmt-head span{font-size:12px; color:var(--muted); margin-left:auto}
+  .cmt{display:flex; gap:14px; align-items:flex-start; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; background:#fff}
+  .cmt-left{flex:0 0 60px; text-align:center; min-width:0}
+  .cmt-av{width:40px; height:40px; border-radius:50%; background:var(--yell-grad); margin:0 auto}
+  .cmt-left b{display:block; font-size:11px; margin-top:6px; line-height:1.3; word-break:break-all}
+  .cmt-main{flex:1; min-width:0}
   .cmt-body{font-size:14px; line-height:1.8; color:var(--ink-2)}
+  .cmt-time{display:block; font-size:11px; color:var(--muted); margin-top:6px}
   .login-toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:120; display:flex; align-items:center; gap:14px; background:var(--ink); color:#fff; padding:12px 16px 12px 20px; border-radius:999px; box-shadow:0 12px 30px rgba(0,0,0,.25); font-size:14px; font-weight:600}
   .login-toast[hidden]{display:none}
   .login-toast .btn{padding:8px 18px; font-size:13px}
@@ -1620,11 +1621,11 @@ const AUD=[
   {uni:"青山学院大学",ttl:"ミス・ミスター青山コンテスト2026", st:"live", stl:"開催中", period:"07.05 – 10.24", ent:"Miss 6 / Mister 6", c:["#DD1C5D","#7A2050"], ck:"#DD1C5D", type:"miscon"},
   {uni:"△△大学",  ttl:"△△ Campus Audition 2026",        st:"live",  stl:"開催中",   period:"06.20 – 09.30", ent:"12組",            c:["#1E73E8","#0B3C7A"], ck:"#1E73E8", type:"normal"},
   {uni:"立教大学",  ttl:"MISS&MISTER 立教 2026",           st:"live",  stl:"開催中",   period:"07.01 – 10.31", ent:"Miss 5 / Mister 5",c:["#B3122F","#2A1A3A"], ck:"#B3122F", type:"miscon"},
-  {uni:"◇◇芸術大",ttl:"◇◇ Talent Contest 2026",         st:"result",stl:"結果発表", period:"結果公開中",    ent:"GP発表済",        c:["#7A5CFF","#3A2A8A"], ck:"#7A5CFF", type:"normal"},
-  {uni:"☆☆大学",  ttl:"ミスコン☆☆2025",                 st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 斉藤花音",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
-  {uni:"◎◎大学",  ttl:"◎◎ Beauty Pageant 2025",         st:"end",   stl:"終了",     period:"2025 終了",     ent:"GP: 田中優花",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
+  {uni:"◇◇芸術大",ttl:"◇◇ Talent Contest 2026",         st:"end",   stl:"終了",     period:"",              ent:"GP発表済",        c:["#7A5CFF","#3A2A8A"], ck:"#7A5CFF", type:"normal"},
+  {uni:"☆☆大学",  ttl:"ミスコン☆☆2025",                 st:"end",   stl:"終了",     period:"",              ent:"GP: 斉藤花音",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
+  {uni:"◎◎大学",  ttl:"◎◎ Beauty Pageant 2025",         st:"end",   stl:"終了",     period:"",              ent:"GP: 田中優花",    c:["#999","#555"],       ck:"#9A9AA2", type:"miscon"},
   {uni:"▲▲大学",  ttl:"▲▲ Campus Star 2026",            st:"live",  stl:"開催中",   period:"07.10 – 10.10", ent:"Miss 8 / Mister 8",c:["#E8730A","#8A3C00"], ck:"#E8730A", type:"miscon"},
-  {uni:"●●大学",  ttl:"●● Contest 2026",                st:"soon",  stl:"近日",     period:"09.01 開始",    ent:"準備中",          c:["#0FB5C4","#075660"], ck:"#0FB5C4", type:"normal"},
+  {uni:"●●大学",  ttl:"●● Contest 2026",                st:"soon",  stl:"開催予定", period:"09.01 開始",    ent:"準備中",          c:["#0FB5C4","#075660"], ck:"#0FB5C4", type:"normal"},
 ];
 const PEOPLE=[
   {no:"ENTRY 01", name:"斉藤花音", gp:"グランプリ", heat:92, c:["#F7C6D5","#DD1C5D"]},
@@ -2162,7 +2163,7 @@ document.getElementById('toast-login').onclick=()=>{hideToast(); go('login');};
 const commented={}; // audition key -> true
 function addComment(listId,text){const list=document.getElementById(listId); if(!list)return;
   const el=document.createElement('div'); el.className='cmt';
-  el.innerHTML='<div class="cmt-head"><span class="cmt-av"></span><b>daisuke</b><span>たった今</span></div><div class="cmt-body"></div>';
+  el.innerHTML='<div class="cmt-left"><span class="cmt-av"></span><b>daisuke</b></div><div class="cmt-main"><div class="cmt-body"></div><span class="cmt-time">たった今</span></div>';
   el.querySelector('.cmt-body').textContent=text; list.insertBefore(el,list.firstChild);}
 function renderCommentBox(boxId,listId,key){const box=document.getElementById(boxId); if(!box)return;
   if(!loggedIn){box.innerHTML='<div class="cmt-gate">応援コメントを送るにはログインが必要です。<button class="btn btn-key">ログインする</button></div>';
@@ -2175,7 +2176,7 @@ function renderCommentBox(boxId,listId,key){const box=document.getElementById(bo
 function renderAllComments(){renderCommentBox('cmt-box-m','cmt-list-m','miscon'); renderCommentBox('cmt-box-n','cmt-list-n','normal');}
 // 既存コメントのサンプル
 const SAMPLE_CMT=[["みおり","2時間前","ステージ楽しみにしてます！自信もって、いつも応援してます📣"],["けんた","昨日","投票しました！最後まで駆け抜けてください🔥"],["なな","2日前","写真どれも素敵でした。これからも応援します！"]];
-['cmt-list-m','cmt-list-n'].forEach(id=>{const list=document.getElementById(id); if(list)list.innerHTML=SAMPLE_CMT.map(c=>`<div class="cmt"><div class="cmt-head"><span class="cmt-av"></span><b>${c[0]}</b><span>${c[1]}</span></div><div class="cmt-body">${c[2]}</div></div>`).join('');});
+['cmt-list-m','cmt-list-n'].forEach(id=>{const list=document.getElementById(id); if(list)list.innerHTML=SAMPLE_CMT.map(c=>`<div class="cmt"><div class="cmt-left"><span class="cmt-av"></span><b>${c[0]}</b></div><div class="cmt-main"><div class="cmt-body">${c[2]}</div><span class="cmt-time">${c[1]}</span></div></div>`).join('');});
 setLogin(true);
 
 // ビュー切替
