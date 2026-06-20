@@ -440,6 +440,8 @@
   .entry-cta .btn-key{padding:13px 28px}
   /* ポイント選択して投票 */
   .vote-panel{margin-top:6px}
+  .vp-balance{display:inline-flex; align-items:baseline; gap:6px; font-size:12px; font-weight:700; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:6px 14px; margin-bottom:12px}
+  .vp-balance b{font-family:'Oswald',sans-serif; font-size:16px; color:var(--key)}
   .vp-label{font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px}
   .vp-amounts{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
   .vp-amounts button{font:inherit; font-weight:700; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink-2); padding:9px 18px; border-radius:999px; cursor:pointer; transition:.15s}
@@ -1211,6 +1213,7 @@
       </div>
       <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
       <div class="vote-panel">
+        <div class="vp-balance">保有ポイント <b class="vp-bal-amt">1,250</b> pt</div>
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
           <button type="button" data-amt="50">50</button>
@@ -1420,6 +1423,7 @@
       </div>
       <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
       <div class="vote-panel">
+        <div class="vp-balance">保有ポイント <b class="vp-bal-amt">1,250</b> pt</div>
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
           <button type="button" data-amt="50">50</button>
@@ -1887,6 +1891,8 @@ navCards('final-miss','entry'); navCards('final-mister','entry'); navCards('entr
 navCards('nentrants','entryN'); navCards('nentry-others','entryN');
 
 // 投票パネル（ポイント選択して投票・ログイン必須）
+let userPoints=1250; // 保有ポイント合計（有料＋無料）
+function renderUserPoints(){document.querySelectorAll('.vp-bal-amt').forEach(el=>el.textContent=userPoints.toLocaleString());}
 document.querySelectorAll('.vote-panel').forEach(function(panel){
   const amtBtns=[...panel.querySelectorAll('.vp-amounts button')];
   const other=panel.querySelector('.vp-other');
@@ -1905,11 +1911,14 @@ document.querySelectorAll('.vote-panel').forEach(function(panel){
     if(voteBtn.disabled)return;
     if(!loggedIn){requireLogin('投票するには');return;}
     if(!(amt>0)){other.focus();return;}
+    if(amt>userPoints){flash('保有ポイントが不足しています'); return;}
+    userPoints-=amt; renderUserPoints();
     burst(voteBtn);
     voteBtn.innerHTML='✓ '+amt.toLocaleString()+'ポイント投票しました';
     voteBtn.disabled=true; amtBtns.forEach(x=>x.disabled=true); other.disabled=true;
   };
 });
+renderUserPoints();
 
 // ===== シェアシート（Instagram / X / LINE / コピー） =====
 function flash(msg){var t=document.createElement('div'); t.className='flash-toast'; t.textContent=msg; document.body.appendChild(t);
