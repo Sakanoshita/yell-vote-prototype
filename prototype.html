@@ -1637,7 +1637,6 @@ const PEOPLE=[
 function cardHTML(a){
   return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" data-ck="${a.ck}" data-c1="${a.c[0]}" data-c2="${a.c[1]}" data-ttl="${a.ttl}" data-uni="${a.uni}" data-period="${a.period}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
     <div class="thumb"><span class="st ${a.st}">${a.stl}</span></div>
-    <div class="keybar"></div>
     <div class="body">
       <div class="ttl">${a.ttl}</div>
       <div class="row"><span class="period num">${a.period}</span></div>
