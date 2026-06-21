@@ -440,11 +440,9 @@
   .entry-cta .btn-key{padding:13px 28px}
   /* ポイント選択して投票 */
   .vote-panel{margin-top:6px}
-  .vp-balance{display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 8px; font-size:12px; font-weight:700; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin:14px 0}
+  .vp-balance{font-size:12px; font-weight:700; color:var(--muted); margin:14px 0 2px}
   .vp-balance b{font-family:'Oswald',sans-serif; font-size:15px; color:var(--ink-2)}
-  .vp-balance .vp-arrow{color:var(--muted)}
-  .vp-balance .vp-after-lbl{color:var(--muted)}
-  .vp-balance .vp-after{color:var(--key)}
+  .vp-balance.insufficient b{color:#E0245E}
   .vp-balance .vp-warn{color:#E0245E; font-weight:800}
   .vp-label{font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px}
   .vp-amounts{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
@@ -1903,11 +1901,10 @@ document.querySelectorAll('.vote-panel').forEach(function(panel){
   const amtLabel=panel.querySelector('.vp-amt');
   const bal=panel.querySelector('.vp-balance');
   let amt=100;
-  function refreshBal(){if(!bal)return; const have=userPoints.toLocaleString();
+  function refreshBal(){if(!bal)return;
     bal.classList.toggle('insufficient', amt>userPoints);
-    bal.innerHTML = (amt>userPoints)
-      ? `保有 <b>${have}</b>pt <span class="vp-warn">→ 保有ポイントが不足しています</span>`
-      : `保有 <b>${have}</b>pt <span class="vp-arrow">→</span> <span class="vp-after-lbl">投票後</span> <b class="vp-after">${(userPoints-amt).toLocaleString()}</b>pt`;}
+    bal.innerHTML = `保有ポイント <b>${userPoints.toLocaleString()}</b> pt`
+      + (amt>userPoints ? ` <span class="vp-warn">（不足しています）</span>` : '');}
   panelRefreshers.push(refreshBal);
   function setAmt(v){amt=v; amtLabel.textContent=(v>0?v.toLocaleString():'—'); refreshBal();}
   amtBtns.forEach(b=>b.onclick=()=>{
