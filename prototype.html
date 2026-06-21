@@ -440,8 +440,12 @@
   .entry-cta .btn-key{padding:13px 28px}
   /* ポイント選択して投票 */
   .vote-panel{margin-top:6px}
-  .vp-balance{display:inline-flex; align-items:baseline; gap:6px; font-size:12px; font-weight:700; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:6px 14px; margin-bottom:12px}
-  .vp-balance b{font-family:'Oswald',sans-serif; font-size:16px; color:var(--key)}
+  .vp-balance{display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 8px; font-size:12px; font-weight:700; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin:14px 0}
+  .vp-balance b{font-family:'Oswald',sans-serif; font-size:15px; color:var(--ink-2)}
+  .vp-balance .vp-arrow{color:var(--muted)}
+  .vp-balance .vp-after-lbl{color:var(--muted)}
+  .vp-balance .vp-after{color:var(--key)}
+  .vp-balance .vp-warn{color:#E0245E; font-weight:800}
   .vp-label{font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px}
   .vp-amounts{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
   .vp-amounts button{font:inherit; font-weight:700; font-size:14px; border:1px solid var(--line); background:#fff; color:var(--ink-2); padding:9px 18px; border-radius:999px; cursor:pointer; transition:.15s}
@@ -1213,7 +1217,6 @@
       </div>
       <div class="pt-bar"><b>77,300</b><span class="u">PT</span></div>
       <div class="vote-panel">
-        <div class="vp-balance">保有ポイント <b class="vp-bal-amt">1,250</b> pt</div>
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
           <button type="button" data-amt="50">50</button>
@@ -1224,6 +1227,7 @@
           <button type="button" data-amt="other">その他</button>
           <input type="number" class="vp-other" placeholder="ポイント数を入力" min="1" hidden>
         </div>
+        <div class="vp-balance"></div>
         <div class="vp-row">
           <button class="btn btn-key vp-vote"><span class="hb">♥</span>&nbsp;<b class="vp-amt">100</b>&nbsp;ポイント投票する</button>
           <button class="btn btn-ghost vp-share" style="color:var(--ink);border-color:var(--line)">SHARE</button>
@@ -1422,7 +1426,6 @@
       </div>
       <div class="pt-bar"><b id="nentry-pts">12,480</b><span class="u">PT</span><span class="live">LIVE</span></div>
       <div class="vote-panel">
-        <div class="vp-balance">保有ポイント <b class="vp-bal-amt">1,250</b> pt</div>
         <div class="vp-label">投票するYELLポイントを選ぶ</div>
         <div class="vp-amounts">
           <button type="button" data-amt="50">50</button>
@@ -1433,6 +1436,7 @@
           <button type="button" data-amt="other">その他</button>
           <input type="number" class="vp-other" placeholder="ポイント数を入力" min="1" hidden>
         </div>
+        <div class="vp-balance"></div>
         <div class="vp-row">
           <button class="btn btn-key vp-vote"><span class="hb">♥</span>&nbsp;<b class="vp-amt">100</b>&nbsp;ポイント投票する</button>
           <button class="btn btn-ghost vp-share" style="color:var(--ink);border-color:var(--line)">SHARE</button>
@@ -1890,14 +1894,22 @@ navCards('nentrants','entryN'); navCards('nentry-others','entryN');
 
 // 投票パネル（ポイント選択して投票・ログイン必須）
 let userPoints=1250; // 保有ポイント合計（有料＋無料）
-function renderUserPoints(){document.querySelectorAll('.vp-bal-amt').forEach(el=>el.textContent=userPoints.toLocaleString());}
+const panelRefreshers=[];
+function renderUserPoints(){panelRefreshers.forEach(fn=>fn());}
 document.querySelectorAll('.vote-panel').forEach(function(panel){
   const amtBtns=[...panel.querySelectorAll('.vp-amounts button')];
   const other=panel.querySelector('.vp-other');
   const voteBtn=panel.querySelector('.vp-vote');
   const amtLabel=panel.querySelector('.vp-amt');
+  const bal=panel.querySelector('.vp-balance');
   let amt=100;
-  function setAmt(v){amt=v; amtLabel.textContent=(v>0?v.toLocaleString():'—');}
+  function refreshBal(){if(!bal)return; const have=userPoints.toLocaleString();
+    bal.classList.toggle('insufficient', amt>userPoints);
+    bal.innerHTML = (amt>userPoints)
+      ? `保有 <b>${have}</b>pt <span class="vp-warn">→ 保有ポイントが不足しています</span>`
+      : `保有 <b>${have}</b>pt <span class="vp-arrow">→</span> <span class="vp-after-lbl">投票後</span> <b class="vp-after">${(userPoints-amt).toLocaleString()}</b>pt`;}
+  panelRefreshers.push(refreshBal);
+  function setAmt(v){amt=v; amtLabel.textContent=(v>0?v.toLocaleString():'—'); refreshBal();}
   amtBtns.forEach(b=>b.onclick=()=>{
     amtBtns.forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
     if(b.dataset.amt==='other'){other.hidden=false; other.focus(); setAmt(+other.value||0);}
@@ -1905,6 +1917,7 @@ document.querySelectorAll('.vote-panel').forEach(function(panel){
   });
   other.oninput=()=>setAmt(+other.value||0);
   panel.querySelector('[data-amt="100"]').classList.add('sel');
+  refreshBal();
   voteBtn.onclick=()=>{
     if(voteBtn.disabled)return;
     if(!loggedIn){requireLogin('投票するには');return;}
