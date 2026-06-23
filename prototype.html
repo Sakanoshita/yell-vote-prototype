@@ -1154,7 +1154,7 @@
     <p class="fineprint">※ 表示は税込となっております。<br>
     ※ 未成年の方は保護者の同意が必要です。<br>
     ※ 決済はクレジットカードのみとなっております。<br>
-    ※ 購入後のポイントは払い戻しできません。詳しくは<a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>をご確認ください。</p>
+    ※ 購入後のポイントは払い戻しできません。詳しくは<a data-view="tokushoho">特定商取引法に基づく表記</a>をご確認ください。</p>
   </section>
 </main>
 </div>
@@ -1469,22 +1469,8 @@
 </div>
 
 <!-- ============ LEGAL（法務） ============ -->
-<div class="view" id="view-legal">
-<main>
-  <section style="margin-top:36px">
-    <span class="eyebrow">Legal</span>
-    <h2 class="sec" id="legal-title">利用規約について</h2>
-    <div class="seg" id="legal-seg" style="margin-top:14px">
-      <button class="active" data-lg="terms">利用規約</button>
-      <button data-lg="privacy">プライバシー</button>
-      <button data-lg="tokushoho">特商法</button>
-      <button data-lg="shikin">資金決済法</button>
-      <button data-lg="company">運営会社</button>
-    </div>
-    <div class="legal-body" id="legal-body"></div>
-  </section>
-</main>
-</div>
+<!-- 法務：各ページに分解（JSで生成） -->
+<div id="legal-pages"></div>
 
 <!-- ============ LOGIN（ログイン／新規登録） ============ -->
 <div class="view" id="view-login">
@@ -1502,10 +1488,10 @@
       <p class="login-note">ログイン・新規登録には YELL CAMPUS ID（無料）が必要です。</p>
     </div>
     <nav class="login-foot">
-      <a data-view="legal" data-legal="terms">利用規約</a>
-      <a data-view="legal" data-legal="privacy">プライバシーポリシー</a>
-      <a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>
-      <a data-view="legal" data-legal="shikin">資金決済法に基づく表記</a>
+      <a data-view="terms">利用規約</a>
+      <a data-view="privacy">プライバシーポリシー</a>
+      <a data-view="tokushoho">特定商取引法に基づく表記</a>
+      <a data-view="shikin">資金決済法に基づく表記</a>
     </nav>
   </div>
 </main>
@@ -1548,10 +1534,10 @@
   <div class="gfoot-inner">
     <div class="foot-brand"><img src="img/yellvoto01.svg" alt="YELL VOTE" class="foot-logo"><span>応援が、ちゃんと届く場所。</span></div>
     <nav class="foot-links">
-      <a data-view="legal" data-legal="terms">利用規約について</a>
-      <a data-view="legal" data-legal="privacy">プライバシーポリシー</a>
-      <a data-view="legal" data-legal="tokushoho">特定商取引法に基づく表記</a>
-      <a data-view="legal" data-legal="company">運営会社</a>
+      <a data-view="terms">利用規約について</a>
+      <a data-view="privacy">プライバシーポリシー</a>
+      <a data-view="tokushoho">特定商取引法に基づく表記</a>
+      <a data-view="company">運営会社</a>
     </nav>
   </div>
   <div class="foot-copy">© 2026 YELL VOTE</div>
@@ -2115,11 +2101,9 @@ const LEGAL={
   shikin:{t:"資金決済法に基づく表記",b:`<dl><dt>前払式支払手段の名称</dt><dd>YELLポイント／YELLコイン</dd><dt>発行事業者</dt><dd>株式会社◯◯</dd><dt>支払可能金額等</dt><dd>各購入プランに表示</dd><dt>有効期限</dt><dd>最終利用日から◯年</dd><dt>利用方法</dt><dd>オーディション参加者への投票（YELLを送る）に利用</dd><dt>未使用残高の確認</dt><dd>マイページに表示</dd><dt>苦情・相談窓口</dt><dd>YELLサポートデスク</dd><dt>払い戻し</dt><dd>原則行いません（資金決済法で定める場合を除く）</dd></dl><p style="color:var(--muted)">※ 本文はプロトタイプ用のサンプルです。前払式支払手段の該当性・記載内容は要法務確認。</p>`},
   company:{t:"運営会社",b:`<dl><dt>会社名</dt><dd>株式会社◯◯</dd><dt>事業内容</dt><dd>YELL CAMPUS プラットフォームの企画・運営</dd><dt>設立</dt><dd>20XX年</dd><dt>所在地</dt><dd>東京都◯◯区◯◯ 0-0-0</dd><dt>関連サービス</dt><dd>YELL VOTE ／ YELL TICKET ／ YELL SUPPORT</dd></dl>`},
 };
-function setLegal(key){const d=LEGAL[key]||LEGAL.terms;document.getElementById('legal-title').textContent=d.t;
-  document.getElementById('legal-body').innerHTML=d.b;
-  [...document.getElementById('legal-seg').children].forEach(b=>b.classList.toggle('active',b.dataset.lg===key));}
-document.getElementById('legal-seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setLegal(b.dataset.lg);});
-setLegal('terms');
+// 法務は各ページに分解（LEGALからビューを生成）
+document.getElementById('legal-pages').innerHTML=Object.entries(LEGAL).map(([k,d])=>
+  `<div class="view" id="view-${k}"><main><section style="margin-top:36px"><span class="eyebrow">Legal</span><h2 class="sec">${d.t}</h2><div class="legal-body">${d.b}</div></section></main></div>`).join('');
 
 // ===== ログイン状態 ＆ 応援コメント =====
 let loggedIn=true; // 既定：ログイン中（ヘッダーのボタンで切替＝ゲートのデモ可能）
@@ -2188,7 +2172,8 @@ setLogin(true);
 
 // ビュー切替
 const views={home:'view-home',auditions:'view-auditions',detail:'view-detail',detailN:'view-detail-n',result:'view-result',
-  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',legal:'view-legal',login:'view-login',pedit:'view-pedit'};
+  about:'view-about',mypage:'view-mypage',points:'view-points',faq:'view-faq',news:'view-news',entry:'view-entry',entryN:'view-entry-n',login:'view-login',pedit:'view-pedit',
+  terms:'view-terms',privacy:'view-privacy',tokushoho:'view-tokushoho',shikin:'view-shikin',company:'view-company'};
 function go(v){
   if((v==='mypage'||v==='pedit') && !loggedIn){ go('login'); return; } // 未ログインはマイページ/編集に入れない
   Object.values(views).forEach(id=>document.getElementById(id).classList.remove('active'));
@@ -2201,7 +2186,7 @@ function go(v){
   if(v==='mypage') updateGachaCta();
   if(v==='pedit') syncPedit();
 }
-document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{go(b.dataset.view); if(b.dataset.view==='legal'&&b.dataset.legal) setLegal(b.dataset.legal);});
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>go(b.dataset.view));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 document.querySelectorAll('[data-scroll]').forEach(b=>b.onclick=()=>{go('home'); setTimeout(()=>document.getElementById(b.dataset.scroll).scrollIntoView({behavior:'smooth'}),60);});
 document.querySelectorAll('[data-stub]').forEach(b=>b.onclick=()=>alert('（プロトタイプ）この画面は別途設計します：'+b.textContent.trim()));
