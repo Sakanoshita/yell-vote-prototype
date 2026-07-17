@@ -139,7 +139,10 @@
   .card .row{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted)}
   .card .period{font-size:12px}
   .card .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
-  .card .remain{font-size:12px; font-weight:800; color:var(--key); white-space:nowrap}
+  .card .remain{font-size:12px; font-weight:800; color:var(--key); white-space:nowrap; font-variant-numeric:tabular-nums}
+  .card .remain.urgent{color:#D92B2B}
+  .card .remain.urgent::before{content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:#D92B2B; margin-right:5px; vertical-align:1px; animation:remain-blink 1s infinite}
+  @keyframes remain-blink{50%{opacity:.25}}
   .card .ent{font-weight:700; color:var(--ink-2)}
   .card.is-end .thumb{filter:grayscale(1) opacity(.85)}
 
@@ -1660,18 +1663,27 @@ const PEOPLE=[
 
 function remainLabel(period){
   const m=period.match(/–\s*(\d{2})\.(\d{2})/); if(!m)return'';
+  const end=new Date(2026, +m[1]-1, +m[2], 23,59,59), now=new Date();
+  const diff=end-now;
+  if(diff<=0)return'';
+  if(diff<=86400000){ // 終了24時間前からはカウントダウン
+    const t=Math.floor(diff/1000), pad=x=>String(x).padStart(2,'0');
+    return`残り${pad(Math.floor(t/3600))}:${pad(Math.floor(t%3600/60))}:${pad(t%60)}`;
+  }
   const endDay=new Date(2026, +m[1]-1, +m[2]), today=new Date(); today.setHours(0,0,0,0);
-  const d=Math.round((endDay-today)/86400000);
-  if(d<0)return'';
-  if(d===0)return'本日終了';
-  return`残り${d}日`;
+  return`残り${Math.round((endDay-today)/86400000)}日`;
 }
+setInterval(()=>{document.querySelectorAll('.remain[data-period]').forEach(el=>{
+  const v=remainLabel(el.dataset.period);
+  if(v){ if(el.textContent!==v)el.textContent=v; el.classList.toggle('urgent', v.includes(':')); }
+  else el.remove();
+});},1000);
 function cardHTML(a){
   return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" data-ck="${a.ck}" data-c1="${a.c[0]}" data-c2="${a.c[1]}" data-ttl="${a.ttl}" data-uni="${a.uni}" data-period="${a.period}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
     <div class="thumb"><span class="st ${a.st}">${a.stl}</span></div>
     <div class="body">
       <div class="ttl">${a.ttl}</div>
-      <div class="row"><span class="period num">${a.period}</span>${a.st==='live'?`<span class="remain num">${remainLabel(a.period)}</span>`:''}</div>
+      <div class="row"><span class="period num">${a.period}</span>${a.st==='live'?`<span class="remain num" data-period="${a.period}">${remainLabel(a.period)}</span>`:''}</div>
     </div>
   </article>`;
 }
