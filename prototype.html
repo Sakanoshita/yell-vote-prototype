@@ -1660,8 +1660,8 @@ const PEOPLE=[
 
 function remainLabel(period){
   const m=period.match(/–\s*(\d{2})\.(\d{2})/); if(!m)return'';
-  const end=new Date(2026, +m[1]-1, +m[2], 23,59,59), now=new Date();
-  const d=Math.ceil((end-now)/86400000);
+  const endDay=new Date(2026, +m[1]-1, +m[2]), today=new Date(); today.setHours(0,0,0,0);
+  const d=Math.round((endDay-today)/86400000);
   if(d<0)return'';
   if(d===0)return'本日終了';
   return`残り${d}日`;
