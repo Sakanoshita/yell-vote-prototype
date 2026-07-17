@@ -511,6 +511,19 @@
   .pt-bar .live{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:800; color:#E0245E; margin-left:auto}
   .pt-bar .live::before{content:""; width:7px; height:7px; border-radius:50%; background:#E0245E; animation:pulse 1.6s infinite}
   .entry-intro{color:var(--ink-2); line-height:1.9; font-size:14px; margin:0 0 14px}
+  /* ファンランキング */
+  .fanrank{margin-top:20px; display:grid; gap:10px}
+  .fr-row{display:flex; align-items:center; gap:14px; border:1px solid var(--line); border-radius:var(--radius); padding:12px 18px; background:#fff}
+  .fr-row.top1{border-color:var(--key); background:var(--key-weak)}
+  .fr-rank{flex:0 0 34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; background:var(--surface-2); color:var(--ink-2)}
+  .fr-row.top1 .fr-rank{background:linear-gradient(135deg,#F5C548,#E8960A); color:#fff}
+  .fr-row.top2 .fr-rank{background:linear-gradient(135deg,#C9CDD6,#9AA1AE); color:#fff}
+  .fr-row.top3 .fr-rank{background:linear-gradient(135deg,#D9A06B,#B06B35); color:#fff}
+  .fr-av{width:36px; height:36px; border-radius:50%; flex:0 0 36px}
+  .fr-name{flex:1; min-width:0; font-weight:700; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .fr-pts{font-weight:800; font-size:15px; color:var(--key); white-space:nowrap}
+  .fr-pts small{font-weight:600; font-size:11px; color:var(--muted); margin-left:2px}
+  .fr-note{margin-top:12px; font-size:12px; color:var(--muted)}
   /* 応援コメント */
   .comment-box{margin-top:16px}
   .comment-box textarea{width:100%; min-height:90px; resize:vertical; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; font:inherit; font-size:14px; line-height:1.7; box-sizing:border-box}
@@ -1273,6 +1286,14 @@
   </section>
 
   <section>
+    <span class="eyebrow">Fan Ranking</span>
+    <h2 class="sec">ファンランキング</h2>
+    <p class="sec-sub">この候補者に投票した応援ポイントのランキング。あなたの応援が順位になります。</p>
+    <div class="fanrank" id="fanrank-m"></div>
+    <div class="fr-note">※ ニックネームとアイコンで表示されます（本名は表示されません）</div>
+  </section>
+
+  <section>
     <span class="eyebrow">Cheer</span>
     <h2 class="sec">応援コメント</h2>
     <p class="sec-sub">1日1回、このオーディションの推しに応援コメントを送れます。マナーを守って応援しよう。</p>
@@ -1456,6 +1477,14 @@
     <h2 class="sec">写真・動画</h2>
     <div class="gallery g43" id="nentry-gallery"></div>
     <div class="entry-video">紹介ムービー（16:9）</div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Fan Ranking</span>
+    <h2 class="sec">ファンランキング</h2>
+    <p class="sec-sub">この候補者に投票した応援ポイントのランキング。あなたの応援が順位になります。</p>
+    <div class="fanrank" id="fanrank-n"></div>
+    <div class="fr-note">※ ニックネームとアイコンで表示されます（本名は表示されません）</div>
   </section>
 
   <section>
@@ -2776,6 +2805,16 @@ loginBtn.onclick=()=>{ if(loggedIn) setLogin(false); else go('login'); };
 // プロフィール編集（アイコン・ニックネームのみ）
 const AVATARS=['var(--yell-grad)','linear-gradient(135deg,#1E73E8,#0B3C7A)','linear-gradient(135deg,#15A36A,#0C5C3C)','linear-gradient(135deg,#7A5CFF,#3A2A8A)','linear-gradient(135deg,#DD1C5D,#7A2050)','linear-gradient(135deg,#E8730A,#8A3C00)'];
 let curNick='daisuke', curAvatar=AVATARS[0];
+// ===== ファンランキング（エントリー者ごと） =====
+const FANS_M=[["みさき",4,12800],["ゆうと",1,9400],["あかり",0,7150],["しゅん",2,4300],["りこ",5,3800]];
+const FANS_N=[["たくみ",3,15200],["はな",0,8800],["けんた",1,6450],["まお",5,5100],["そら",2,2900]];
+function renderFanrank(id,data){var el=document.getElementById(id); if(!el)return;
+  el.innerHTML=data.map((f,i)=>{var r=i+1;
+    return `<div class="fr-row${r<=3?' top'+r:''}"><span class="fr-rank">${r}</span><span class="fr-av" style="background:${AVATARS[f[1]]}"></span><span class="fr-name">${f[0]}</span><span class="fr-pts">${f[2].toLocaleString()}<small>pt</small></span></div>`;
+  }).join('');}
+renderFanrank('fanrank-m',FANS_M);
+renderFanrank('fanrank-n',FANS_N);
+
 (function(){var sw=document.getElementById('pe-swatches'); if(!sw)return;
   sw.innerHTML=AVATARS.map((g,i)=>`<div class="pe-sw${i===0?' sel':''}" data-i="${i}" style="background:${g}"></div>`).join('');
   sw.addEventListener('click',e=>{var s=e.target.closest('.pe-sw'); if(!s)return; [...sw.children].forEach(x=>x.classList.remove('sel')); s.classList.add('sel'); document.getElementById('pe-av').style.background=AVATARS[+s.dataset.i];});})();
