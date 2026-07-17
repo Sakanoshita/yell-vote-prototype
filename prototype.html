@@ -138,6 +138,8 @@
   .card .ttl{font-weight:700; font-size:15px; margin:3px 0 8px; line-height:1.35}
   .card .row{display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--muted)}
   .card .period{font-size:12px}
+  .card .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .card .remain{font-size:12px; font-weight:800; color:var(--key); white-space:nowrap}
   .card .ent{font-weight:700; color:var(--ink-2)}
   .card.is-end .thumb{filter:grayscale(1) opacity(.85)}
 
@@ -1656,12 +1658,20 @@ const PEOPLE=[
   {no:"ENTRY 04", name:"山形光美", gp:"",          heat:55, c:["#D2F0E2","#15A36A"]},
 ];
 
+function remainLabel(period){
+  const m=period.match(/–\s*(\d{2})\.(\d{2})/); if(!m)return'';
+  const end=new Date(2026, +m[1]-1, +m[2], 23,59,59), now=new Date();
+  const d=Math.ceil((end-now)/86400000);
+  if(d<0)return'';
+  if(d===0)return'本日終了';
+  return`残り${d}日`;
+}
 function cardHTML(a){
   return `<article class="card ${a.st==='end'?'is-end':''}" data-type="${a.type||'miscon'}" data-ck="${a.ck}" data-c1="${a.c[0]}" data-c2="${a.c[1]}" data-ttl="${a.ttl}" data-uni="${a.uni}" data-period="${a.period}" style="--c1:${a.c[0]};--c2:${a.c[1]};--ck:${a.ck}">
     <div class="thumb"><span class="st ${a.st}">${a.stl}</span></div>
     <div class="body">
       <div class="ttl">${a.ttl}</div>
-      <div class="row"><span class="period num">${a.period}</span></div>
+      <div class="row"><span class="period num">${a.period}</span>${a.st==='live'?`<span class="remain num">${remainLabel(a.period)}</span>`:''}</div>
     </div>
   </article>`;
 }
