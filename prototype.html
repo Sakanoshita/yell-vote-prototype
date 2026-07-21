@@ -403,10 +403,11 @@
   .pod-2 .pod-av{background:linear-gradient(135deg,#EDEDED,#BFC3C9)}
   .pod-3 .pod-av{background:linear-gradient(135deg,#E9C39B,#C98A55)}
   .pod-name{font-weight:800; font-size:15px}
-  .pod-who{font-size:11px; color:var(--muted); margin-top:3px}
-  .pod-who b{color:var(--ink); font-weight:700}
-  .pod-ev{margin-top:8px; font-size:11px; color:var(--muted); line-height:1.5; white-space:normal; overflow-wrap:anywhere}
-  .pod-ev span{display:block; font-size:9.5px; font-weight:700; letter-spacing:.08em; color:var(--key); margin-bottom:1px}
+  /* A案：人物を主役 */
+  .pod-lead{margin-top:9px; font-size:10px; color:var(--muted); letter-spacing:.06em}
+  .pod-person{font-weight:800; font-size:14px; color:var(--ink); margin-top:1px; line-height:1.3}
+  .pod-1 .pod-person{font-size:15px}
+  .pod-ev{margin-top:5px; font-size:11px; color:var(--muted); line-height:1.5; white-space:normal; overflow-wrap:anywhere}
   .pod-pt{margin-top:10px; font-family:'Oswald',sans-serif; font-weight:700; font-size:20px; color:var(--key); line-height:1}
   .pod-1 .pod-pt{font-size:24px}
   .pod-pt small{font-size:10px; color:var(--muted); font-family:inherit; margin-left:2px}
@@ -419,10 +420,9 @@
   .rl-main{min-width:0; flex:1}
   .rl-name{font-weight:700; font-size:15px}
   .rl-sub{font-size:12px; color:var(--muted); margin-top:2px; white-space:normal; overflow-wrap:anywhere}
-  .rl-sub b{color:var(--ink); font-weight:700}
-  .rl-sub .rl-ev{color:var(--ink-2); font-weight:600}
-  .rl-evtag{color:var(--muted)}
-  .rl-evtag::before{content:""; display:inline-block; width:3px; height:3px; border-radius:50%; background:var(--line); vertical-align:middle; margin:0 7px}
+  .rl-sub b{color:var(--ink); font-weight:700; font-size:13px}
+  .rl-sub .rl-lead{font-size:10px; color:var(--muted); letter-spacing:.04em; margin-right:5px}
+  .rl-evtag{display:block; color:var(--muted); margin-top:1px}
   .rl-pt{font-family:'Oswald',sans-serif; font-weight:700; font-size:17px; color:var(--key); flex:0 0 auto; text-align:right}
   .rl-pt small{font-size:11px; color:var(--muted); font-family:inherit; margin-left:2px}
   @media(max-width:560px){
@@ -1783,8 +1783,9 @@ const FANS=[
       <div class="pod-badge">${i+1}</div>
       <div class="pod-av">${ini(f.name)}</div>
       <div class="pod-name">${f.name}</div>
-      <div class="pod-who">最も応援 <b>${f.who}</b></div>
-      <div class="pod-ev"><span>応援先</span>${f.ev}</div>
+      <div class="pod-lead">最も応援</div>
+      <div class="pod-person">${f.who}</div>
+      <div class="pod-ev">${f.ev}</div>
       <div class="pod-pt">${f.pt.toLocaleString()}<small>YELL</small></div>
     </div>`).join('');
   const rest=FANS.slice(3).map((f,i)=>`
@@ -1792,7 +1793,7 @@ const FANS=[
       <div class="rl-pos">${i+4}</div>
       <div class="rl-av">${ini(f.name)}</div>
       <div class="rl-main"><div class="rl-name">${f.name}</div>
-        <div class="rl-sub"><span class="rl-ev">最も応援</span> <b>${f.who}</b><span class="rl-evtag">${f.ev}</span></div></div>
+        <div class="rl-sub"><span class="rl-lead">最も応援</span><b>${f.who}</b><span class="rl-evtag">${f.ev}</span></div></div>
       <div class="rl-pt">${f.pt.toLocaleString()}<small>YELL</small></div>
     </div>`).join('');
   document.getElementById('rankboard').innerHTML=`<div class="podium">${top3}</div><div class="rank-list">${rest}</div>`;
